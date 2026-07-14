@@ -323,6 +323,19 @@
         </div>
         <small class="muted" id="sync-status">Chưa kết nối — bấm Kết nối để đồng bộ đa thiết bị.</small>
       </div>
+      <div id="voice-box" style="margin-bottom:16px;border-bottom:1px solid var(--line);padding-bottom:12px">
+        <div class="toolbar" style="margin-bottom:6px">
+          <b style="font-size:14px">🔊 Giọng đọc</b>
+          <button class="btn ghost sm" id="voice-test">Thử: こんにちは</button>
+        </div>
+        <div class="row" style="align-items:center">
+          <select id="voice-select" style="flex:1;min-width:180px"></select>
+          <label style="display:flex;align-items:center;gap:6px;font-weight:400;color:var(--muted);font-size:13px">Cao độ
+            <input type="range" id="voice-pitch" min="0.8" max="1.8" step="0.1" style="width:120px">
+          </label>
+        </div>
+        <small class="muted" id="voice-hint"></small>
+      </div>
       <div id="topic-manager" style="margin-bottom:16px;border-bottom:1px solid var(--line);padding-bottom:12px">
         <div class="toolbar" style="margin-bottom:6px">
           <b style="font-size:14px">Quản lý topic</b>
@@ -400,15 +413,36 @@ function romajiToHira(s){
 function hiraToKata(s){ return s.replace(/[ぁ-ゖ]/g,ch=>String.fromCharCode(ch.charCodeAt(0)+0x60)); }
 
 /* ---------------- Text to speech ---------------- */
+function jaVoices(){ return (speechSynthesis.getVoices()||[]).filter(v=>v.lang&&v.lang.toLowerCase().startsWith('ja')); }
+function pickVoice(){
+  const voices=jaVoices(); if(!voices.length) return null;
+  if(prefs.voiceName){ const v=voices.find(x=>x.name===prefs.voiceName); if(v) return v; }
+  // ưu tiên giọng nữ / neural (nghe thân thiện, tươi hơn)
+  const prefer=['nanami','ayumi','haruka','mayu','sayaka','kyoko','o-ren','google 日本語','google japanese'];
+  for(const k of prefer){ const v=voices.find(x=>x.name.toLowerCase().includes(k)); if(v) return v; }
+  const male=['otoya','hattori','ichiro','ryuu'];
+  return voices.find(v=>!male.some(m=>v.name.toLowerCase().includes(m))) || voices[0];
+}
 function speak(text){
   if(!text) return;
   if(!('speechSynthesis' in window)){ toast('Trình duyệt không hỗ trợ đọc tiếng Nhật'); return; }
-  const u=new SpeechSynthesisUtterance(text); u.lang='ja-JP'; u.rate=0.9;
-  const v=(speechSynthesis.getVoices()||[]).find(x=>x.lang&&x.lang.toLowerCase().startsWith('ja'));
-  if(v) u.voice=v;
+  const u=new SpeechSynthesisUtterance(text); u.lang='ja-JP';
+  const v=pickVoice(); if(v) u.voice=v;
+  u.pitch=(prefs.voicePitch!=null?prefs.voicePitch:1.3); // cao độ cao hơn → tươi/trẻ, kiểu anime
+  u.rate=0.95;
   speechSynthesis.cancel(); speechSynthesis.speak(u);
 }
-if('speechSynthesis' in window){ speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged=()=>{}; }
+function populateVoices(){
+  const sel=$('voice-select'); if(!sel) return;
+  const ps=$('voice-pitch'); if(ps) ps.value=(prefs.voicePitch!=null?prefs.voicePitch:1.3);
+  const voices=jaVoices();
+  if(!voices.length){ sel.innerHTML='<option value="">(chưa có giọng tiếng Nhật trên máy)</option>';
+    $('voice-hint').textContent='Máy chưa cài giọng tiếng Nhật — xem cách thêm ở dưới.'; return; }
+  const cur=prefs.voiceName || (pickVoice()&&pickVoice().name);
+  sel.innerHTML=voices.map(v=>`<option value="${esc(v.name)}"${v.name===cur?' selected':''}>${esc(v.name)}</option>`).join('');
+  $('voice-hint').textContent=voices.length+' giọng tiếng Nhật. Chọn giọng nữ/Neural + tăng cao độ để nghe dễ thương hơn.';
+}
+if('speechSynthesis' in window){ speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged=populateVoices; }
 document.addEventListener('click',e=>{ const b=e.target.closest('[data-speak]'); if(b){ e.stopPropagation(); speak(b.getAttribute('data-speak')); } });
 
 /* ---------------- SRS (SM-2 lite) ---------------- */
@@ -787,6 +821,7 @@ $('topic-list-mgr').addEventListener('click',e=>{
 });
 function renderManage(){
   renderTopicManager();
+  populateVoices();
   fillTopicSelect('m-topic');
   const f=$('m-topic').value; const list=cards.filter(c=>f==='all'||c.topic===f);
   $('m-count').textContent=`${list.length} thẻ`;
@@ -896,6 +931,9 @@ async function reconcile(){
 async function pushNow(){ if(!gToken||!gSheetId) return; try{ setSyncStatus('Đang lưu lên Sheet…'); await gWriteAll(Number(prefs.syncModified||Date.now())); setSyncStatus('Đã lưu lên Sheet ✓'); }catch(e){ setSyncStatus('Lỗi lưu: '+e.message); } }
 function schedulePush(){ if(!gToken||!gSheetId) return; clearTimeout(gPushTimer); gPushTimer=setTimeout(pushNow,2500); }
 async function syncNowManual(){ if(!gToken){ connect(true); return; } try{ setSyncStatus('Đang đồng bộ…'); if(!gSheetId){ gSheetId=await gFindSheet()||await gCreateSheet(); prefs.spreadsheetId=gSheetId; savePrefs(); } await reconcile(); }catch(e){ setSyncStatus('Lỗi: '+e.message); } }
+$('voice-select').onchange=()=>{ prefs.voiceName=$('voice-select').value; savePrefs(); };
+$('voice-pitch').oninput=()=>{ prefs.voicePitch=parseFloat($('voice-pitch').value); savePrefs(); };
+$('voice-test').onclick=()=>speak('こんにちは、はじめまして！');
 $('sync-connect').onclick=()=>connect(true);
 $('sync-now').onclick=syncNowManual;
 $('sync-open').onclick=()=>{ if(gSheetId) window.open('https://docs.google.com/spreadsheets/d/'+gSheetId,'_blank'); else toast('Chưa có Sheet — kết nối trước'); };
