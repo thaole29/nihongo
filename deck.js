@@ -1,419 +1,5 @@
-/* Bộ thẻ mặc định — tự nạp khi mở app lần đầu trên 1 thiết bị (localStorage trống). */
+/* Bộ thẻ flashcard mặc định (chỉ từ vựng) + dữ liệu chi tiết bảng chữ cho tab 'Bảng chữ'. */
 window.NIHONGO_DEFAULT_DECK = [
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "あ",
-"reading": "a",
-"meaning": "Âm 'a' — như 'a' trong 'ba'",
-"example": "あさ (asa) — buổi sáng",
-"note": "Mẹo nhớ: giống chữ 'A' in hoa có thêm vòng xoáy."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "い",
-"reading": "i",
-"meaning": "Âm 'i' — như 'i' trong 'đi'",
-"example": "いぬ (inu) — con chó",
-"note": "Mẹo nhớ: hai nét đứng như số '11' hoặc 2 con lươn."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "う",
-"reading": "u",
-"meaning": "Âm 'u' — giữa 'u' và 'ư', môi không tròn",
-"example": "うみ (umi) — biển",
-"note": "Mẹo nhớ: giống chữ 'u' thường đang đội mũ."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "え",
-"reading": "e",
-"meaning": "Âm 'ê' — như 'ê' trong 'bê'",
-"example": "えき (eki) — nhà ga",
-"note": "Mẹo nhớ: giống người quỳ vươn cổ / cái giá vẽ."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "お",
-"reading": "o",
-"meaning": "Âm 'ô' — như 'ô' trong 'cô'",
-"example": "おかね (okane) — tiền",
-"note": "Mẹo nhớ: giống あ thêm nét — như người đá bóng có đuôi."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "か",
-"reading": "ka",
-"meaning": "Âm 'ca'",
-"example": "かさ (kasa) — cái ô (dù)",
-"note": "Mẹo nhớ: như con dao katana có nét phẩy."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "き",
-"reading": "ki",
-"meaning": "Âm 'ki'",
-"example": "き (ki) — cây, gỗ",
-"note": "Mẹo nhớ: giống chiếc chìa khoá — 'ki' = key."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "く",
-"reading": "ku",
-"meaning": "Âm 'ku'",
-"example": "くつ (kutsu) — đôi giày",
-"note": "Mẹo nhớ: giống cái mỏ chim / dấu '<'."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "け",
-"reading": "ke",
-"meaning": "Âm 'kê'",
-"example": "けさ (kesa) — sáng nay",
-"note": "Mẹo nhớ: một cây bút đứng cạnh nét sổ."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "こ",
-"reading": "ko",
-"meaning": "Âm 'kô'",
-"example": "こども (kodomo) — trẻ con",
-"note": "Mẹo nhớ: hai nét ngang như 2 sợi mì."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "さ",
-"reading": "sa",
-"meaning": "Âm 'sa'",
-"example": "さかな (sakana) — cá",
-"note": "Mẹo nhớ: gần giống き nhưng cong hơn — như chiếc lá."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "し",
-"reading": "shi",
-"meaning": "Âm 'shi' — gần 'si' (đầu lưỡi nhẹ)",
-"example": "しお (shio) — muối",
-"note": "Mẹo nhớ: một nét cong như lưỡi câu."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "す",
-"reading": "su",
-"meaning": "Âm 'su' — gần 'sư'",
-"example": "すし (sushi) — sushi",
-"note": "Mẹo nhớ: có vòng lặp như cây kẹo mút."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "せ",
-"reading": "se",
-"meaning": "Âm 'sê'",
-"example": "せんせい (sensei) — giáo viên",
-"note": "Mẹo nhớ: giống cái nĩa nghiêng."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "そ",
-"reading": "so",
-"meaning": "Âm 'sô'",
-"example": "そら (sora) — bầu trời",
-"note": "Mẹo nhớ: đường zigzag như mũi khâu."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "た",
-"reading": "ta",
-"meaning": "Âm 'ta'",
-"example": "たまご (tamago) — trứng",
-"note": "Mẹo nhớ: giống chữ 't' + 'a' ghép lại."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "ち",
-"reading": "chi",
-"meaning": "Âm 'chi'",
-"example": "ちず (chizu) — bản đồ",
-"note": "Mẹo nhớ: giống số '5' xoay ngược / má lúm khi cười."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "つ",
-"reading": "tsu",
-"meaning": "Âm 'tsư' — bật 'ts' rồi 'u'",
-"example": "つき (tsuki) — mặt trăng",
-"note": "Mẹo nhớ: một làn sóng / miệng cười nằm ngang."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "て",
-"reading": "te",
-"meaning": "Âm 'tê'",
-"example": "て (te) — bàn tay",
-"note": "Mẹo nhớ: một nét như bàn tay (te = tay) đưa ra."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "と",
-"reading": "to",
-"meaning": "Âm 'tô'",
-"example": "とり (tori) — con chim",
-"note": "Mẹo nhớ: nét thẳng có cái gai — như ngón chân (toe)."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "な",
-"reading": "na",
-"meaning": "Âm 'na'",
-"example": "なつ (natsu) — mùa hè",
-"note": "Mẹo nhớ: giống người đang quỳ cầu nguyện."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "に",
-"reading": "ni",
-"meaning": "Âm 'ni'",
-"example": "にく (niku) — thịt",
-"note": "Mẹo nhớ: nét sổ + い — như hai đầu gối."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "ぬ",
-"reading": "nu",
-"meaning": "Âm 'nu'",
-"example": "ぬの (nuno) — vải",
-"note": "Mẹo nhớ: có vòng xoáy đuôi như sợi mì (noodle)."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "ね",
-"reading": "ne",
-"meaning": "Âm 'nê'",
-"example": "ねこ (neko) — con mèo",
-"note": "Mẹo nhớ: có vòng xoáy đuôi như đuôi mèo (neko)."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "の",
-"reading": "no",
-"meaning": "Âm 'nô'",
-"example": "のり (nori) — rong biển",
-"note": "Mẹo nhớ: một vòng xoáy tròn như biển 'NO' cấm."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "は",
-"reading": "ha",
-"meaning": "Âm 'ha' (làm trợ từ thì đọc 'wa')",
-"example": "はな (hana) — hoa",
-"note": "Mẹo nhớ: số '1' đứng cạnh cái ghế + nét ngang."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "ひ",
-"reading": "hi",
-"meaning": "Âm 'hi'",
-"example": "ひと (hito) — người",
-"note": "Mẹo nhớ: giống cái mũi / khoé miệng đang cười."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "ふ",
-"reading": "fu",
-"meaning": "Âm 'fu' — giữa 'hu' và 'phu'",
-"example": "ふゆ (fuyu) — mùa đông",
-"note": "Mẹo nhớ: giống núi Phú Sĩ (Fuji) — 'fu'."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "へ",
-"reading": "he",
-"meaning": "Âm 'hê' (làm trợ từ thì đọc 'e')",
-"example": "へや (heya) — căn phòng",
-"note": "Mẹo nhớ: một nét như ngọn núi thấp."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "ほ",
-"reading": "ho",
-"meaning": "Âm 'hô'",
-"example": "ほし (hoshi) — ngôi sao",
-"note": "Mẹo nhớ: giống は thêm 1 nét ngang trên đầu."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "ま",
-"reading": "ma",
-"meaning": "Âm 'ma'",
-"example": "まど (mado) — cửa sổ",
-"note": "Mẹo nhớ: giống cuộn chỉ mẹ (mama) đang cầm."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "み",
-"reading": "mi",
-"meaning": "Âm 'mi'",
-"example": "みず (mizu) — nước",
-"note": "Mẹo nhớ: giống số '21' với nét xoáy."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "む",
-"reading": "mu",
-"meaning": "Âm 'mu'",
-"example": "むし (mushi) — côn trùng",
-"note": "Mẹo nhớ: có cái đuôi — con bò kêu 'muuu'."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "め",
-"reading": "me",
-"meaning": "Âm 'mê'",
-"example": "め (me) — con mắt",
-"note": "Mẹo nhớ: có vòng xoáy như con mắt (me = mắt)."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "も",
-"reading": "mo",
-"meaning": "Âm 'mô'",
-"example": "もり (mori) — khu rừng",
-"note": "Mẹo nhớ: giống lưỡi câu có 2 nét ngang."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "や",
-"reading": "ya",
-"meaning": "Âm 'ya'",
-"example": "やま (yama) — núi",
-"note": "Mẹo nhớ: giống cái ná (súng cao su) chữ 'Y'."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "ゆ",
-"reading": "yu",
-"meaning": "Âm 'yu'",
-"example": "ゆき (yuki) — tuyết",
-"note": "Mẹo nhớ: giống con cá / cái muôi múc canh."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "よ",
-"reading": "yo",
-"meaning": "Âm 'yô'",
-"example": "よる (yoru) — buổi tối, ban đêm",
-"note": "Mẹo nhớ: giống lưỡi câu có nét ngang."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "ら",
-"reading": "ra",
-"meaning": "Âm 'ra' (giữa r/l/đ, nhẹ)",
-"example": "さくら (sakura) — hoa anh đào",
-"note": "Mẹo nhớ: giống người đang chạy."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "り",
-"reading": "ri",
-"meaning": "Âm 'ri'",
-"example": "りんご (ringo) — quả táo",
-"note": "Mẹo nhớ: hai nét như đôi đũa."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "る",
-"reading": "ru",
-"meaning": "Âm 'ru'",
-"example": "はる (haru) — mùa xuân",
-"note": "Mẹo nhớ: giống ろ nhưng CÓ vòng xoáy ở đuôi."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "れ",
-"reading": "re",
-"meaning": "Âm 'rê'",
-"example": "はれ (hare) — trời nắng",
-"note": "Mẹo nhớ: nét sổ + móc — họ hàng với ね, わ."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "ろ",
-"reading": "ro",
-"meaning": "Âm 'rô'",
-"example": "くろ (kuro) — màu đen",
-"note": "Mẹo nhớ: giống る nhưng KHÔNG có đuôi xoáy."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "わ",
-"reading": "wa",
-"meaning": "Âm 'wa'",
-"example": "わたし (watashi) — tôi",
-"note": "Mẹo nhớ: nét sổ + móc — họ hàng với れ, ね."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "を",
-"reading": "wo (đọc 'o')",
-"meaning": "Trợ từ tân ngữ — luôn đọc là 'o'",
-"example": "ほんをよむ (hon o yomu) — đọc sách",
-"note": "Mẹo nhớ: chỉ dùng làm trợ từ, không dùng trong từ vựng."
-},
-{
-"type": "hiragana",
-"topic": "Bảng chữ Hiragana",
-"char": "ん",
-"reading": "n",
-"meaning": "Âm mũi cuối 'n/m/ng'",
-"example": "ほん (hon) — quyển sách",
-"note": "Mẹo nhớ: không bao giờ đứng đầu từ; giống chữ 'h' viết thường."
-},
 {
 "type": "hiragana",
 "topic": "Chào hỏi",
@@ -937,3 +523,281 @@ window.NIHONGO_DEFAULT_DECK = [
 "note": "Từ 'hotel'."
 }
 ];
+window.NIHONGO_KANA_INFO = {
+"あ": {
+"reading": "a",
+"meaning": "Âm 'a' — như 'a' trong 'ba'",
+"example": "あさ (asa) — buổi sáng",
+"note": "Mẹo nhớ: giống chữ 'A' in hoa có thêm vòng xoáy."
+},
+"い": {
+"reading": "i",
+"meaning": "Âm 'i' — như 'i' trong 'đi'",
+"example": "いぬ (inu) — con chó",
+"note": "Mẹo nhớ: hai nét đứng như số '11' hoặc 2 con lươn."
+},
+"う": {
+"reading": "u",
+"meaning": "Âm 'u' — giữa 'u' và 'ư', môi không tròn",
+"example": "うみ (umi) — biển",
+"note": "Mẹo nhớ: giống chữ 'u' thường đang đội mũ."
+},
+"え": {
+"reading": "e",
+"meaning": "Âm 'ê' — như 'ê' trong 'bê'",
+"example": "えき (eki) — nhà ga",
+"note": "Mẹo nhớ: giống người quỳ vươn cổ / cái giá vẽ."
+},
+"お": {
+"reading": "o",
+"meaning": "Âm 'ô' — như 'ô' trong 'cô'",
+"example": "おかね (okane) — tiền",
+"note": "Mẹo nhớ: giống あ thêm nét — như người đá bóng có đuôi."
+},
+"か": {
+"reading": "ka",
+"meaning": "Âm 'ca'",
+"example": "かさ (kasa) — cái ô (dù)",
+"note": "Mẹo nhớ: như con dao katana có nét phẩy."
+},
+"き": {
+"reading": "ki",
+"meaning": "Âm 'ki'",
+"example": "き (ki) — cây, gỗ",
+"note": "Mẹo nhớ: giống chiếc chìa khoá — 'ki' = key."
+},
+"く": {
+"reading": "ku",
+"meaning": "Âm 'ku'",
+"example": "くつ (kutsu) — đôi giày",
+"note": "Mẹo nhớ: giống cái mỏ chim / dấu '<'."
+},
+"け": {
+"reading": "ke",
+"meaning": "Âm 'kê'",
+"example": "けさ (kesa) — sáng nay",
+"note": "Mẹo nhớ: một cây bút đứng cạnh nét sổ."
+},
+"こ": {
+"reading": "ko",
+"meaning": "Âm 'kô'",
+"example": "こども (kodomo) — trẻ con",
+"note": "Mẹo nhớ: hai nét ngang như 2 sợi mì."
+},
+"さ": {
+"reading": "sa",
+"meaning": "Âm 'sa'",
+"example": "さかな (sakana) — cá",
+"note": "Mẹo nhớ: gần giống き nhưng cong hơn — như chiếc lá."
+},
+"し": {
+"reading": "shi",
+"meaning": "Âm 'shi' — gần 'si' (đầu lưỡi nhẹ)",
+"example": "しお (shio) — muối",
+"note": "Mẹo nhớ: một nét cong như lưỡi câu."
+},
+"す": {
+"reading": "su",
+"meaning": "Âm 'su' — gần 'sư'",
+"example": "すし (sushi) — sushi",
+"note": "Mẹo nhớ: có vòng lặp như cây kẹo mút."
+},
+"せ": {
+"reading": "se",
+"meaning": "Âm 'sê'",
+"example": "せんせい (sensei) — giáo viên",
+"note": "Mẹo nhớ: giống cái nĩa nghiêng."
+},
+"そ": {
+"reading": "so",
+"meaning": "Âm 'sô'",
+"example": "そら (sora) — bầu trời",
+"note": "Mẹo nhớ: đường zigzag như mũi khâu."
+},
+"た": {
+"reading": "ta",
+"meaning": "Âm 'ta'",
+"example": "たまご (tamago) — trứng",
+"note": "Mẹo nhớ: giống chữ 't' + 'a' ghép lại."
+},
+"ち": {
+"reading": "chi",
+"meaning": "Âm 'chi'",
+"example": "ちず (chizu) — bản đồ",
+"note": "Mẹo nhớ: giống số '5' xoay ngược / má lúm khi cười."
+},
+"つ": {
+"reading": "tsu",
+"meaning": "Âm 'tsư' — bật 'ts' rồi 'u'",
+"example": "つき (tsuki) — mặt trăng",
+"note": "Mẹo nhớ: một làn sóng / miệng cười nằm ngang."
+},
+"て": {
+"reading": "te",
+"meaning": "Âm 'tê'",
+"example": "て (te) — bàn tay",
+"note": "Mẹo nhớ: một nét như bàn tay (te = tay) đưa ra."
+},
+"と": {
+"reading": "to",
+"meaning": "Âm 'tô'",
+"example": "とり (tori) — con chim",
+"note": "Mẹo nhớ: nét thẳng có cái gai — như ngón chân (toe)."
+},
+"な": {
+"reading": "na",
+"meaning": "Âm 'na'",
+"example": "なつ (natsu) — mùa hè",
+"note": "Mẹo nhớ: giống người đang quỳ cầu nguyện."
+},
+"に": {
+"reading": "ni",
+"meaning": "Âm 'ni'",
+"example": "にく (niku) — thịt",
+"note": "Mẹo nhớ: nét sổ + い — như hai đầu gối."
+},
+"ぬ": {
+"reading": "nu",
+"meaning": "Âm 'nu'",
+"example": "ぬの (nuno) — vải",
+"note": "Mẹo nhớ: có vòng xoáy đuôi như sợi mì (noodle)."
+},
+"ね": {
+"reading": "ne",
+"meaning": "Âm 'nê'",
+"example": "ねこ (neko) — con mèo",
+"note": "Mẹo nhớ: có vòng xoáy đuôi như đuôi mèo (neko)."
+},
+"の": {
+"reading": "no",
+"meaning": "Âm 'nô'",
+"example": "のり (nori) — rong biển",
+"note": "Mẹo nhớ: một vòng xoáy tròn như biển 'NO' cấm."
+},
+"は": {
+"reading": "ha",
+"meaning": "Âm 'ha' (làm trợ từ thì đọc 'wa')",
+"example": "はな (hana) — hoa",
+"note": "Mẹo nhớ: số '1' đứng cạnh cái ghế + nét ngang."
+},
+"ひ": {
+"reading": "hi",
+"meaning": "Âm 'hi'",
+"example": "ひと (hito) — người",
+"note": "Mẹo nhớ: giống cái mũi / khoé miệng đang cười."
+},
+"ふ": {
+"reading": "fu",
+"meaning": "Âm 'fu' — giữa 'hu' và 'phu'",
+"example": "ふゆ (fuyu) — mùa đông",
+"note": "Mẹo nhớ: giống núi Phú Sĩ (Fuji) — 'fu'."
+},
+"へ": {
+"reading": "he",
+"meaning": "Âm 'hê' (làm trợ từ thì đọc 'e')",
+"example": "へや (heya) — căn phòng",
+"note": "Mẹo nhớ: một nét như ngọn núi thấp."
+},
+"ほ": {
+"reading": "ho",
+"meaning": "Âm 'hô'",
+"example": "ほし (hoshi) — ngôi sao",
+"note": "Mẹo nhớ: giống は thêm 1 nét ngang trên đầu."
+},
+"ま": {
+"reading": "ma",
+"meaning": "Âm 'ma'",
+"example": "まど (mado) — cửa sổ",
+"note": "Mẹo nhớ: giống cuộn chỉ mẹ (mama) đang cầm."
+},
+"み": {
+"reading": "mi",
+"meaning": "Âm 'mi'",
+"example": "みず (mizu) — nước",
+"note": "Mẹo nhớ: giống số '21' với nét xoáy."
+},
+"む": {
+"reading": "mu",
+"meaning": "Âm 'mu'",
+"example": "むし (mushi) — côn trùng",
+"note": "Mẹo nhớ: có cái đuôi — con bò kêu 'muuu'."
+},
+"め": {
+"reading": "me",
+"meaning": "Âm 'mê'",
+"example": "め (me) — con mắt",
+"note": "Mẹo nhớ: có vòng xoáy như con mắt (me = mắt)."
+},
+"も": {
+"reading": "mo",
+"meaning": "Âm 'mô'",
+"example": "もり (mori) — khu rừng",
+"note": "Mẹo nhớ: giống lưỡi câu có 2 nét ngang."
+},
+"や": {
+"reading": "ya",
+"meaning": "Âm 'ya'",
+"example": "やま (yama) — núi",
+"note": "Mẹo nhớ: giống cái ná (súng cao su) chữ 'Y'."
+},
+"ゆ": {
+"reading": "yu",
+"meaning": "Âm 'yu'",
+"example": "ゆき (yuki) — tuyết",
+"note": "Mẹo nhớ: giống con cá / cái muôi múc canh."
+},
+"よ": {
+"reading": "yo",
+"meaning": "Âm 'yô'",
+"example": "よる (yoru) — buổi tối, ban đêm",
+"note": "Mẹo nhớ: giống lưỡi câu có nét ngang."
+},
+"ら": {
+"reading": "ra",
+"meaning": "Âm 'ra' (giữa r/l/đ, nhẹ)",
+"example": "さくら (sakura) — hoa anh đào",
+"note": "Mẹo nhớ: giống người đang chạy."
+},
+"り": {
+"reading": "ri",
+"meaning": "Âm 'ri'",
+"example": "りんご (ringo) — quả táo",
+"note": "Mẹo nhớ: hai nét như đôi đũa."
+},
+"る": {
+"reading": "ru",
+"meaning": "Âm 'ru'",
+"example": "はる (haru) — mùa xuân",
+"note": "Mẹo nhớ: giống ろ nhưng CÓ vòng xoáy ở đuôi."
+},
+"れ": {
+"reading": "re",
+"meaning": "Âm 'rê'",
+"example": "はれ (hare) — trời nắng",
+"note": "Mẹo nhớ: nét sổ + móc — họ hàng với ね, わ."
+},
+"ろ": {
+"reading": "ro",
+"meaning": "Âm 'rô'",
+"example": "くろ (kuro) — màu đen",
+"note": "Mẹo nhớ: giống る nhưng KHÔNG có đuôi xoáy."
+},
+"わ": {
+"reading": "wa",
+"meaning": "Âm 'wa'",
+"example": "わたし (watashi) — tôi",
+"note": "Mẹo nhớ: nét sổ + móc — họ hàng với れ, ね."
+},
+"を": {
+"reading": "wo (đọc 'o')",
+"meaning": "Trợ từ tân ngữ — luôn đọc là 'o'",
+"example": "ほんをよむ (hon o yomu) — đọc sách",
+"note": "Mẹo nhớ: chỉ dùng làm trợ từ, không dùng trong từ vựng."
+},
+"ん": {
+"reading": "n",
+"meaning": "Âm mũi cuối 'n/m/ng'",
+"example": "ほん (hon) — quyển sách",
+"note": "Mẹo nhớ: không bao giờ đứng đầu từ; giống chữ 'h' viết thường."
+}
+};

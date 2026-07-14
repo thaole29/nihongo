@@ -514,13 +514,13 @@ function kanaCategory(ch){
   return '';
 }
 function openChartDetail(ch){
-  const c=cards.find(x=>x.char===ch);
+  const info=(window.NIHONGO_KANA_INFO&&window.NIHONGO_KANA_INFO[ch]) || cards.find(x=>x.char===ch);
   let h=`<div class="detail-char">${esc(ch)}</div><div class="detail-rom">${esc(KANA_ROMAJI[ch]||'')}</div>`;
   h+=`<div class="center"><button class="btn ghost sm" data-speak="${esc(ch)}">🔊 Nghe</button></div>`;
-  if(c){
-    if(c.meaning) h+=`<div class="detail-mean">${esc(c.meaning)}</div>`;
-    if(c.example&&c.example.trim()) h+=`<div class="block"><span class="lbl">Ví dụ</span>${esc(c.example)}</div>`;
-    const note=(c.note||'').replace(/^\s*mẹo nhớ:\s*/i,'').trim();
+  if(info){
+    if(info.meaning) h+=`<div class="detail-mean">${esc(info.meaning)}</div>`;
+    if(info.example&&info.example.trim()) h+=`<div class="block"><span class="lbl">Ví dụ</span>${esc(info.example)}</div>`;
+    const note=(info.note||'').replace(/^\s*mẹo nhớ:\s*/i,'').trim();
     if(note) h+=`<div class="block"><span class="lbl">Mẹo nhớ</span>${esc(note)}</div>`;
   } else {
     const cat=kanaCategory(ch);
@@ -917,6 +917,13 @@ document.addEventListener('keydown',e=>{
 });
 
 /* ---------------- init ---------------- */
+// Migration 1 lần: bảng chữ Hiragana không còn là flashcard (chỉ hiển thị ở tab Bảng chữ)
+if(!prefs.kanaFlashcardsRemoved){
+  const before=cards.length;
+  cards=cards.filter(c=>c.topic!=='Bảng chữ Hiragana');
+  prefs.kanaFlashcardsRemoved=true; savePrefs();
+  if(cards.length!==before) save();
+}
 $('f-type').value=prefs.focusType; fillTopicSelect('f-topic'); refreshDeck(); updateDueBadge();
 if(prefs.syncEnabled){ setSyncStatus('Đang kết nối lại…'); connect(false); }
 </script>
