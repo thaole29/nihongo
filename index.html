@@ -102,6 +102,22 @@
   .bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:14px}
   .bar>span{display:block;height:100%;background:var(--accent);transition:width .3s}
 
+  /* Hiragana chart */
+  .chart{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;max-width:520px;margin:0 auto}
+  .cell{aspect-ratio:1;border:1px solid var(--line);border-radius:12px;background:var(--panel);cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:4px;color:var(--ink);font-family:inherit}
+  .cell:hover{border-color:var(--accent);background:var(--accent-soft)}
+  .cell .k{font-size:26px;font-weight:600;line-height:1}
+  .cell .r{font-size:11px;color:var(--muted)}
+  .cell.empty{border:0;background:transparent;cursor:default;pointer-events:none}
+  @media(max-width:520px){.cell .k{font-size:20px}.cell .r{font-size:10px}}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:60;padding:16px}
+  .modal{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px;max-width:360px;width:100%;box-shadow:var(--shadow);position:relative;max-height:85vh;overflow:auto}
+  .modal-close{position:absolute;top:8px;right:12px;border:0;background:transparent;font-size:18px;cursor:pointer;color:var(--muted)}
+  .detail-char{font-size:80px;text-align:center;font-weight:600;line-height:1}
+  .detail-rom{text-align:center;font-size:22px;color:var(--muted);margin-bottom:8px}
+  .detail-mean{text-align:center;font-size:16px;margin:12px 0 0}
+
   .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);
     padding:10px 18px;border-radius:10px;font-size:14px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:50}
   .toast.show{opacity:1}
@@ -116,6 +132,7 @@
     <h1>日本語 <span>Flashcards</span></h1>
     <div class="tabs">
       <button class="tab active" data-view="study">Học</button>
+      <button class="tab" data-view="chart">Bảng chữ</button>
       <button class="tab" data-view="review" id="tab-review">Ôn tập</button>
       <button class="tab" data-view="quiz">Quiz</button>
       <button class="tab" data-view="add">Thêm thẻ</button>
@@ -156,6 +173,12 @@
     </div>
     <div class="empty hide" id="study-empty">Chưa có thẻ nào khớp bộ lọc.<br><br>
       <button class="btn" onclick="switchView('add')">+ Thêm thẻ đầu tiên</button></div>
+  </section>
+
+  <!-- ================= CHART (Hiragana gojūon) ================= -->
+  <section id="view-chart" class="hide">
+    <p class="center" style="color:var(--muted);margin:0 0 14px"><small class="muted">Bảng chữ cái Hiragana — 46 âm cơ bản. Nhấn vào từng chữ để xem cách đọc, ví dụ và mẹo nhớ. 🔊 để nghe.</small></p>
+    <div class="chart" id="chart-grid"></div>
   </section>
 
   <!-- ================= REVIEW (SRS) ================= -->
@@ -298,6 +321,13 @@
   </section>
 </div>
 
+<div class="modal-overlay hide" id="chart-modal">
+  <div class="modal">
+    <button class="modal-close" id="chart-modal-close" aria-label="Đóng">✕</button>
+    <div id="chart-detail"></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script src="deck.js"></script>
@@ -389,7 +419,8 @@ function updateDueBadge(){ const n=dueCount(); $('tab-review').textContent = n? 
 const $=id=>document.getElementById(id);
 function switchView(v){
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.view===v));
-  ['study','review','quiz','add','manage'].forEach(x=>$('view-'+x).classList.toggle('hide',x!==v));
+  ['study','chart','review','quiz','add','manage'].forEach(x=>$('view-'+x).classList.toggle('hide',x!==v));
+  if(v==='chart'){ renderChart(); }
   if(v==='study'){ $('f-type').value=prefs.focusType; fillTopicSelect('f-topic'); refreshDeck(); }
   if(v==='review'){ $('r-type').value=prefs.focusType; fillTopicSelect('r-topic'); startReview(); }
   if(v==='quiz'){ $('q-type').value=prefs.focusType; fillTopicSelect('q-topic'); showQuizSetup(); }
@@ -404,6 +435,48 @@ function fillTopicSelect(elId){
   el.innerHTML='<option value="all">Tất cả</option>'+topics.map(t=>`<option>${esc(t)}</option>`).join('');
   if([...el.options].some(o=>o.value===cur)) el.value=cur;
 }
+
+/* ---------------- Hiragana chart ---------------- */
+const GOJUON=[
+  ['あ','い','う','え','お'],
+  ['か','き','く','け','こ'],
+  ['さ','し','す','せ','そ'],
+  ['た','ち','つ','て','と'],
+  ['な','に','ぬ','ね','の'],
+  ['は','ひ','ふ','へ','ほ'],
+  ['ま','み','む','め','も'],
+  ['や',null,'ゆ',null,'よ'],
+  ['ら','り','る','れ','ろ'],
+  ['わ',null,null,null,'を'],
+  ['ん',null,null,null,null],
+];
+const KANA_ROMAJI={'あ':'a','い':'i','う':'u','え':'e','お':'o','か':'ka','き':'ki','く':'ku','け':'ke','こ':'ko',
+ 'さ':'sa','し':'shi','す':'su','せ':'se','そ':'so','た':'ta','ち':'chi','つ':'tsu','て':'te','と':'to',
+ 'な':'na','に':'ni','ぬ':'nu','ね':'ne','の':'no','は':'ha','ひ':'hi','ふ':'fu','へ':'he','ほ':'ho',
+ 'ま':'ma','み':'mi','む':'mu','め':'me','も':'mo','や':'ya','ゆ':'yu','よ':'yo',
+ 'ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro','わ':'wa','を':'wo','ん':'n'};
+function renderChart(){
+  $('chart-grid').innerHTML = GOJUON.map(row=>row.map(ch=>{
+    if(!ch) return '<div class="cell empty"></div>';
+    return `<button class="cell" data-char="${esc(ch)}"><span class="k">${esc(ch)}</span><span class="r">${esc(KANA_ROMAJI[ch]||'')}</span></button>`;
+  }).join('')).join('');
+}
+function openChartDetail(ch){
+  const c=cards.find(x=>x.char===ch);
+  let h=`<div class="detail-char">${esc(ch)}</div><div class="detail-rom">${esc(KANA_ROMAJI[ch]||'')}</div>`;
+  h+=`<div class="center"><button class="btn ghost sm" data-speak="${esc(ch)}">🔊 Nghe</button></div>`;
+  if(c){
+    if(c.meaning) h+=`<div class="detail-mean">${esc(c.meaning)}</div>`;
+    if(c.example&&c.example.trim()) h+=`<div class="block"><span class="lbl">Ví dụ</span>${esc(c.example)}</div>`;
+    const note=(c.note||'').replace(/^\s*mẹo nhớ:\s*/i,'').trim();
+    if(note) h+=`<div class="block"><span class="lbl">Mẹo nhớ</span>${esc(note)}</div>`;
+  }
+  $('chart-detail').innerHTML=h; $('chart-modal').classList.remove('hide');
+}
+function closeChartModal(){ $('chart-modal').classList.add('hide'); }
+$('chart-grid').addEventListener('click',e=>{ const b=e.target.closest('[data-char]'); if(b) openChartDetail(b.getAttribute('data-char')); });
+$('chart-modal-close').onclick=closeChartModal;
+$('chart-modal').addEventListener('click',e=>{ if(e.target===$('chart-modal')) closeChartModal(); });
 
 /* ---------------- Study ---------------- */
 let deck=[], pos=0;
@@ -700,6 +773,7 @@ let toastT; function toast(m){ const t=$('toast'); t.textContent=m; t.classList.
 
 /* keyboard */
 document.addEventListener('keydown',e=>{
+  if(e.key==='Escape' && !$('chart-modal').classList.contains('hide')){ closeChartModal(); return; }
   if(!$('view-study').classList.contains('hide')){
     if(e.code==='Space'){e.preventDefault();flipStudy();}
     if(e.code==='ArrowRight')$('next').click();
