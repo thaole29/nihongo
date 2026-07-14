@@ -935,23 +935,5 @@ window.NIHONGO_DEFAULT_DECK = [
 "meaning": "Hotel / Khách sạn",
 "example": "ホテルにとまります。(Hoteru ni tomarimasu.) — Tôi ở (nghỉ tại) khách sạn.",
 "note": "Từ 'hotel'."
-},
-{
-"type": "kanji",
-"topic": "N5",
-"char": "水",
-"reading": "みず / mizu",
-"meaning": "Nước / Water",
-"example": "水を飲みます。(Mizu o nomimasu.) — Tôi uống nước.",
-"note": "On: スイ · Kun: みず"
-},
-{
-"type": "kanji",
-"topic": "N5",
-"char": "日本語",
-"reading": "にほんご / nihongo",
-"meaning": "Tiếng Nhật / Japanese",
-"example": "日本語を勉強します。(Nihongo o benkyou shimasu.) — Tôi học tiếng Nhật.",
-"note": ""
 }
 ];

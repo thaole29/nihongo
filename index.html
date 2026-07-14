@@ -286,6 +286,13 @@
           <input type="file" id="import-file" accept="application/json" class="hide">
         </div>
       </div>
+      <div id="topic-manager" style="margin-bottom:16px;border-bottom:1px solid var(--line);padding-bottom:12px">
+        <div class="toolbar" style="margin-bottom:6px">
+          <b style="font-size:14px">Quản lý topic</b>
+          <button class="btn ghost sm" id="add-topic">+ Thêm topic</button>
+        </div>
+        <div id="topic-list-mgr"></div>
+      </div>
       <div id="manage-list"></div>
     </div>
   </section>
@@ -303,8 +310,10 @@ function load(){ try{ const d=JSON.parse(localStorage.getItem(KEY)); if(Array.is
 function save(){ localStorage.setItem(KEY, JSON.stringify(cards)); }
 /* tuỳ chọn người dùng: mặc định ưu tiên Hiragana */
 const PKEY='nihongo_prefs';
-let prefs = (()=>{ try{ return Object.assign({focusType:'hiragana'}, JSON.parse(localStorage.getItem(PKEY))||{}); }catch(e){ return {focusType:'hiragana'}; } })();
+let prefs = (()=>{ try{ return Object.assign({focusType:'hiragana',extraTopics:[]}, JSON.parse(localStorage.getItem(PKEY))||{}); }catch(e){ return {focusType:'hiragana',extraTopics:[]}; } })();
 function savePrefs(){ localStorage.setItem(PKEY, JSON.stringify(prefs)); }
+/* nguồn topic = topic của các thẻ + topic tự thêm (prefs.extraTopics) */
+function allTopics(){ return [...new Set([...cards.map(c=>c.topic),...(prefs.extraTopics||[])].filter(Boolean))].sort(); }
 function seed(){
   if(Array.isArray(window.NIHONGO_DEFAULT_DECK) && window.NIHONGO_DEFAULT_DECK.length)
     return window.NIHONGO_DEFAULT_DECK.map(c=>({id:id(),...c}));
@@ -313,8 +322,6 @@ function seed(){
     {id:id(),type:'hiragana',topic:'Chào hỏi',char:'ありがとう',reading:'arigatou',meaning:'Cảm ơn / Thank you',example:'ありがとうございます。(Arigatou gozaimasu.) — Cảm ơn (lịch sự).',note:''},
     {id:id(),type:'katakana',topic:'Đồ ăn',char:'コーヒー',reading:'koohii',meaning:'Cà phê / Coffee',example:'コーヒーを飲みます。(Koohii o nomimasu.) — Tôi uống cà phê.',note:'ー là dấu kéo dài âm.'},
     {id:id(),type:'katakana',topic:'Đồ ăn',char:'ラーメン',reading:'raamen',meaning:'Mì ramen / Ramen',example:'ラーメンが好きです。(Raamen ga suki desu.) — Tôi thích ramen.',note:''},
-    {id:id(),type:'kanji',topic:'N5',char:'水',reading:'みず / mizu',meaning:'Nước / Water',example:'水を飲みます。(Mizu o nomimasu.) — Tôi uống nước.',note:'On: スイ · Kun: みず'},
-    {id:id(),type:'kanji',topic:'N5',char:'日本語',reading:'にほんご / nihongo',meaning:'Tiếng Nhật / Japanese',example:'日本語を勉強します。(Nihongo o benkyou shimasu.) — Tôi học tiếng Nhật.',note:''},
   ];
 }
 
@@ -392,7 +399,7 @@ function switchView(v){
 }
 document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>switchView(t.dataset.view));
 function fillTopicSelect(elId){
-  const topics=[...new Set(cards.map(c=>c.topic).filter(Boolean))].sort();
+  const topics=allTopics();
   const el=$(elId), cur=el.value;
   el.innerHTML='<option value="all">Tất cả</option>'+topics.map(t=>`<option>${esc(t)}</option>`).join('');
   if([...el.options].some(o=>o.value===cur)) el.value=cur;
@@ -589,7 +596,7 @@ document.querySelectorAll('[data-fill]').forEach(b=>b.onclick=()=>{
   const val=b.dataset.fill==='hira'?$('pv-hira').textContent:$('pv-kata').textContent;
   if(val){ $('in-char').value=val; $('in-type').value=b.dataset.fill==='hira'?'hiragana':'katakana'; toast('Đã điền ký tự'); }
 });
-function refreshTopicList(){ const t=[...new Set(cards.map(c=>c.topic).filter(Boolean))].sort(); $('topic-list').innerHTML=t.map(x=>`<option value="${esc(x)}">`).join(''); }
+function refreshTopicList(){ $('topic-list').innerHTML=allTopics().map(x=>`<option value="${esc(x)}">`).join(''); }
 $('save-card').onclick=()=>{
   const ch=$('in-char').value.trim(), me=$('in-meaning').value.trim();
   if(!ch){ toast('Thiếu ký tự mặt trước'); return; }
@@ -611,7 +618,47 @@ function exitEdit(){ $('edit-id').textContent=''; $('form-title').textContent='T
 $('cancel-edit').onclick=()=>{ exitEdit(); clearForm(); };
 
 /* ---------------- Manage ---------------- */
+function renderTopicManager(){
+  const counts={}; cards.forEach(c=>{ if(c.topic) counts[c.topic]=(counts[c.topic]||0)+1; });
+  const topics=allTopics();
+  $('topic-list-mgr').innerHTML = topics.length ? topics.map(t=>`
+    <div class="list-item" style="padding:7px 4px">
+      <div class="lmeta"><span class="r">${esc(t)}</span> <small class="muted">· ${counts[t]||0} thẻ</small></div>
+      <button class="btn ghost sm" data-trename="${esc(t)}">Đổi tên</button>
+      <button class="btn ghost sm" data-tdelete="${esc(t)}">Xoá</button>
+    </div>`).join('') : '<small class="muted">Chưa có topic nào.</small>';
+}
+function addTopic(){
+  const name=(prompt('Tên topic mới:')||'').trim(); if(!name) return;
+  if(allTopics().includes(name)){ toast('Topic đã tồn tại'); return; }
+  prefs.extraTopics=[...(prefs.extraTopics||[]),name]; savePrefs();
+  renderManage(); refreshTopicList(); toast('Đã thêm topic');
+}
+function renameTopic(old){
+  const name=(prompt(`Đổi tên topic "${old}" thành:`, old)||'').trim(); if(!name||name===old) return;
+  cards.forEach(c=>{ if(c.topic===old) c.topic=name; });
+  prefs.extraTopics=[...new Set((prefs.extraTopics||[]).map(x=>x===old?name:x))];
+  save(); savePrefs(); renderManage(); refreshTopicList(); updateDueBadge();
+  toast(allTopics().includes(old)?'Đã đổi tên topic':'Đã đổi tên / gộp topic');
+}
+function deleteTopic(t){
+  const n=cards.filter(c=>c.topic===t).length;
+  if(n>0){
+    if(!confirm(`Xoá topic "${t}" (${n} thẻ)?`)) return;
+    const delCards=confirm(`Bấm OK: XOÁ LUÔN ${n} thẻ trong topic.\nBấm Cancel: GIỮ thẻ, chỉ bỏ nhãn topic (về "Chưa phân loại").`);
+    if(delCards) cards=cards.filter(c=>c.topic!==t);
+    else cards.forEach(c=>{ if(c.topic===t) c.topic=''; });
+  } else { if(!confirm(`Xoá topic "${t}"?`)) return; }
+  prefs.extraTopics=(prefs.extraTopics||[]).filter(x=>x!==t); savePrefs();
+  save(); renderManage(); refreshTopicList(); updateDueBadge(); toast('Đã xoá topic');
+}
+$('add-topic').onclick=addTopic;
+$('topic-list-mgr').addEventListener('click',e=>{
+  const r=e.target.closest('[data-trename]'); if(r){ renameTopic(r.getAttribute('data-trename')); return; }
+  const d=e.target.closest('[data-tdelete]'); if(d){ deleteTopic(d.getAttribute('data-tdelete')); return; }
+});
 function renderManage(){
+  renderTopicManager();
   fillTopicSelect('m-topic');
   const f=$('m-topic').value; const list=cards.filter(c=>f==='all'||c.topic===f);
   $('m-count').textContent=`${list.length} thẻ`;
