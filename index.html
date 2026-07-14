@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nihongo Flashcards</title>
+<style>
+  :root{
+    --bg:#f6f5f2; --panel:#ffffff; --ink:#1f2328; --muted:#6b7280;
+    --line:#e5e3dd; --accent:#d64545; --accent-soft:#fbeaea;
+    --hira:#2f81f7; --kata:#8957e5; --kanji:#d64545;
+    --ok:#1a7f37; --bad:#cf222e; --shadow:0 6px 24px rgba(0,0,0,.08);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#16181d; --panel:#22262e; --ink:#e6e6e6; --muted:#9aa0aa;
+      --line:#333844; --accent:#ef6a6a; --accent-soft:#3a2626;
+      --hira:#58a6ff; --kata:#bc8cff; --kanji:#ef6a6a;
+      --ok:#3fb950; --bad:#ff7b72; --shadow:0 6px 24px rgba(0,0,0,.35);
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Hiragino Kaku Gothic Pro","Noto Sans JP",sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.5}
+  .wrap{max-width:880px;margin:0 auto;padding:20px 16px 60px}
+  header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+  h1{font-size:22px;margin:0;letter-spacing:.5px}
+  h1 span{color:var(--accent)}
+  .tabs{display:flex;gap:6px;background:var(--panel);padding:4px;border-radius:12px;border:1px solid var(--line);flex-wrap:wrap}
+  .tab{border:0;background:transparent;color:var(--muted);padding:8px 13px;border-radius:9px;cursor:pointer;font-size:14px;font-weight:600}
+  .tab.active{background:var(--accent);color:#fff}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  label{font-size:13px;color:var(--muted);font-weight:600;display:block;margin:0 0 4px}
+  input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;
+    background:var(--bg);color:var(--ink);font-size:15px;font-family:inherit}
+  textarea{resize:vertical;min-height:60px}
+  .btn{border:0;border-radius:10px;padding:10px 16px;font-size:14px;font-weight:600;cursor:pointer;background:var(--accent);color:#fff}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+  .btn.sm{padding:6px 10px;font-size:13px}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .field{margin-bottom:14px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:560px){.grid2{grid-template-columns:1fr}}
+
+  .badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:.3px}
+  .badge.hiragana{background:color-mix(in srgb,var(--hira) 18%,transparent);color:var(--hira)}
+  .badge.katakana{background:color-mix(in srgb,var(--kata) 18%,transparent);color:var(--kata)}
+  .badge.kanji{background:color-mix(in srgb,var(--kanji) 18%,transparent);color:var(--kanji)}
+
+  .filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:flex-end}
+  .filters select{width:auto;min-width:140px}
+  .counter{text-align:center;color:var(--muted);font-size:14px;margin-bottom:10px}
+  .card-stage{perspective:1200px;margin:0 auto 18px;max-width:560px}
+  .card{position:relative;width:100%;min-height:320px;cursor:pointer;transition:transform .5s;transform-style:preserve-3d}
+  .card.flipped{transform:rotateY(180deg)}
+  .face{position:absolute;inset:0;backface-visibility:hidden;border:1px solid var(--line);border-radius:20px;
+    background:var(--panel);box-shadow:var(--shadow);padding:24px;display:flex;flex-direction:column;overflow:auto}
+  .face.back{transform:rotateY(180deg)}
+  .face-top{display:flex;justify-content:space-between;align-items:center}
+  .topic-chip{font-size:12px;color:var(--muted);font-weight:600}
+  .char{flex:1;display:flex;align-items:center;justify-content:center;font-size:64px;font-weight:600;line-height:1.1;text-align:center;white-space:nowrap;overflow:hidden}
+  @media(max-width:560px){.char{font-size:48px}}
+  .char.mid{font-size:30px;font-weight:600;white-space:normal}
+  .hint{text-align:center;color:var(--muted);font-size:12px}
+  .reading{font-size:32px;text-align:center;font-weight:700;margin:4px 0}
+  .meaning{font-size:19px;text-align:center;margin-bottom:12px}
+  .block{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:8px;font-size:15px}
+  .block .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:700;display:block;margin-bottom:2px}
+  .controls{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  .empty{text-align:center;color:var(--muted);padding:50px 10px}
+  .center{text-align:center}
+
+  .helper{background:var(--accent-soft);border:1px dashed var(--accent);border-radius:12px;padding:12px;margin-bottom:16px}
+  .preview{display:flex;gap:16px;margin-top:8px;flex-wrap:wrap}
+  .preview .pv{flex:1;min-width:120px}
+  .preview .pvchar{font-size:30px;min-height:40px;font-weight:600}
+
+  .list-item{display:flex;align-items:center;gap:12px;padding:10px 4px;border-bottom:1px solid var(--line)}
+  .list-item .lc{font-size:20px;min-width:52px;max-width:120px;text-align:center;flex:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .list-item .lmeta{flex:1;min-width:0}
+  .list-item .lmeta .r{font-weight:600}
+  .list-item .lmeta .m{color:var(--muted);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:14px}
+
+  .grade{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:560px;margin:0 auto}
+  .grade button{flex-direction:column;padding:12px 6px;font-size:13px}
+  .g-again{background:var(--bad)!important;color:#fff!important;border:0!important}
+  .g-hard{background:#c9820a!important;color:#fff!important;border:0!important}
+  .g-good{background:var(--ok)!important;color:#fff!important;border:0!important}
+  .g-easy{background:var(--accent)!important;color:#fff!important;border:0!important}
+
+  .choice{display:block;width:100%;text-align:left;margin:8px 0;padding:14px;border:1px solid var(--line);border-radius:12px;
+    background:var(--bg);color:var(--ink);font-size:18px;cursor:pointer;font-weight:600}
+  .choice:hover{border-color:var(--accent)}
+  .choice.correct{background:color-mix(in srgb,var(--ok) 18%,transparent);border-color:var(--ok)}
+  .choice.wrong{background:color-mix(in srgb,var(--bad) 18%,transparent);border-color:var(--bad)}
+  .q-char{font-size:56px;text-align:center;font-weight:600;margin:6px 0 14px;white-space:nowrap;overflow:hidden}
+  .q-mean{font-size:26px;text-align:center;font-weight:600;margin:10px 0 18px}
+  .fb{text-align:center;font-weight:700;margin:10px 0}
+  .fb.ok{color:var(--ok)} .fb.bad{color:var(--bad)}
+  .bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:14px}
+  .bar>span{display:block;height:100%;background:var(--accent);transition:width .3s}
+
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);
+    padding:10px 18px;border-radius:10px;font-size:14px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:50}
+  .toast.show{opacity:1}
+  .hide{display:none!important}
+  small.muted{color:var(--muted)}
+  .stat{font-size:40px;font-weight:800}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>日本語 <span>Flashcards</span></h1>
+    <div class="tabs">
+      <button class="tab active" data-view="study">Học</button>
+      <button class="tab" data-view="review" id="tab-review">Ôn tập</button>
+      <button class="tab" data-view="quiz">Quiz</button>
+      <button class="tab" data-view="add">Thêm thẻ</button>
+      <button class="tab" data-view="manage">Quản lý</button>
+    </div>
+  </header>
+
+  <!-- ================= STUDY ================= -->
+  <section id="view-study">
+    <div class="filters">
+      <div><label>Phân loại</label>
+        <select id="f-type"><option value="all">Tất cả</option><option value="hiragana">Hiragana</option><option value="katakana">Katakana</option><option value="kanji">Kanji</option></select></div>
+      <div><label>Topic</label><select id="f-topic"><option value="all">Tất cả</option></select></div>
+      <div><button class="btn ghost sm" id="shuffle">🔀 Xáo trộn</button></div>
+    </div>
+    <div id="study-body">
+      <div class="counter" id="counter"></div>
+      <div class="card-stage"><div class="card" id="card">
+        <div class="face front">
+          <div class="face-top"><span class="badge" id="front-badge"></span><span class="topic-chip" id="front-topic"></span></div>
+          <div class="char" id="front-char"></div>
+          <div class="hint">Nhấn để lật · (Space)</div>
+        </div>
+        <div class="face back">
+          <div class="face-top"><span class="badge" id="back-badge"></span><span class="topic-chip" id="back-topic"></span></div>
+          <div class="reading" id="back-reading"></div>
+          <div class="center"><button class="btn ghost sm" id="speak-study">🔊 Nghe</button></div>
+          <div class="meaning" id="back-meaning" style="margin-top:10px"></div>
+          <div id="back-example" class="block"><span class="lbl">Ví dụ</span><span id="ex-text"></span></div>
+          <div id="back-note" class="block"><span class="lbl">Note</span><span id="note-text"></span></div>
+        </div>
+      </div></div>
+      <div class="controls">
+        <button class="btn ghost" id="prev">← Trước</button>
+        <button class="btn" id="flip">Lật thẻ</button>
+        <button class="btn ghost" id="next">Sau →</button>
+      </div>
+    </div>
+    <div class="empty hide" id="study-empty">Chưa có thẻ nào khớp bộ lọc.<br><br>
+      <button class="btn" onclick="switchView('add')">+ Thêm thẻ đầu tiên</button></div>
+  </section>
+
+  <!-- ================= REVIEW (SRS) ================= -->
+  <section id="view-review" class="hide">
+    <div class="filters">
+      <div><label>Phân loại</label>
+        <select id="r-type"><option value="all">Tất cả</option><option value="hiragana">Hiragana</option><option value="katakana">Katakana</option><option value="kanji">Kanji</option></select></div>
+      <div><label>Topic</label><select id="r-topic"><option value="all">Tất cả</option></select></div>
+      <div><label>Chiều hỏi</label>
+        <select id="r-dir"><option value="jp2mean">Ký tự → Nghĩa</option><option value="mean2jp">Nghĩa → Ký tự (ngược)</option></select></div>
+    </div>
+    <div id="review-body">
+      <div class="counter" id="r-counter"></div>
+      <div class="card-stage"><div class="card" id="r-card">
+        <div class="face front">
+          <div class="face-top"><span class="badge" id="rf-badge"></span><span class="topic-chip" id="rf-topic"></span></div>
+          <div id="rf-main" class="char"></div>
+          <div class="hint" id="rf-hint">Nhấn để hiện đáp án · (Space)</div>
+        </div>
+        <div class="face back">
+          <div class="face-top"><span class="badge" id="rb-badge"></span><span class="topic-chip" id="rb-topic"></span></div>
+          <div id="rb-main"></div>
+        </div>
+      </div></div>
+      <div class="controls" id="r-reveal-row"><button class="btn" id="r-reveal">Hiện đáp án (Space)</button></div>
+      <div class="grade hide" id="r-grade-row">
+        <button class="btn g-again" data-grade="again">😵<br>Quên</button>
+        <button class="btn g-hard" data-grade="hard">😓<br>Khó</button>
+        <button class="btn g-good" data-grade="good">🙂<br>Nhớ</button>
+        <button class="btn g-easy" data-grade="easy">😎<br>Dễ</button>
+      </div>
+    </div>
+    <div class="empty hide" id="review-done"></div>
+  </section>
+
+  <!-- ================= QUIZ ================= -->
+  <section id="view-quiz" class="hide">
+    <div class="panel" id="quiz-setup">
+      <h2 style="margin:0 0 14px;font-size:18px">Tạo bài quiz</h2>
+      <div class="grid2">
+        <div class="field"><label>Kiểu câu hỏi</label>
+          <select id="q-mode">
+            <option value="reading">Nhìn ký tự → gõ cách đọc</option>
+            <option value="meaning">Nhìn ký tự → chọn nghĩa</option>
+            <option value="char">Nhìn nghĩa → chọn ký tự (ngược)</option>
+          </select></div>
+        <div class="field"><label>Số câu</label>
+          <select id="q-count"><option>10</option><option>20</option><option>30</option><option value="all">Tất cả</option></select></div>
+        <div class="field"><label>Phân loại</label>
+          <select id="q-type"><option value="all">Tất cả</option><option value="hiragana">Hiragana</option><option value="katakana">Katakana</option><option value="kanji">Kanji</option></select></div>
+        <div class="field"><label>Topic</label><select id="q-topic"><option value="all">Tất cả</option></select></div>
+      </div>
+      <button class="btn" id="q-start">Bắt đầu ▶</button>
+      <p style="margin:12px 0 0"><small class="muted">Câu sai sẽ được đánh dấu “hay quên” và ưu tiên trong tab Ôn tập.</small></p>
+    </div>
+
+    <div id="quiz-play" class="hide">
+      <div class="bar"><span id="q-bar"></span></div>
+      <div class="counter" id="q-progress"></div>
+      <div class="panel">
+        <div id="q-question"></div>
+        <div id="q-answer-area"></div>
+        <div class="fb hide" id="q-feedback"></div>
+        <div class="center hide" id="q-next-row"><button class="btn" id="q-next">Câu tiếp →</button></div>
+      </div>
+    </div>
+
+    <div id="quiz-result" class="hide">
+      <div class="panel center">
+        <div class="stat" id="q-score"></div>
+        <div class="muted" id="q-score-sub" style="margin-bottom:16px"></div>
+        <div id="q-wrong-list" style="text-align:left"></div>
+        <button class="btn" id="q-again" style="margin-top:16px">Làm bài mới</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ADD / EDIT ================= -->
+  <section id="view-add" class="hide">
+    <div class="panel">
+      <h2 style="margin:0 0 4px;font-size:18px" id="form-title">Thêm thẻ mới</h2>
+      <p style="margin:0 0 16px"><small class="muted">Mặt trước = ký tự tiếng Nhật · Mặt sau = đọc + nghĩa + ví dụ.</small></p>
+      <div class="helper">
+        <label style="color:var(--accent)">⌨️ Gõ romaji → kana (viết tiếng Nhật bằng chữ latin)</label>
+        <input id="romaji-in" placeholder="vd: konnichiwa, sushi, arigatou..." autocomplete="off">
+        <div class="preview">
+          <div class="pv"><small class="muted">Hiragana</small><div class="pvchar" id="pv-hira"></div>
+            <button type="button" class="btn ghost sm" data-fill="hira">↑ Dùng cho ký tự</button></div>
+          <div class="pv"><small class="muted">Katakana</small><div class="pvchar" id="pv-kata"></div>
+            <button type="button" class="btn ghost sm" data-fill="kata">↑ Dùng cho ký tự</button></div>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>Phân loại *</label>
+          <select id="in-type"><option value="hiragana">Hiragana</option><option value="katakana">Katakana</option><option value="kanji">Kanji</option></select></div>
+        <div class="field"><label>Topic</label>
+          <input id="in-topic" list="topic-list" placeholder="vd: Chào hỏi, Gia đình, N5..."><datalist id="topic-list"></datalist></div>
+      </div>
+      <div class="field"><label>Ký tự (mặt trước) *</label>
+        <input id="in-char" placeholder="日本語 / こんにちは / コーヒー" style="font-size:22px"></div>
+      <div class="grid2">
+        <div class="field"><label>Cách đọc</label><input id="in-reading" placeholder="にほんご / nihongo"></div>
+        <div class="field"><label>Nghĩa (Anh/Việt) *</label><input id="in-meaning" placeholder="Japanese language / tiếng Nhật"></div>
+      </div>
+      <div class="field"><label>Câu ví dụ ngắn</label>
+        <textarea id="in-example" placeholder="日本語を勉強します。 — Tôi học tiếng Nhật."></textarea></div>
+      <div class="field"><label>Note (tuỳ chọn)</label>
+        <textarea id="in-note" placeholder="Ghi chú, mẹo nhớ, biến thể..."></textarea></div>
+      <div class="row">
+        <button class="btn" id="save-card">Lưu thẻ</button>
+        <button class="btn ghost hide" id="cancel-edit">Huỷ sửa</button>
+        <span id="edit-id" class="hide"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MANAGE ================= -->
+  <section id="view-manage" class="hide">
+    <div class="panel">
+      <div class="toolbar">
+        <div class="row">
+          <select id="m-topic" style="width:auto"><option value="all">Tất cả topic</option></select>
+          <span class="muted"><small class="muted" id="m-count"></small></span>
+        </div>
+        <div class="row">
+          <button class="btn ghost sm" id="export">⬇ Export JSON</button>
+          <button class="btn ghost sm" id="import-btn">⬆ Import JSON</button>
+          <input type="file" id="import-file" accept="application/json" class="hide">
+        </div>
+      </div>
+      <div id="manage-list"></div>
+    </div>
+  </section>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="deck.js"></script>
+<script>
+/* ---------------- Storage ---------------- */
+const KEY='nihongo_cards_v1';
+let _seq=0; function id(){ return 'c'+Date.now().toString(36)+(_seq++).toString(36); }
+let cards = load();
+function load(){ try{ const d=JSON.parse(localStorage.getItem(KEY)); if(Array.isArray(d)) return d; }catch(e){} const s=seed(); try{ localStorage.setItem(KEY, JSON.stringify(s)); }catch(e){} return s; }
+function save(){ localStorage.setItem(KEY, JSON.stringify(cards)); }
+/* tuỳ chọn người dùng: mặc định ưu tiên Hiragana */
+const PKEY='nihongo_prefs';
+let prefs = (()=>{ try{ return Object.assign({focusType:'hiragana'}, JSON.parse(localStorage.getItem(PKEY))||{}); }catch(e){ return {focusType:'hiragana'}; } })();
+function savePrefs(){ localStorage.setItem(PKEY, JSON.stringify(prefs)); }
+function seed(){
+  if(Array.isArray(window.NIHONGO_DEFAULT_DECK) && window.NIHONGO_DEFAULT_DECK.length)
+    return window.NIHONGO_DEFAULT_DECK.map(c=>({id:id(),...c}));
+  return [
+    {id:id(),type:'hiragana',topic:'Chào hỏi',char:'こんにちは',reading:'konnichiwa',meaning:'Xin chào / Hello',example:'こんにちは、元気ですか。(Konnichiwa, genki desu ka?) — Chào, bạn khoẻ không?',note:'Dùng ban ngày.'},
+    {id:id(),type:'hiragana',topic:'Chào hỏi',char:'ありがとう',reading:'arigatou',meaning:'Cảm ơn / Thank you',example:'ありがとうございます。(Arigatou gozaimasu.) — Cảm ơn (lịch sự).',note:''},
+    {id:id(),type:'katakana',topic:'Đồ ăn',char:'コーヒー',reading:'koohii',meaning:'Cà phê / Coffee',example:'コーヒーを飲みます。(Koohii o nomimasu.) — Tôi uống cà phê.',note:'ー là dấu kéo dài âm.'},
+    {id:id(),type:'katakana',topic:'Đồ ăn',char:'ラーメン',reading:'raamen',meaning:'Mì ramen / Ramen',example:'ラーメンが好きです。(Raamen ga suki desu.) — Tôi thích ramen.',note:''},
+    {id:id(),type:'kanji',topic:'N5',char:'水',reading:'みず / mizu',meaning:'Nước / Water',example:'水を飲みます。(Mizu o nomimasu.) — Tôi uống nước.',note:'On: スイ · Kun: みず'},
+    {id:id(),type:'kanji',topic:'N5',char:'日本語',reading:'にほんご / nihongo',meaning:'Tiếng Nhật / Japanese',example:'日本語を勉強します。(Nihongo o benkyou shimasu.) — Tôi học tiếng Nhật.',note:''},
+  ];
+}
+
+/* ---------------- Romaji -> Kana ---------------- */
+const RMAP={
+ a:'あ',i:'い',u:'う',e:'え',o:'お',ka:'か',ki:'き',ku:'く',ke:'け',ko:'こ',
+ sa:'さ',shi:'し',si:'し',su:'す',se:'せ',so:'そ',ta:'た',chi:'ち',ti:'ち',tsu:'つ',tu:'つ',te:'て',to:'と',
+ na:'な',ni:'に',nu:'ぬ',ne:'ね',no:'の',ha:'は',hi:'ひ',fu:'ふ',hu:'ふ',he:'へ',ho:'ほ',
+ ma:'ま',mi:'み',mu:'む',me:'め',mo:'も',ya:'や',yu:'ゆ',yo:'よ',ra:'ら',ri:'り',ru:'る',re:'れ',ro:'ろ',
+ wa:'わ',wo:'を',n:'ん',nn:'ん',ga:'が',gi:'ぎ',gu:'ぐ',ge:'げ',go:'ご',za:'ざ',ji:'じ',zi:'じ',zu:'ず',ze:'ぜ',zo:'ぞ',
+ da:'だ',di:'ぢ',du:'づ',de:'で',do:'ど',ba:'ば',bi:'び',bu:'ぶ',be:'べ',bo:'ぼ',pa:'ぱ',pi:'ぴ',pu:'ぷ',pe:'ぺ',po:'ぽ',
+ kya:'きゃ',kyu:'きゅ',kyo:'きょ',sha:'しゃ',shu:'しゅ',sho:'しょ',sya:'しゃ',syu:'しゅ',syo:'しょ',
+ cha:'ちゃ',chu:'ちゅ',cho:'ちょ',tya:'ちゃ',tyu:'ちゅ',tyo:'ちょ',nya:'にゃ',nyu:'にゅ',nyo:'にょ',
+ hya:'ひゃ',hyu:'ひゅ',hyo:'ひょ',mya:'みゃ',myu:'みゅ',myo:'みょ',rya:'りゃ',ryu:'りゅ',ryo:'りょ',
+ gya:'ぎゃ',gyu:'ぎゅ',gyo:'ぎょ',ja:'じゃ',ju:'じゅ',jo:'じょ',jya:'じゃ',jyu:'じゅ',jyo:'じょ',
+ bya:'びゃ',byu:'びゅ',byo:'びょ',pya:'ぴゃ',pyu:'ぴゅ',pyo:'ぴょ',fa:'ふぁ',fi:'ふぃ',fe:'ふぇ',fo:'ふぉ',vu:'ゔ','-':'ー',' ':' '
+};
+function romajiToHira(s){
+  s=(s||'').toLowerCase(); let out=''; let i=0;
+  while(i<s.length){
+    const c=s[i];
+    if(/[a-z]/.test(c) && c!=='n' && !'aiueo'.includes(c) && s[i+1]===c){ out+='っ'; i++; continue; }
+    let matched=false;
+    for(let len=3;len>=1;len--){ const chunk=s.substr(i,len); if(RMAP[chunk]!==undefined){ out+=RMAP[chunk]; i+=len; matched=true; break; } }
+    if(!matched){ if(c==='n'){ out+='ん'; i++; } else { out+=c; i++; } }
+  }
+  return out;
+}
+function hiraToKata(s){ return s.replace(/[ぁ-ゖ]/g,ch=>String.fromCharCode(ch.charCodeAt(0)+0x60)); }
+
+/* ---------------- Text to speech ---------------- */
+function speak(text){
+  if(!text) return;
+  if(!('speechSynthesis' in window)){ toast('Trình duyệt không hỗ trợ đọc tiếng Nhật'); return; }
+  const u=new SpeechSynthesisUtterance(text); u.lang='ja-JP'; u.rate=0.9;
+  const v=(speechSynthesis.getVoices()||[]).find(x=>x.lang&&x.lang.toLowerCase().startsWith('ja'));
+  if(v) u.voice=v;
+  speechSynthesis.cancel(); speechSynthesis.speak(u);
+}
+if('speechSynthesis' in window){ speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged=()=>{}; }
+document.addEventListener('click',e=>{ const b=e.target.closest('[data-speak]'); if(b){ e.stopPropagation(); speak(b.getAttribute('data-speak')); } });
+
+/* ---------------- SRS (SM-2 lite) ---------------- */
+const DAY=86400000;
+function isDue(c){ return !c.srs || (c.srs.due||0)<=Date.now(); }
+function schedule(c,grade){
+  const s=c.srs||{interval:0,ease:2.5,reps:0,lapses:0,due:0};
+  if(grade==='again'){
+    s.reps=0; s.lapses=(s.lapses||0)+1; s.interval=0; s.ease=Math.max(1.3,s.ease-0.2);
+    s.due=Date.now()+60000; // ~1 phút: quay lại ngay trong phiên (ưu tiên)
+  }else{
+    const q=grade==='hard'?3:grade==='good'?4:5;
+    s.ease=Math.max(1.3, s.ease + (0.1-(5-q)*(0.08+(5-q)*0.02)));
+    if(s.reps===0) s.interval=grade==='hard'?1:grade==='easy'?4:1;
+    else if(s.reps===1) s.interval=grade==='hard'?3:6;
+    else s.interval=Math.max(1,Math.round(s.interval*(grade==='hard'?1.2:s.ease)*(grade==='easy'?1.3:1)));
+    s.reps++; s.due=Date.now()+s.interval*DAY;
+  }
+  c.srs=s; save();
+}
+function dueCount(){ return cards.filter(c=>(prefs.focusType==='all'||c.type===prefs.focusType)&&isDue(c)).length; }
+function updateDueBadge(){ const n=dueCount(); $('tab-review').textContent = n? `Ôn tập (${n})` : 'Ôn tập'; }
+
+/* ---------------- View switching ---------------- */
+const $=id=>document.getElementById(id);
+function switchView(v){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.view===v));
+  ['study','review','quiz','add','manage'].forEach(x=>$('view-'+x).classList.toggle('hide',x!==v));
+  if(v==='study'){ $('f-type').value=prefs.focusType; fillTopicSelect('f-topic'); refreshDeck(); }
+  if(v==='review'){ $('r-type').value=prefs.focusType; fillTopicSelect('r-topic'); startReview(); }
+  if(v==='quiz'){ $('q-type').value=prefs.focusType; fillTopicSelect('q-topic'); showQuizSetup(); }
+  if(v==='add'){ refreshTopicList(); }
+  if(v==='manage'){ renderManage(); }
+  updateDueBadge();
+}
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>switchView(t.dataset.view));
+function fillTopicSelect(elId){
+  const topics=[...new Set(cards.map(c=>c.topic).filter(Boolean))].sort();
+  const el=$(elId), cur=el.value;
+  el.innerHTML='<option value="all">Tất cả</option>'+topics.map(t=>`<option>${esc(t)}</option>`).join('');
+  if([...el.options].some(o=>o.value===cur)) el.value=cur;
+}
+
+/* ---------------- Study ---------------- */
+let deck=[], pos=0;
+function refreshDeck(){
+  const ty=$('f-type').value, tp=$('f-topic').value;
+  deck=cards.filter(c=>(ty==='all'||c.type===ty)&&(tp==='all'||c.topic===tp));
+  pos=0; renderStudy();
+}
+function renderStudy(){
+  const has=deck.length>0;
+  $('study-body').classList.toggle('hide',!has); $('study-empty').classList.toggle('hide',has);
+  if(!has) return;
+  const c=deck[pos]; $('card').classList.remove('flipped');
+  $('counter').textContent=`${pos+1} / ${deck.length}`;
+  const label=typeLabel(c.type);
+  $('front-badge').className='badge '+c.type; $('front-badge').textContent=label;
+  $('back-badge').className='badge '+c.type; $('back-badge').textContent=label;
+  $('front-topic').textContent=c.topic||''; $('back-topic').textContent=c.topic||'';
+  fitChar($('front-char'),c.char,72); $('back-reading').textContent=c.reading||''; $('back-meaning').textContent=c.meaning||'';
+  $('speak-study').setAttribute('data-speak',c.char);
+  toggleBlock('back-example','ex-text',c.example); toggleBlock('back-note','note-text',c.note);
+}
+function typeLabel(t){ return {hiragana:'Hiragana',katakana:'Katakana',kanji:'Kanji'}[t]||t; }
+/* auto co ký tự Nhật cho vừa 1 dòng theo bề rộng thẻ */
+function fitChar(el,text,maxSize){
+  maxSize=maxSize||64; el.dataset.fit=text; el.dataset.max=maxSize; el.style.whiteSpace='nowrap';
+  el.textContent=''; const span=document.createElement('span'); span.style.display='inline-block'; span.textContent=text; el.appendChild(span);
+  const avail=el.clientWidth; if(!avail){ el.style.fontSize=maxSize+'px'; return; }
+  let size=maxSize; el.style.fontSize=size+'px';
+  if(span.offsetWidth>avail){ size=Math.max(12,Math.floor(maxSize*(avail-6)/span.offsetWidth)); el.style.fontSize=size+'px'; }
+  let g=0; while(span.offsetWidth>avail && size>12 && g<12){ size-=1; el.style.fontSize=size+'px'; g++; }
+}
+let _rt; window.addEventListener('resize',()=>{ clearTimeout(_rt); _rt=setTimeout(()=>{
+  document.querySelectorAll('[data-fit]').forEach(el=>{ if(el.offsetParent!==null) fitChar(el,el.dataset.fit,+el.dataset.max); });
+},150); });
+function toggleBlock(box,txt,val){ if(val&&val.trim()){ $(box).classList.remove('hide'); $(txt).textContent=val; } else $(box).classList.add('hide'); }
+function flipStudy(){ if(deck.length) $('card').classList.toggle('flipped'); }
+$('card').onclick=flipStudy; $('flip').onclick=flipStudy;
+$('prev').onclick=()=>{ if(deck.length){ pos=(pos-1+deck.length)%deck.length; renderStudy(); } };
+$('next').onclick=()=>{ if(deck.length){ pos=(pos+1)%deck.length; renderStudy(); } };
+$('f-type').onchange=()=>{ prefs.focusType=$('f-type').value; savePrefs(); refreshDeck(); }; $('f-topic').onchange=refreshDeck;
+$('shuffle').onclick=()=>{ for(let i=deck.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [deck[i],deck[j]]=[deck[j],deck[i]]; } pos=0; renderStudy(); };
+
+/* ---------------- Review (SRS) ---------------- */
+let rQueue=[], rCard=null, rShown=false;
+function startReview(){
+  const ty=$('r-type').value, tp=$('r-topic').value;
+  rQueue=cards.filter(c=>(ty==='all'||c.type===ty)&&(tp==='all'||c.topic===tp)&&isDue(c))
+              .sort((a,b)=>((a.srs?.due||0)-(b.srs?.due||0)));
+  nextReview();
+}
+$('r-type').onchange=()=>{ prefs.focusType=$('r-type').value; savePrefs(); startReview(); }; $('r-topic').onchange=startReview; $('r-dir').onchange=startReview;
+function nextReview(){
+  // refresh due state (an 'again' card may have become due again)
+  rQueue=rQueue.filter(isDue).sort((a,b)=>((a.srs?.due||0)-(b.srs?.due||0)));
+  const has=rQueue.length>0;
+  $('review-body').classList.toggle('hide',!has); $('review-done').classList.toggle('hide',has);
+  updateDueBadge();
+  if(!has){ $('review-done').innerHTML='🎉 Hết thẻ cần ôn!<br><small class="muted">Quay lại sau, hoặc qua tab Học để xem tất cả.</small>'; return; }
+  rCard=rQueue[0]; rShown=false;
+  const dir=$('r-dir').value; const c=rCard;
+  $('r-card').classList.remove('flipped');
+  $('r-reveal-row').classList.remove('hide'); $('r-grade-row').classList.add('hide');
+  $('r-counter').textContent=`Còn lại: ${rQueue.length}`;
+  $('rf-badge').className='badge '+c.type; $('rf-badge').textContent=typeLabel(c.type);
+  $('rb-badge').className='badge '+c.type; $('rb-badge').textContent=typeLabel(c.type);
+  $('rf-topic').textContent=c.topic||''; $('rb-topic').textContent=c.topic||'';
+  const front=$('rf-main');
+  if(dir==='jp2mean'){ front.className='char'; fitChar(front,c.char,72); }
+  else { front.className='char mid'; delete front.dataset.fit; front.style.whiteSpace='normal'; front.style.fontSize=''; front.textContent=c.meaning||'(chưa có nghĩa)'; }
+  $('rb-main').innerHTML=reviewBack(c,dir);
+  const bc=$('rb-main').querySelector('.char'); if(bc) fitChar(bc,bc.textContent,56);
+}
+function reviewBack(c,dir){
+  const speakBtn=`<div class="center"><button class="btn ghost sm" data-speak="${esc(c.char)}">🔊 Nghe</button></div>`;
+  let h='';
+  if(dir==='jp2mean'){
+    h+=`<div class="reading">${esc(c.reading||'')}</div>`+speakBtn;
+    h+=`<div class="meaning" style="margin-top:10px">${esc(c.meaning||'')}</div>`;
+  }else{
+    h+=`<div class="char">${esc(c.char)}</div>`+speakBtn;
+    h+=`<div class="reading" style="font-size:24px;margin-top:8px">${esc(c.reading||'')}</div>`;
+  }
+  if(c.example&&c.example.trim()) h+=`<div class="block"><span class="lbl">Ví dụ</span>${esc(c.example)}</div>`;
+  if(c.note&&c.note.trim()) h+=`<div class="block"><span class="lbl">Note</span>${esc(c.note)}</div>`;
+  return h;
+}
+function revealReview(){ if(!rCard||rShown)return; rShown=true; $('r-card').classList.add('flipped'); $('r-reveal-row').classList.add('hide'); $('r-grade-row').classList.remove('hide'); }
+$('r-reveal').onclick=revealReview;
+$('r-card').onclick=()=>{ if(!rShown) revealReview(); };
+$('r-grade-row').querySelectorAll('[data-grade]').forEach(b=>b.onclick=()=>{ if(!rCard)return; schedule(rCard,b.dataset.grade); nextReview(); });
+
+/* ---------------- Quiz ---------------- */
+let quiz=null;
+function showQuizSetup(){ $('quiz-setup').classList.remove('hide'); $('quiz-play').classList.add('hide'); $('quiz-result').classList.add('hide'); }
+$('q-type').onchange=()=>{ prefs.focusType=$('q-type').value; savePrefs(); };
+$('q-start').onclick=()=>{
+  const mode=$('q-mode').value, ty=$('q-type').value, tp=$('q-topic').value;
+  let pool=cards.filter(c=>(ty==='all'||c.type===ty)&&(tp==='all'||c.topic===tp));
+  if(mode==='meaning') pool=pool.filter(c=>c.meaning&&c.meaning.trim());
+  if(mode==='reading') pool=pool.filter(c=>c.reading&&c.reading.trim());
+  if(mode==='char') pool=pool.filter(c=>c.meaning&&c.meaning.trim());
+  if(pool.length<1){ toast('Không đủ thẻ cho bộ lọc này'); return; }
+  if((mode==='meaning'||mode==='char')&&pool.length<2){ toast('Cần ít nhất 2 thẻ cho trắc nghiệm'); return; }
+  pool=shuffle(pool.slice());
+  const cnt=$('q-count').value; const n=cnt==='all'?pool.length:Math.min(parseInt(cnt),pool.length);
+  quiz={mode,pool,items:pool.slice(0,n),i:0,correct:0,wrong:[]};
+  $('quiz-setup').classList.add('hide'); $('quiz-result').classList.add('hide'); $('quiz-play').classList.remove('hide');
+  renderQuestion();
+};
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function renderQuestion(){
+  const c=quiz.items[quiz.i], mode=quiz.mode;
+  $('q-progress').textContent=`Câu ${quiz.i+1} / ${quiz.items.length} · Đúng ${quiz.correct}`;
+  $('q-bar').style.width=(quiz.i/quiz.items.length*100)+'%';
+  $('q-feedback').classList.add('hide'); $('q-next-row').classList.add('hide');
+  const q=$('q-question'), area=$('q-answer-area'); area.innerHTML='';
+  if(mode==='reading'){
+    q.innerHTML=`<div class="center"><span class="badge ${c.type}">${typeLabel(c.type)}</span></div><div class="q-char">${esc(c.char)}</div>`;
+    fitChar(q.querySelector('.q-char'),c.char,56);
+    area.innerHTML=`<label>Gõ cách đọc (romaji hoặc kana)</label><input id="q-input" autocomplete="off" placeholder="vd: nihongo / にほんご">
+      <div class="center" style="margin-top:12px"><button class="btn" id="q-submit">Kiểm tra</button></div>`;
+    const inp=$('q-input'); inp.focus();
+    inp.onkeydown=e=>{ if(e.key==='Enter') gradeTyped(); };
+    $('q-submit').onclick=gradeTyped;
+  }else if(mode==='meaning'){
+    q.innerHTML=`<div class="center"><span class="badge ${c.type}">${typeLabel(c.type)}</span></div><div class="q-char">${esc(c.char)}</div>
+      <div class="center"><button class="btn ghost sm" data-speak="${esc(c.char)}">🔊 Nghe</button></div>`;
+    fitChar(q.querySelector('.q-char'),c.char,56);
+    buildChoices(area,c,'meaning');
+  }else{ // char (reverse)
+    q.innerHTML=`<div class="q-mean">${esc(c.meaning)}</div>`;
+    buildChoices(area,c,'char');
+  }
+}
+function buildChoices(area,c,kind){
+  const key=kind==='meaning'?'meaning':'char';
+  const src=(quiz&&quiz.pool&&quiz.pool.length>1)?quiz.pool:cards;
+  const others=shuffle(src.filter(x=>x.id!==c.id && x[key] && x[key]!==c[key]));
+  const seen=new Set([c[key]]); const distract=[];
+  for(const o of others){ if(!seen.has(o[key])){ seen.add(o[key]); distract.push(o); } if(distract.length>=3) break; }
+  const opts=shuffle([c,...distract]);
+  area.innerHTML=opts.map(o=>`<button class="choice" data-correct="${o.id===c.id?1:0}">${esc(o[key])}</button>`).join('');
+  area.querySelectorAll('.choice').forEach(btn=>btn.onclick=()=>{
+    const ok=btn.dataset.correct==='1';
+    area.querySelectorAll('.choice').forEach(b=>{ b.disabled=true; if(b.dataset.correct==='1') b.classList.add('correct'); });
+    if(!ok) btn.classList.add('wrong');
+    finishQuestion(ok,c, kind==='char'?c.char:c.meaning);
+  });
+}
+function gradeTyped(){
+  const c=quiz.items[quiz.i]; const val=$('q-input').value;
+  if(!val.trim()){ toast('Nhập đáp án đã'); return; }
+  const ok=readingMatch(val,c);
+  finishQuestion(ok,c, c.reading||'');
+  $('q-input').disabled=true; $('q-submit').disabled=true;
+}
+function readingMatch(input,c){
+  const u=input.toLowerCase().trim();
+  const cand=new Set([u.replace(/\s/g,''), romajiToHira(u).replace(/\s/g,''), hiraToKata(romajiToHira(u)).replace(/\s/g,'')]);
+  const parts=(c.reading||'').toLowerCase().split(/[\/,、;]|\s{2,}/).map(x=>x.trim()).filter(Boolean);
+  parts.push((c.reading||'').toLowerCase());
+  const targets=new Set(parts.map(p=>p.replace(/\s/g,'')));
+  for(const x of cand){ if(x && targets.has(x)) return true; }
+  return false;
+}
+function finishQuestion(ok,c,answer){
+  const fb=$('q-feedback'); fb.classList.remove('hide','ok','bad'); fb.classList.add(ok?'ok':'bad');
+  fb.innerHTML = ok? '✓ Chính xác!' : `✗ Sai · Đáp án: <b>${esc(answer)}</b>`+(c.reading&&quiz.mode!=='reading'?` (${esc(c.reading)})`:'');
+  if(ok){ quiz.correct++; schedule(c,'good'); } else { quiz.wrong.push(c); schedule(c,'again'); }
+  $('q-next-row').classList.remove('hide'); $('q-next').focus();
+  updateDueBadge();
+}
+$('q-next').onclick=()=>{ quiz.i++; if(quiz.i>=quiz.items.length) showResult(); else renderQuestion(); };
+function showResult(){
+  $('quiz-play').classList.add('hide'); $('quiz-result').classList.remove('hide');
+  const total=quiz.items.length, pct=Math.round(quiz.correct/total*100);
+  $('q-score').textContent=`${quiz.correct}/${total}`;
+  $('q-score-sub').textContent=`${pct}% đúng`+(quiz.wrong.length?` · ${quiz.wrong.length} câu sai đã đưa vào Ôn tập`:' · Xuất sắc! 🎉');
+  $('q-wrong-list').innerHTML = quiz.wrong.length? '<h3 style="font-size:15px">Cần ôn lại:</h3>'+quiz.wrong.map(c=>`
+    <div class="list-item"><div class="lc">${esc(c.char)}</div>
+      <div class="lmeta"><div class="r">${esc(c.reading||'')}</div><div class="m">${esc(c.meaning||'')}</div></div>
+      <button class="btn ghost sm" data-speak="${esc(c.char)}">🔊</button></div>`).join('') : '';
+}
+$('q-again').onclick=showQuizSetup;
+
+/* ---------------- Add / Edit ---------------- */
+$('romaji-in').addEventListener('input',e=>{ const h=romajiToHira(e.target.value); $('pv-hira').textContent=h; $('pv-kata').textContent=hiraToKata(h); });
+document.querySelectorAll('[data-fill]').forEach(b=>b.onclick=()=>{
+  const val=b.dataset.fill==='hira'?$('pv-hira').textContent:$('pv-kata').textContent;
+  if(val){ $('in-char').value=val; $('in-type').value=b.dataset.fill==='hira'?'hiragana':'katakana'; toast('Đã điền ký tự'); }
+});
+function refreshTopicList(){ const t=[...new Set(cards.map(c=>c.topic).filter(Boolean))].sort(); $('topic-list').innerHTML=t.map(x=>`<option value="${esc(x)}">`).join(''); }
+$('save-card').onclick=()=>{
+  const ch=$('in-char').value.trim(), me=$('in-meaning').value.trim();
+  if(!ch){ toast('Thiếu ký tự mặt trước'); return; }
+  if(!me){ toast('Thiếu nghĩa'); return; }
+  const data={type:$('in-type').value,topic:$('in-topic').value.trim(),char:ch,reading:$('in-reading').value.trim(),meaning:me,example:$('in-example').value.trim(),note:$('in-note').value.trim()};
+  const eid=$('edit-id').textContent;
+  if(eid){ const c=cards.find(x=>x.id===eid); Object.assign(c,data); toast('Đã cập nhật thẻ'); exitEdit(); }
+  else { cards.push({id:id(),...data}); toast('Đã thêm thẻ ✓'); }
+  save(); clearForm(); refreshTopicList(); updateDueBadge();
+};
+function clearForm(){ ['in-char','in-reading','in-meaning','in-example','in-note','in-topic','romaji-in'].forEach(x=>$(x).value=''); $('pv-hira').textContent='';$('pv-kata').textContent=''; }
+function loadForEdit(cid){
+  const c=cards.find(x=>x.id===cid); if(!c)return; switchView('add');
+  $('in-type').value=c.type;$('in-topic').value=c.topic;$('in-char').value=c.char;$('in-reading').value=c.reading;
+  $('in-meaning').value=c.meaning;$('in-example').value=c.example;$('in-note').value=c.note;
+  $('edit-id').textContent=c.id; $('form-title').textContent='Sửa thẻ'; $('save-card').textContent='Lưu thay đổi'; $('cancel-edit').classList.remove('hide');
+}
+function exitEdit(){ $('edit-id').textContent=''; $('form-title').textContent='Thêm thẻ mới'; $('save-card').textContent='Lưu thẻ'; $('cancel-edit').classList.add('hide'); }
+$('cancel-edit').onclick=()=>{ exitEdit(); clearForm(); };
+
+/* ---------------- Manage ---------------- */
+function renderManage(){
+  fillTopicSelect('m-topic');
+  const f=$('m-topic').value; const list=cards.filter(c=>f==='all'||c.topic===f);
+  $('m-count').textContent=`${list.length} thẻ`;
+  $('manage-list').innerHTML = list.length? list.map(c=>`
+    <div class="list-item">
+      <div class="lc">${esc(c.char)}</div>
+      <div class="lmeta">
+        <div class="r"><span class="badge ${c.type}" style="font-size:10px;padding:1px 7px">${c.type}</span>
+          ${esc(c.reading||'')} ${c.topic?`· <small class="muted">${esc(c.topic)}</small>`:''}</div>
+        <div class="m">${esc(c.meaning||'')}</div>
+      </div>
+      <button class="btn ghost sm" data-speak="${esc(c.char)}">🔊</button>
+      <button class="btn ghost sm" onclick="loadForEdit('${c.id}')">Sửa</button>
+      <button class="btn ghost sm" onclick="delCard('${c.id}')">🗑</button>
+    </div>`).join('') : '<div class="empty">Chưa có thẻ nào.</div>';
+}
+$('m-topic').onchange=renderManage;
+function delCard(cid){ if(!confirm('Xoá thẻ này?'))return; cards=cards.filter(c=>c.id!==cid); save(); renderManage(); updateDueBadge(); toast('Đã xoá'); }
+$('export').onclick=()=>{ const blob=new Blob([JSON.stringify(cards,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='nihongo-flashcards.json'; a.click(); };
+$('import-btn').onclick=()=>$('import-file').click();
+$('import-file').onchange=e=>{
+  const file=e.target.files[0]; if(!file)return; const r=new FileReader();
+  r.onload=()=>{ try{
+    const data=JSON.parse(r.result); if(!Array.isArray(data))throw 0;
+    const byChar=new Map(cards.map(c=>[c.char,c])); let added=0, updated=0;
+    data.forEach(d=>{ if(!d.char) return;
+      const fields={type:d.type||'kanji',topic:d.topic||'',char:d.char,reading:d.reading||'',meaning:d.meaning||'',example:d.example||'',note:d.note||''};
+      const ex=byChar.get(d.char);
+      if(ex){ Object.assign(ex,fields); updated++; }        // cập nhật nội dung, giữ id + srs
+      else { const nc={id:id(),...fields,srs:d.srs}; cards.push(nc); byChar.set(d.char,nc); added++; } });
+    save(); renderManage(); updateDueBadge(); toast(`Đã thêm ${added} · cập nhật ${updated} thẻ`);
+  }catch(err){ toast('File JSON không hợp lệ'); } };
+  r.readAsText(file); e.target.value='';
+};
+
+/* ---------------- utils ---------------- */
+function esc(s){ return (s||'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
+let toastT; function toast(m){ const t=$('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),1800); }
+
+/* keyboard */
+document.addEventListener('keydown',e=>{
+  if(!$('view-study').classList.contains('hide')){
+    if(e.code==='Space'){e.preventDefault();flipStudy();}
+    if(e.code==='ArrowRight')$('next').click();
+    if(e.code==='ArrowLeft')$('prev').click();
+  }else if(!$('view-review').classList.contains('hide')){
+    if(e.code==='Space'){ e.preventDefault(); if(!rShown) revealReview(); }
+  }
+});
+
+/* ---------------- init ---------------- */
+$('f-type').value=prefs.focusType; fillTopicSelect('f-topic'); refreshDeck(); updateDueBadge();
+</script>
+</body>
+</html>
