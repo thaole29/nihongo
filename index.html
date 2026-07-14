@@ -103,7 +103,10 @@
   .bar>span{display:block;height:100%;background:var(--accent);transition:width .3s}
 
   /* Hiragana chart */
-  .chart{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;max-width:520px;margin:0 auto}
+  .chart{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;max-width:520px;margin:0 auto 6px}
+  .chart.yoon{grid-template-columns:repeat(3,1fr);max-width:330px}
+  .chart.yoon .cell{aspect-ratio:auto;min-height:62px}
+  .chart-h{max-width:520px;margin:20px auto 8px;font-size:14px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
   .cell{aspect-ratio:1;border:1px solid var(--line);border-radius:12px;background:var(--panel);cursor:pointer;
     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:4px;color:var(--ink);font-family:inherit}
   .cell:hover{border-color:var(--accent);background:var(--accent-soft)}
@@ -177,8 +180,8 @@
 
   <!-- ================= CHART (Hiragana gojūon) ================= -->
   <section id="view-chart" class="hide">
-    <p class="center" style="color:var(--muted);margin:0 0 14px"><small class="muted">Bảng chữ cái Hiragana — 46 âm cơ bản. Nhấn vào từng chữ để xem cách đọc, ví dụ và mẹo nhớ. 🔊 để nghe.</small></p>
-    <div class="chart" id="chart-grid"></div>
+    <p class="center" style="color:var(--muted);margin:0 0 14px"><small class="muted">Bảng chữ Hiragana. Nhấn vào từng chữ để xem cách đọc, ví dụ, mẹo nhớ và 🔊 nghe.</small></p>
+    <div id="chart-body"></div>
   </section>
 
   <!-- ================= REVIEW (SRS) ================= -->
@@ -450,16 +453,48 @@ const GOJUON=[
   ['わ',null,null,null,'を'],
   ['ん',null,null,null,null],
 ];
+const DAKUTEN=[
+  ['が','ぎ','ぐ','げ','ご'],
+  ['ざ','じ','ず','ぜ','ぞ'],
+  ['だ','ぢ','づ','で','ど'],
+  ['ば','び','ぶ','べ','ぼ'],
+];
+const HANDAKUTEN=[['ぱ','ぴ','ぷ','ぺ','ぽ']];
+const YOON=[
+  ['きゃ','きゅ','きょ'],['しゃ','しゅ','しょ'],['ちゃ','ちゅ','ちょ'],['にゃ','にゅ','にょ'],
+  ['ひゃ','ひゅ','ひょ'],['みゃ','みゅ','みょ'],['りゃ','りゅ','りょ'],['ぎゃ','ぎゅ','ぎょ'],
+  ['じゃ','じゅ','じょ'],['びゃ','びゅ','びょ'],['ぴゃ','ぴゅ','ぴょ'],
+];
 const KANA_ROMAJI={'あ':'a','い':'i','う':'u','え':'e','お':'o','か':'ka','き':'ki','く':'ku','け':'ke','こ':'ko',
  'さ':'sa','し':'shi','す':'su','せ':'se','そ':'so','た':'ta','ち':'chi','つ':'tsu','て':'te','と':'to',
  'な':'na','に':'ni','ぬ':'nu','ね':'ne','の':'no','は':'ha','ひ':'hi','ふ':'fu','へ':'he','ほ':'ho',
  'ま':'ma','み':'mi','む':'mu','め':'me','も':'mo','や':'ya','ゆ':'yu','よ':'yo',
- 'ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro','わ':'wa','を':'wo','ん':'n'};
+ 'ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro','わ':'wa','を':'wo','ん':'n',
+ 'が':'ga','ぎ':'gi','ぐ':'gu','げ':'ge','ご':'go','ざ':'za','じ':'ji','ず':'zu','ぜ':'ze','ぞ':'zo',
+ 'だ':'da','ぢ':'ji','づ':'zu','で':'de','ど':'do','ば':'ba','び':'bi','ぶ':'bu','べ':'be','ぼ':'bo',
+ 'ぱ':'pa','ぴ':'pi','ぷ':'pu','ぺ':'pe','ぽ':'po',
+ 'きゃ':'kya','きゅ':'kyu','きょ':'kyo','しゃ':'sha','しゅ':'shu','しょ':'sho','ちゃ':'cha','ちゅ':'chu','ちょ':'cho',
+ 'にゃ':'nya','にゅ':'nyu','にょ':'nyo','ひゃ':'hya','ひゅ':'hyu','ひょ':'hyo','みゃ':'mya','みゅ':'myu','みょ':'myo',
+ 'りゃ':'rya','りゅ':'ryu','りょ':'ryo','ぎゃ':'gya','ぎゅ':'gyu','ぎょ':'gyo','じゃ':'ja','じゅ':'ju','じょ':'jo',
+ 'びゃ':'bya','びゅ':'byu','びょ':'byo','ぴゃ':'pya','ぴゅ':'pyu','ぴょ':'pyo'};
+function chartCell(ch){
+  if(!ch) return '<div class="cell empty"></div>';
+  return `<button class="cell" data-char="${esc(ch)}"><span class="k">${esc(ch)}</span><span class="r">${esc(KANA_ROMAJI[ch]||'')}</span></button>`;
+}
+function chartGrid(rows,cls){
+  return `<div class="chart ${cls||''}">`+rows.map(r=>r.map(chartCell).join('')).join('')+'</div>';
+}
 function renderChart(){
-  $('chart-grid').innerHTML = GOJUON.map(row=>row.map(ch=>{
-    if(!ch) return '<div class="cell empty"></div>';
-    return `<button class="cell" data-char="${esc(ch)}"><span class="k">${esc(ch)}</span><span class="r">${esc(KANA_ROMAJI[ch]||'')}</span></button>`;
-  }).join('')).join('');
+  $('chart-body').innerHTML =
+    '<div class="chart-h">Âm cơ bản (Gojūon)</div>'+chartGrid(GOJUON)+
+    '<div class="chart-h">Âm đục &amp; bán đục (Dakuten / Handakuten)</div>'+chartGrid(DAKUTEN.concat(HANDAKUTEN))+
+    '<div class="chart-h">Âm ghép (Yōon)</div>'+chartGrid(YOON,'yoon');
+}
+function kanaCategory(ch){
+  if(DAKUTEN.flat().includes(ch)) return 'Âm đục (dakuten)';
+  if(HANDAKUTEN.flat().includes(ch)) return 'Âm bán đục (handakuten)';
+  if(YOON.flat().includes(ch)) return 'Âm ghép (yōon)';
+  return '';
 }
 function openChartDetail(ch){
   const c=cards.find(x=>x.char===ch);
@@ -470,11 +505,14 @@ function openChartDetail(ch){
     if(c.example&&c.example.trim()) h+=`<div class="block"><span class="lbl">Ví dụ</span>${esc(c.example)}</div>`;
     const note=(c.note||'').replace(/^\s*mẹo nhớ:\s*/i,'').trim();
     if(note) h+=`<div class="block"><span class="lbl">Mẹo nhớ</span>${esc(note)}</div>`;
+  } else {
+    const cat=kanaCategory(ch);
+    if(cat) h+=`<div class="detail-mean">${esc(cat)}</div>`;
   }
   $('chart-detail').innerHTML=h; $('chart-modal').classList.remove('hide');
 }
 function closeChartModal(){ $('chart-modal').classList.add('hide'); }
-$('chart-grid').addEventListener('click',e=>{ const b=e.target.closest('[data-char]'); if(b) openChartDetail(b.getAttribute('data-char')); });
+$('chart-body').addEventListener('click',e=>{ const b=e.target.closest('[data-char]'); if(b) openChartDetail(b.getAttribute('data-char')); });
 $('chart-modal-close').onclick=closeChartModal;
 $('chart-modal').addEventListener('click',e=>{ if(e.target===$('chart-modal')) closeChartModal(); });
 
