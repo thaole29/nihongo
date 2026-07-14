@@ -312,6 +312,17 @@
           <input type="file" id="import-file" accept="application/json" class="hide">
         </div>
       </div>
+      <div id="sync-box" style="margin-bottom:16px;border-bottom:1px solid var(--line);padding-bottom:12px">
+        <div class="toolbar" style="margin-bottom:2px">
+          <b style="font-size:14px">☁️ Đồng bộ Google Sheet</b>
+          <div class="row">
+            <button class="btn ghost sm" id="sync-connect">Kết nối</button>
+            <button class="btn ghost sm hide" id="sync-now">Đồng bộ ngay</button>
+            <button class="btn ghost sm hide" id="sync-open">Mở Sheet</button>
+          </div>
+        </div>
+        <small class="muted" id="sync-status">Chưa kết nối — bấm Kết nối để đồng bộ đa thiết bị.</small>
+      </div>
       <div id="topic-manager" style="margin-bottom:16px;border-bottom:1px solid var(--line);padding-bottom:12px">
         <div class="toolbar" style="margin-bottom:6px">
           <b style="font-size:14px">Quản lý topic</b>
@@ -334,13 +345,16 @@
 <div class="toast" id="toast"></div>
 
 <script src="deck.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <script>
 /* ---------------- Storage ---------------- */
 const KEY='nihongo_cards_v1';
 let _seq=0; function id(){ return 'c'+Date.now().toString(36)+(_seq++).toString(36); }
 let cards = load();
 function load(){ try{ const d=JSON.parse(localStorage.getItem(KEY)); if(Array.isArray(d)) return d; }catch(e){} const s=seed(); try{ localStorage.setItem(KEY, JSON.stringify(s)); }catch(e){} return s; }
-function save(){ localStorage.setItem(KEY, JSON.stringify(cards)); }
+let applyingRemote=false;
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(cards)); }catch(e){} markDirty(); }
+function markDirty(){ if(applyingRemote) return; prefs.syncModified=Date.now(); savePrefs(); schedulePush(); }
 /* tuỳ chọn người dùng: mặc định ưu tiên Hiragana */
 const PKEY='nihongo_prefs';
 let prefs = (()=>{ try{ return Object.assign({focusType:'hiragana',extraTopics:[]}, JSON.parse(localStorage.getItem(PKEY))||{}); }catch(e){ return {focusType:'hiragana',extraTopics:[]}; } })();
@@ -420,7 +434,10 @@ function updateDueBadge(){ const n=dueCount(); $('tab-review').textContent = n? 
 
 /* ---------------- View switching ---------------- */
 const $=id=>document.getElementById(id);
+let curView='study';
+function rerender(){ switchView(curView); }
 function switchView(v){
+  curView=v;
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.view===v));
   ['study','chart','review','quiz','add','manage'].forEach(x=>$('view-'+x).classList.toggle('hide',x!==v));
   if(v==='chart'){ renderChart(); }
@@ -805,6 +822,84 @@ $('import-file').onchange=e=>{
   r.readAsText(file); e.target.value='';
 };
 
+/* ---------------- Google Sheet sync ---------------- */
+const GOOGLE_CLIENT_ID='769453018538-lucpdkkmdqpsi7u0uqcude3ab5os8idc.apps.googleusercontent.com';
+const SYNC_SCOPES='https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.file';
+const SHEET_NAME='Nihongo Flashcards';
+const SHEET_HEADER=['type','topic','char','reading','meaning','example','note','srs'];
+let gTokenClient=null, gToken=null, gSheetId=(prefs.spreadsheetId||null), gPushTimer=null;
+function setSyncStatus(m){ const el=$('sync-status'); if(el) el.textContent=m; }
+function ensureGsi(cb){ if(window.google&&google.accounts&&google.accounts.oauth2){ cb(); } else { setSyncStatus('Đang tải Google…'); setTimeout(()=>ensureGsi(cb),300); } }
+function gInit(){ if(gTokenClient) return;
+  gTokenClient=google.accounts.oauth2.initTokenClient({ client_id:GOOGLE_CLIENT_ID, scope:SYNC_SCOPES,
+    callback:(resp)=>{ if(resp&&resp.access_token){ gToken=resp.access_token; prefs.syncEnabled=true; savePrefs(); onConnected(); } else { setSyncStatus('Đăng nhập thất bại'); } },
+    error_callback:()=>{ setSyncStatus('Chưa kết nối — bấm Kết nối'); } });
+}
+function connect(interactive){ ensureGsi(()=>{ gInit(); try{ gTokenClient.requestAccessToken({prompt: interactive?'consent':''}); }catch(e){ setSyncStatus('Lỗi: '+e.message); } }); }
+async function gFetch(url,opts){ opts=opts||{}; opts.headers=Object.assign({Authorization:'Bearer '+gToken}, opts.headers||{});
+  const r=await fetch(url,opts);
+  if(r.status===401){ gToken=null; throw new Error('Hết phiên — Kết nối lại'); }
+  if(!r.ok) throw new Error('API '+r.status);
+  return r.status===204?null:r.json();
+}
+async function gFindSheet(){
+  const q=encodeURIComponent("name='"+SHEET_NAME+"' and mimeType='application/vnd.google-apps.spreadsheet' and trashed=false");
+  const d=await gFetch("https://www.googleapis.com/drive/v3/files?q="+q+"&spaces=drive&fields=files(id,name)");
+  return (d.files&&d.files[0])?d.files[0].id:null;
+}
+async function gCreateSheet(){
+  const d=await gFetch("https://sheets.googleapis.com/v4/spreadsheets",{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({properties:{title:SHEET_NAME}})});
+  return d.spreadsheetId;
+}
+function cardsToMatrix(ts){
+  const header=SHEET_HEADER.concat(['',String(ts)]);
+  const rows=cards.map(c=>[c.type||'',c.topic||'',c.char||'',c.reading||'',c.meaning||'',c.example||'',c.note||'', c.srs?JSON.stringify(c.srs):'', '', '']);
+  return [header].concat(rows);
+}
+function matrixToCards(vals){
+  const out=[];
+  for(let i=1;i<vals.length;i++){ const r=vals[i]||[]; const ch=(r[2]||'').trim(); if(!ch) continue;
+    let srs; if(r[7]){ try{ srs=JSON.parse(r[7]); }catch(e){} }
+    out.push({id:id(),type:(r[0]||'kanji').trim(),topic:(r[1]||'').trim(),char:ch,reading:(r[3]||'').trim(),meaning:(r[4]||'').trim(),example:(r[5]||'').trim(),note:(r[6]||'').trim(),srs}); }
+  return out;
+}
+async function gReadAll(){ const d=await gFetch("https://sheets.googleapis.com/v4/spreadsheets/"+gSheetId+"/values/A1:J100000"); return d.values||[]; }
+async function gWriteAll(ts){
+  await gFetch("https://sheets.googleapis.com/v4/spreadsheets/"+gSheetId+"/values/A1:J100000:clear",{method:'POST'});
+  await gFetch("https://sheets.googleapis.com/v4/spreadsheets/"+gSheetId+"/values/A1?valueInputOption=RAW",{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({values:cardsToMatrix(ts)})});
+}
+async function onConnected(){
+  try{
+    $('sync-connect').textContent='Kết nối lại'; $('sync-now').classList.remove('hide'); $('sync-open').classList.remove('hide');
+    setSyncStatus('Đang đồng bộ…');
+    if(!gSheetId) gSheetId=await gFindSheet();
+    if(!gSheetId) gSheetId=await gCreateSheet();
+    prefs.spreadsheetId=gSheetId; savePrefs();
+    await reconcile();
+  }catch(e){ setSyncStatus('Lỗi: '+e.message); }
+}
+async function reconcile(){
+  const vals=await gReadAll();
+  const remoteTs=Number((vals[0]&&vals[0][9])||0);
+  const localTs=Number(prefs.syncModified||0);
+  const remoteHasData=vals.length>1;
+  if(!remoteHasData || localTs>remoteTs){
+    if(!prefs.syncModified){ prefs.syncModified=Date.now(); savePrefs(); }
+    await gWriteAll(Number(prefs.syncModified));
+    setSyncStatus('Đã đẩy '+cards.length+' thẻ lên Sheet ✓');
+  } else if(remoteTs>localTs){
+    applyingRemote=true; cards=matrixToCards(vals); save(); applyingRemote=false;
+    prefs.syncModified=remoteTs; savePrefs(); rerender();
+    setSyncStatus('Đã kéo '+cards.length+' thẻ từ Sheet ✓');
+  } else { setSyncStatus('Đã đồng bộ ✓ ('+cards.length+' thẻ)'); }
+}
+async function pushNow(){ if(!gToken||!gSheetId) return; try{ setSyncStatus('Đang lưu lên Sheet…'); await gWriteAll(Number(prefs.syncModified||Date.now())); setSyncStatus('Đã lưu lên Sheet ✓'); }catch(e){ setSyncStatus('Lỗi lưu: '+e.message); } }
+function schedulePush(){ if(!gToken||!gSheetId) return; clearTimeout(gPushTimer); gPushTimer=setTimeout(pushNow,2500); }
+async function syncNowManual(){ if(!gToken){ connect(true); return; } try{ setSyncStatus('Đang đồng bộ…'); if(!gSheetId){ gSheetId=await gFindSheet()||await gCreateSheet(); prefs.spreadsheetId=gSheetId; savePrefs(); } await reconcile(); }catch(e){ setSyncStatus('Lỗi: '+e.message); } }
+$('sync-connect').onclick=()=>connect(true);
+$('sync-now').onclick=syncNowManual;
+$('sync-open').onclick=()=>{ if(gSheetId) window.open('https://docs.google.com/spreadsheets/d/'+gSheetId,'_blank'); else toast('Chưa có Sheet — kết nối trước'); };
+
 /* ---------------- utils ---------------- */
 function esc(s){ return (s||'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
 let toastT; function toast(m){ const t=$('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),1800); }
@@ -823,6 +918,7 @@ document.addEventListener('keydown',e=>{
 
 /* ---------------- init ---------------- */
 $('f-type').value=prefs.focusType; fillTopicSelect('f-topic'); refreshDeck(); updateDueBadge();
+if(prefs.syncEnabled){ setSyncStatus('Đang kết nối lại…'); connect(false); }
 </script>
 </body>
 </html>
