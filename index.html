@@ -552,7 +552,7 @@ let _rt; window.addEventListener('resize',()=>{ clearTimeout(_rt); _rt=setTimeou
 },150); });
 function toggleBlock(box,txt,val){ if(val&&val.trim()){ $(box).classList.remove('hide'); $(txt).textContent=val; } else $(box).classList.add('hide'); }
 function flipStudy(){ if(deck.length) $('card').classList.toggle('flipped'); }
-$('card').onclick=flipStudy; $('flip').onclick=flipStudy;
+$('card').onclick=(e)=>{ if(e.target.closest('button,a,[data-speak]')) return; flipStudy(); }; $('flip').onclick=flipStudy;
 $('prev').onclick=()=>{ if(deck.length){ pos=(pos-1+deck.length)%deck.length; renderStudy(); } };
 $('next').onclick=()=>{ if(deck.length){ pos=(pos+1)%deck.length; renderStudy(); } };
 $('f-type').onchange=()=>{ prefs.focusType=$('f-type').value; savePrefs(); refreshDeck(); }; $('f-topic').onchange=refreshDeck;
@@ -604,7 +604,7 @@ function reviewBack(c,dir){
 }
 function revealReview(){ if(!rCard||rShown)return; rShown=true; $('r-card').classList.add('flipped'); $('r-reveal-row').classList.add('hide'); $('r-grade-row').classList.remove('hide'); }
 $('r-reveal').onclick=revealReview;
-$('r-card').onclick=()=>{ if(!rShown) revealReview(); };
+$('r-card').onclick=(e)=>{ if(e.target.closest('button,a,[data-speak]')) return; if(!rShown) revealReview(); };
 $('r-grade-row').querySelectorAll('[data-grade]').forEach(b=>b.onclick=()=>{ if(!rCard)return; schedule(rCard,b.dataset.grade); nextReview(); });
 
 /* ---------------- Quiz ---------------- */
