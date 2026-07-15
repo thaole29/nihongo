@@ -965,19 +965,45 @@ async function onConnected(){
     await reconcile();
   }catch(e){ setSyncStatus('Lỗi: '+e.message); }
 }
+// Gộp các thẻ mặc định mới (deck.js) mà deck chưa có (theo char). Giữ thẻ cũ + SRS.
+// Tôn trọng thao tác xoá: thẻ đã từng gộp mà bị xoá sẽ không quay lại. Trả về số thẻ đã thêm.
+function mergeNewDefaults(){
+  const def=window.NIHONGO_DEFAULT_DECK||[];
+  const seen=new Set(prefs.mergedDefaultChars||[]);
+  const have=new Set(cards.map(c=>c.char));
+  let added=0;
+  for(const d of def){
+    if(!d.char) continue;
+    if(have.has(d.char)){ seen.add(d.char); continue; }   // đã có -> đánh dấu đã biết
+    if(seen.has(d.char)) continue;                        // từng gộp rồi bị xoá -> tôn trọng
+    cards.push({id:id(), ...d}); have.add(d.char); seen.add(d.char); added++;
+  }
+  prefs.mergedDefaultChars=[...seen]; savePrefs();
+  return added;
+}
 async function reconcile(){
   const vals=await gReadAll();
   const remoteTs=Number((vals[0]&&vals[0][9])||0);
-  const localTs=Number(prefs.syncModified||0);
+  let localTs=Number(prefs.syncModified||0);
   const remoteHasData=vals.length>1;
+  let pulled=false;
+  if(remoteHasData && remoteTs>localTs){        // remote mới hơn -> kéo bản mới nhất về trước
+    applyingRemote=true; cards=matrixToCards(vals); save(); applyingRemote=false;
+    prefs.syncModified=remoteTs; savePrefs(); localTs=remoteTs; pulled=true;
+  }
+  const added=mergeNewDefaults();               // gộp thẻ mặc định mới vào bản hiện tại
+  if(added){                                     // có thẻ mới -> lưu local + đẩy bản gộp lên Sheet
+    applyingRemote=true; save(); applyingRemote=false;
+    prefs.syncModified=Date.now(); savePrefs(); rerender();
+    await gWriteAll(Number(prefs.syncModified));
+    setSyncStatus('Đã thêm '+added+' thẻ mới & đẩy lên Sheet ✓ (tổng '+cards.length+')');
+    return;
+  }
+  if(pulled){ rerender(); setSyncStatus('Đã kéo '+cards.length+' thẻ từ Sheet ✓'); return; }
   if(!remoteHasData || localTs>remoteTs){
     if(!prefs.syncModified){ prefs.syncModified=Date.now(); savePrefs(); }
     await gWriteAll(Number(prefs.syncModified));
     setSyncStatus('Đã đẩy '+cards.length+' thẻ lên Sheet ✓');
-  } else if(remoteTs>localTs){
-    applyingRemote=true; cards=matrixToCards(vals); save(); applyingRemote=false;
-    prefs.syncModified=remoteTs; savePrefs(); rerender();
-    setSyncStatus('Đã kéo '+cards.length+' thẻ từ Sheet ✓');
   } else { setSyncStatus('Đã đồng bộ ✓ ('+cards.length+' thẻ)'); }
 }
 async function pushNow(){ if(!gToken||!gSheetId) return; try{ setSyncStatus('Đang lưu lên Sheet…'); await gWriteAll(Number(prefs.syncModified||Date.now())); setSyncStatus('Đã lưu lên Sheet ✓'); }catch(e){ setSyncStatus('Lỗi lưu: '+e.message); } }
@@ -1013,6 +1039,11 @@ if(!prefs.kanaFlashcardsRemoved){
   cards=cards.filter(c=>c.topic!=='Bảng chữ Hiragana');
   prefs.kanaFlashcardsRemoved=true; savePrefs();
   if(cards.length!==before) save();
+}
+// Tự động gộp thẻ mặc định mới. Nếu bật sync thì reconcile lo (gộp sau khi kéo bản mới nhất, tránh ghi đè máy khác).
+if(!prefs.syncEnabled){
+  const addedDef=mergeNewDefaults();
+  if(addedDef){ save(); toast('Đã thêm '+addedDef+' từ mới vào bộ thẻ'); }
 }
 $('f-type').value=prefs.focusType; fillTopicSelect('f-topic'); refreshDeck(); updateDueBadge();
 if(prefs.syncEnabled){
