@@ -132,7 +132,10 @@
 <body>
 <div class="wrap">
   <header>
-    <h1>日本語 <span>Flashcards</span></h1>
+    <div style="display:flex;align-items:center;gap:10px">
+      <button id="back-btn" class="btn ghost sm hide" onclick="goBack()" title="Quay lại trang trước">← Quay lại</button>
+      <h1>日本語 <span>Flashcards</span></h1>
+    </div>
     <div class="tabs">
       <button class="tab active" data-view="study">Học</button>
       <button class="tab" data-view="chart">Bảng chữ</button>
@@ -470,8 +473,12 @@ function updateDueBadge(){ const n=dueCount(); $('tab-review').textContent = n? 
 /* ---------------- View switching ---------------- */
 const $=id=>document.getElementById(id);
 let curView='study';
+let viewHistory=[];
 function rerender(){ switchView(curView); }
-function switchView(v){
+function goBack(){ if(viewHistory.length){ switchView(viewHistory.pop(), true); } }
+function updateBackBtn(){ const b=$('back-btn'); if(b) b.classList.toggle('hide', viewHistory.length===0); }
+function switchView(v, isBack){
+  if(!isBack && curView!==v) viewHistory.push(curView);
   curView=v;
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.view===v));
   ['study','chart','review','quiz','add','manage'].forEach(x=>$('view-'+x).classList.toggle('hide',x!==v));
@@ -482,6 +489,7 @@ function switchView(v){
   if(v==='add'){ refreshTopicList(); }
   if(v==='manage'){ renderManage(); }
   updateDueBadge();
+  updateBackBtn();
 }
 document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>switchView(t.dataset.view));
 function fillTopicSelect(elId){
