@@ -1089,6 +1089,906 @@ window.NIHONGO_DEFAULT_DECK = [
 "example": "トイレは どこですか。(Toire wa doko desu ka?) — Nhà vệ sinh ở đâu?",
 "note": "Từ để hỏi nơi chốn."
 }
+,{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "いきます",
+"reading": "ikimasu",
+"meaning": "Đi / Go",
+"example": "がっこうへ いきます。(Gakkou e ikimasu.) — Đi đến trường.",
+"note": "Thể ます của いく. Nơi đến + へ/に."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "きます",
+"reading": "kimasu",
+"meaning": "Đến / Come",
+"example": "ともだちが きます。(Tomodachi ga kimasu.) — Bạn tôi đến.",
+"note": "Thể ます của くる (bất quy tắc)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "かえります",
+"reading": "kaerimasu",
+"meaning": "Về nhà / Go home · return",
+"example": "うちへ かえります。(Uchi e kaerimasu.) — Về nhà.",
+"note": "Thể ます của かえる."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "みます",
+"reading": "mimasu",
+"meaning": "Xem / See · watch",
+"example": "テレビを みます。(Terebi o mimasu.) — Xem TV.",
+"note": "Thể ます của みる."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "ききます",
+"reading": "kikimasu",
+"meaning": "Nghe · hỏi / Listen · ask",
+"example": "おんがくを ききます。(Ongaku o kikimasu.) — Nghe nhạc.",
+"note": "Vừa 'nghe' vừa 'hỏi'."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "よみます",
+"reading": "yomimasu",
+"meaning": "Đọc / Read",
+"example": "ほんを よみます。(Hon o yomimasu.) — Đọc sách.",
+"note": "Thể ます của よむ."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "かきます",
+"reading": "kakimasu",
+"meaning": "Viết · vẽ / Write",
+"example": "てがみを かきます。(Tegami o kakimasu.) — Viết thư.",
+"note": "Cũng nghĩa 'vẽ'. Thể ます của かく."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "はなします",
+"reading": "hanashimasu",
+"meaning": "Nói / Speak",
+"example": "にほんごを はなします。(Nihongo o hanashimasu.) — Nói tiếng Nhật.",
+"note": "Thể ます của はなす."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "かいます",
+"reading": "kaimasu",
+"meaning": "Mua / Buy",
+"example": "パンを かいます。(Pan o kaimasu.) — Mua bánh mì.",
+"note": "Thể ます của かう."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "します",
+"reading": "shimasu",
+"meaning": "Làm / Do",
+"example": "しゅくだいを します。(Shukudai o shimasu.) — Làm bài tập.",
+"note": "Động từ 'làm' vạn năng (bất quy tắc)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "べんきょうします",
+"reading": "benkyou shimasu",
+"meaning": "Học / Study",
+"example": "にほんごを べんきょうします。(Nihongo o benkyou shimasu.) — Học tiếng Nhật.",
+"note": "べんきょう (sự học) + します."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "あります",
+"reading": "arimasu",
+"meaning": "Có (vật) / There is (objects)",
+"example": "つくえの うえに ほんが あります。(Tsukue no ue ni hon ga arimasu.) — Trên bàn có sách.",
+"note": "Dùng cho đồ vật, cây cối (không sự sống)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "います",
+"reading": "imasu",
+"meaning": "Có (người/thú) / There is (people · animals)",
+"example": "へやに ねこが います。(Heya ni neko ga imasu.) — Trong phòng có mèo.",
+"note": "Dùng cho người/động vật (có sự sống)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "わかります",
+"reading": "wakarimasu",
+"meaning": "Hiểu / Understand",
+"example": "いみが わかります。(Imi ga wakarimasu.) — Hiểu nghĩa.",
+"note": "Đối tượng đi với trợ từ が."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "おおきい",
+"reading": "ookii",
+"meaning": "To / Big",
+"example": "おおきい いえ (ookii ie) — ngôi nhà to",
+"note": "Tính từ đuôi -い. Trái nghĩa ちいさい."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "ちいさい",
+"reading": "chiisai",
+"meaning": "Nhỏ / Small",
+"example": "ちいさい こども (chiisai kodomo) — đứa trẻ nhỏ",
+"note": "Tính từ -い."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "たかい",
+"reading": "takai",
+"meaning": "Cao · đắt / Tall · expensive",
+"example": "たかい ビル (takai biru) — toà nhà cao",
+"note": "Vừa 'cao' vừa 'đắt'. Trái nghĩa: ひくい / やすい."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "やすい",
+"reading": "yasui",
+"meaning": "Rẻ / Cheap",
+"example": "やすい みせ (yasui mise) — cửa hàng rẻ",
+"note": "Tính từ -い. Trái nghĩa たかい."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "あたらしい",
+"reading": "atarashii",
+"meaning": "Mới / New",
+"example": "あたらしい くるま (atarashii kuruma) — xe mới",
+"note": "Trái nghĩa ふるい."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "ふるい",
+"reading": "furui",
+"meaning": "Cũ (đồ vật) / Old (things)",
+"example": "ふるい ほん (furui hon) — quyển sách cũ",
+"note": "Chỉ cho vật, không cho người (người già: としより)."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "いい",
+"reading": "ii",
+"meaning": "Tốt · đẹp / Good",
+"example": "いい てんき (ii tenki) — thời tiết đẹp",
+"note": "Bất quy tắc: quá khứ よかった. Cũng viết よい."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "わるい",
+"reading": "warui",
+"meaning": "Xấu · tệ / Bad",
+"example": "わるい てんき (warui tenki) — thời tiết xấu",
+"note": "Trái nghĩa いい."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "たのしい",
+"reading": "tanoshii",
+"meaning": "Vui / Fun",
+"example": "たのしい パーティー (tanoshii paatii) — bữa tiệc vui",
+"note": "Cảm giác vui, thú vị."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "むずかしい",
+"reading": "muzukashii",
+"meaning": "Khó / Difficult",
+"example": "むずかしい もんだい (muzukashii mondai) — bài toán khó",
+"note": "Trái nghĩa やさしい / かんたん."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "やさしい",
+"reading": "yasashii",
+"meaning": "Dễ · hiền / Easy · kind",
+"example": "やさしい せんせい (yasashii sensei) — thầy hiền",
+"note": "Vừa 'dễ' vừa 'hiền, tốt bụng'."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "おもしろい",
+"reading": "omoshiroi",
+"meaning": "Thú vị · hay / Interesting",
+"example": "おもしろい えいが (omoshiroi eiga) — bộ phim hay",
+"note": "Thú vị, buồn cười."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "かわいい",
+"reading": "kawaii",
+"meaning": "Dễ thương / Cute",
+"example": "かわいい いぬ (kawaii inu) — chú chó dễ thương",
+"note": "Tính từ -い."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "いそがしい",
+"reading": "isogashii",
+"meaning": "Bận / Busy",
+"example": "きょうは いそがしいです。(Kyou wa isogashii desu.) — Hôm nay bận.",
+"note": "Tính từ -い."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "ながい",
+"reading": "nagai",
+"meaning": "Dài / Long",
+"example": "ながい かわ (nagai kawa) — con sông dài",
+"note": "Trái nghĩa みじかい."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "みじかい",
+"reading": "mijikai",
+"meaning": "Ngắn / Short",
+"example": "みじかい えんぴつ (mijikai enpitsu) — cây bút chì ngắn",
+"note": "Trái nghĩa ながい."
+},
+{
+"type": "hiragana",
+"topic": "Màu sắc",
+"char": "いろ",
+"reading": "iro",
+"meaning": "Màu / Color",
+"example": "すきな いろは あおです。(Sukina iro wa ao desu.) — Màu thích là xanh dương.",
+"note": "Danh từ chung chỉ 'màu'."
+},
+{
+"type": "hiragana",
+"topic": "Màu sắc",
+"char": "あか",
+"reading": "aka",
+"meaning": "Màu đỏ / Red",
+"example": "あかい りんご (akai ringo) — quả táo đỏ",
+"note": "Tính từ: あかい."
+},
+{
+"type": "hiragana",
+"topic": "Màu sắc",
+"char": "あお",
+"reading": "ao",
+"meaning": "Màu xanh dương / Blue",
+"example": "あおい そら (aoi sora) — bầu trời xanh",
+"note": "Tính từ: あおい. Cũng chỉ đèn xanh."
+},
+{
+"type": "hiragana",
+"topic": "Màu sắc",
+"char": "しろ",
+"reading": "shiro",
+"meaning": "Màu trắng / White",
+"example": "しろい かみ (shiroi kami) — tờ giấy trắng",
+"note": "Tính từ: しろい."
+},
+{
+"type": "hiragana",
+"topic": "Màu sắc",
+"char": "くろ",
+"reading": "kuro",
+"meaning": "Màu đen / Black",
+"example": "くろい くつ (kuroi kutsu) — đôi giày đen",
+"note": "Tính từ: くろい."
+},
+{
+"type": "hiragana",
+"topic": "Màu sắc",
+"char": "きいろ",
+"reading": "kiiro",
+"meaning": "Màu vàng / Yellow",
+"example": "きいろい はな (kiiroi hana) — bông hoa vàng",
+"note": "Tính từ: きいろい."
+},
+{
+"type": "hiragana",
+"topic": "Màu sắc",
+"char": "みどり",
+"reading": "midori",
+"meaning": "Màu xanh lá / Green",
+"example": "みどりの き (midori no ki) — cây xanh",
+"note": "Dùng với の: みどりの."
+},
+{
+"type": "hiragana",
+"topic": "Màu sắc",
+"char": "ちゃいろ",
+"reading": "chairo",
+"meaning": "Màu nâu / Brown",
+"example": "ちゃいろの かばん (chairo no kaban) — cái túi nâu",
+"note": "ちゃ (trà) + いろ (màu)."
+},
+{
+"type": "hiragana",
+"topic": "Động vật",
+"char": "とり",
+"reading": "tori",
+"meaning": "Con chim / Bird",
+"example": "とりが とびます。(Tori ga tobimasu.) — Chim bay.",
+"note": "Cũng chỉ 'thịt gà' (とりにく)."
+},
+{
+"type": "hiragana",
+"topic": "Động vật",
+"char": "うま",
+"reading": "uma",
+"meaning": "Con ngựa / Horse",
+"example": "うまに のります。(Uma ni norimasu.) — Cưỡi ngựa.",
+"note": ""
+},
+{
+"type": "hiragana",
+"topic": "Động vật",
+"char": "うし",
+"reading": "ushi",
+"meaning": "Con bò / Cow",
+"example": "うしの ミルク (ushi no miruku) — sữa bò",
+"note": ""
+},
+{
+"type": "hiragana",
+"topic": "Động vật",
+"char": "ぶた",
+"reading": "buta",
+"meaning": "Con lợn / Pig",
+"example": "ぶたを かいます。(Buta o kaimasu.) — Nuôi lợn.",
+"note": "Thịt lợn: ぶたにく."
+},
+{
+"type": "hiragana",
+"topic": "Động vật",
+"char": "ひつじ",
+"reading": "hitsuji",
+"meaning": "Con cừu / Sheep",
+"example": "ひつじが います。(Hitsuji ga imasu.) — Có con cừu.",
+"note": ""
+},
+{
+"type": "hiragana",
+"topic": "Động vật",
+"char": "さる",
+"reading": "saru",
+"meaning": "Con khỉ / Monkey",
+"example": "さるは きが すきです。(Saru wa ki ga suki desu.) — Khỉ thích cây.",
+"note": ""
+},
+{
+"type": "hiragana",
+"topic": "Động vật",
+"char": "くま",
+"reading": "kuma",
+"meaning": "Con gấu / Bear",
+"example": "くまは おおきいです。(Kuma wa ookii desu.) — Gấu thì to.",
+"note": ""
+},
+{
+"type": "hiragana",
+"topic": "Động vật",
+"char": "ぞう",
+"reading": "zou",
+"meaning": "Con voi / Elephant",
+"example": "ぞうの はなは ながいです。(Zou no hana wa nagai desu.) — Vòi voi dài.",
+"note": "はな ở đây = mũi/vòi."
+},
+{
+"type": "hiragana",
+"topic": "Động vật",
+"char": "うさぎ",
+"reading": "usagi",
+"meaning": "Con thỏ / Rabbit",
+"example": "うさぎは かわいいです。(Usagi wa kawaii desu.) — Thỏ dễ thương.",
+"note": ""
+},
+{
+"type": "hiragana",
+"topic": "Động vật",
+"char": "むし",
+"reading": "mushi",
+"meaning": "Côn trùng / Insect · bug",
+"example": "むしが います。(Mushi ga imasu.) — Có con côn trùng.",
+"note": ""
+},
+{
+"type": "hiragana",
+"topic": "Cơ thể & Sức khoẻ",
+"char": "あたま",
+"reading": "atama",
+"meaning": "Đầu / Head",
+"example": "あたまが いたいです。(Atama ga itai desu.) — Đau đầu.",
+"note": "あたまが いい = thông minh."
+},
+{
+"type": "hiragana",
+"topic": "Cơ thể & Sức khoẻ",
+"char": "かお",
+"reading": "kao",
+"meaning": "Mặt / Face",
+"example": "かおを あらいます。(Kao o araimasu.) — Rửa mặt.",
+"note": ""
+},
+{
+"type": "hiragana",
+"topic": "Cơ thể & Sức khoẻ",
+"char": "め",
+"reading": "me",
+"meaning": "Mắt / Eye",
+"example": "めが おおきいです。(Me ga ookii desu.) — Mắt to.",
+"note": ""
+},
+{
+"type": "hiragana",
+"topic": "Cơ thể & Sức khoẻ",
+"char": "みみ",
+"reading": "mimi",
+"meaning": "Tai / Ear",
+"example": "みみが いいです。(Mimi ga ii desu.) — Thính tai.",
+"note": ""
+},
+{
+"type": "hiragana",
+"topic": "Cơ thể & Sức khoẻ",
+"char": "くち",
+"reading": "kuchi",
+"meaning": "Miệng / Mouth",
+"example": "くちを あけます。(Kuchi o akemasu.) — Há miệng.",
+"note": ""
+},
+{
+"type": "hiragana",
+"topic": "Cơ thể & Sức khoẻ",
+"char": "て",
+"reading": "te",
+"meaning": "Tay / Hand",
+"example": "てを あらいます。(Te o araimasu.) — Rửa tay.",
+"note": ""
+},
+{
+"type": "hiragana",
+"topic": "Cơ thể & Sức khoẻ",
+"char": "あし",
+"reading": "ashi",
+"meaning": "Chân / Leg · foot",
+"example": "あしが いたいです。(Ashi ga itai desu.) — Đau chân.",
+"note": "Chỉ cả chân lẫn bàn chân."
+},
+{
+"type": "hiragana",
+"topic": "Cơ thể & Sức khoẻ",
+"char": "おなか",
+"reading": "onaka",
+"meaning": "Bụng / Stomach",
+"example": "おなかが すきました。(Onaka ga sukimashita.) — Đói bụng.",
+"note": "おなかが すく = đói."
+},
+{
+"type": "hiragana",
+"topic": "Cơ thể & Sức khoẻ",
+"char": "びょういん",
+"reading": "byouin",
+"meaning": "Bệnh viện / Hospital",
+"example": "びょういんへ いきます。(Byouin e ikimasu.) — Đi bệnh viện.",
+"note": "Đừng nhầm びよういん (tiệm làm tóc)."
+},
+{
+"type": "hiragana",
+"topic": "Cơ thể & Sức khoẻ",
+"char": "くすり",
+"reading": "kusuri",
+"meaning": "Thuốc / Medicine",
+"example": "くすりを のみます。(Kusuri o nomimasu.) — Uống thuốc.",
+"note": "'Uống thuốc' dùng động từ のむ."
+},
+{
+"type": "hiragana",
+"topic": "Quần áo",
+"char": "ふく",
+"reading": "fuku",
+"meaning": "Quần áo / Clothes",
+"example": "ふくを きます。(Fuku o kimasu.) — Mặc quần áo.",
+"note": "'Mặc' (áo) dùng động từ きる."
+},
+{
+"type": "hiragana",
+"topic": "Quần áo",
+"char": "くつ",
+"reading": "kutsu",
+"meaning": "Giày / Shoes",
+"example": "くつを はきます。(Kutsu o hakimasu.) — Đi giày.",
+"note": "Đi giày/quần dùng はく."
+},
+{
+"type": "hiragana",
+"topic": "Quần áo",
+"char": "ぼうし",
+"reading": "boushi",
+"meaning": "Mũ / Hat",
+"example": "ぼうしを かぶります。(Boushi o kaburimasu.) — Đội mũ.",
+"note": "Đội mũ dùng かぶる."
+},
+{
+"type": "hiragana",
+"topic": "Quần áo",
+"char": "かばん",
+"reading": "kaban",
+"meaning": "Cặp · túi / Bag",
+"example": "かばんを もちます。(Kaban o mochimasu.) — Cầm túi.",
+"note": ""
+},
+{
+"type": "hiragana",
+"topic": "Quần áo",
+"char": "めがね",
+"reading": "megane",
+"meaning": "Kính mắt / Glasses",
+"example": "めがねを かけます。(Megane o kakemasu.) — Đeo kính.",
+"note": "Đeo kính dùng かける."
+},
+{
+"type": "katakana",
+"topic": "Quần áo",
+"char": "シャツ",
+"reading": "shatsu",
+"meaning": "Áo sơ mi / Shirt",
+"example": "しろい シャツ (shiroi shatsu) — áo sơ mi trắng",
+"note": "Katakana."
+},
+{
+"type": "katakana",
+"topic": "Quần áo",
+"char": "スカート",
+"reading": "sukaato",
+"meaning": "Váy / Skirt",
+"example": "ながい スカート (nagai sukaato) — chiếc váy dài",
+"note": "Katakana."
+},
+{
+"type": "katakana",
+"topic": "Quần áo",
+"char": "ズボン",
+"reading": "zubon",
+"meaning": "Quần dài / Pants",
+"example": "あおい ズボン (aoi zubon) — quần xanh",
+"note": "Katakana (gốc tiếng Pháp)."
+},
+{
+"type": "hiragana",
+"topic": "Trường học",
+"char": "がっこう",
+"reading": "gakkou",
+"meaning": "Trường học / School",
+"example": "がっこうへ いきます。(Gakkou e ikimasu.) — Đi học.",
+"note": ""
+},
+{
+"type": "hiragana",
+"topic": "Trường học",
+"char": "だいがく",
+"reading": "daigaku",
+"meaning": "Đại học / University",
+"example": "だいがくの がくせい (daigaku no gakusei) — sinh viên đại học",
+"note": ""
+},
+{
+"type": "hiragana",
+"topic": "Trường học",
+"char": "きょうしつ",
+"reading": "kyoushitsu",
+"meaning": "Lớp học / Classroom",
+"example": "きょうしつで べんきょうします。(Kyoushitsu de benkyou shimasu.) — Học ở lớp.",
+"note": ""
+},
+{
+"type": "hiragana",
+"topic": "Trường học",
+"char": "しゅくだい",
+"reading": "shukudai",
+"meaning": "Bài tập về nhà / Homework",
+"example": "しゅくだいを します。(Shukudai o shimasu.) — Làm bài tập.",
+"note": ""
+},
+{
+"type": "hiragana",
+"topic": "Trường học",
+"char": "えんぴつ",
+"reading": "enpitsu",
+"meaning": "Bút chì / Pencil",
+"example": "えんぴつで かきます。(Enpitsu de kakimasu.) — Viết bằng bút chì.",
+"note": ""
+},
+{
+"type": "hiragana",
+"topic": "Trường học",
+"char": "かみ",
+"reading": "kami",
+"meaning": "Giấy / Paper",
+"example": "かみに かきます。(Kami ni kakimasu.) — Viết lên giấy.",
+"note": "Đồng âm với かみ (tóc / thần)."
+},
+{
+"type": "katakana",
+"topic": "Trường học",
+"char": "テスト",
+"reading": "tesuto",
+"meaning": "Bài kiểm tra / Test",
+"example": "テストが あります。(Tesuto ga arimasu.) — Có bài kiểm tra.",
+"note": "Katakana."
+},
+{
+"type": "katakana",
+"topic": "Trường học",
+"char": "ノート",
+"reading": "nooto",
+"meaning": "Vở / Notebook",
+"example": "ノートに かきます。(Nooto ni kakimasu.) — Ghi vào vở.",
+"note": "Katakana."
+},
+{
+"type": "hiragana",
+"topic": "Công việc",
+"char": "しごと",
+"reading": "shigoto",
+"meaning": "Công việc / Work · job",
+"example": "しごとを します。(Shigoto o shimasu.) — Làm việc.",
+"note": "Lịch sự hơn: おしごと."
+},
+{
+"type": "hiragana",
+"topic": "Công việc",
+"char": "かいしゃ",
+"reading": "kaisha",
+"meaning": "Công ty / Company",
+"example": "かいしゃへ いきます。(Kaisha e ikimasu.) — Đi công ty.",
+"note": ""
+},
+{
+"type": "hiragana",
+"topic": "Công việc",
+"char": "かいしゃいん",
+"reading": "kaishain",
+"meaning": "Nhân viên công ty / Office worker",
+"example": "ちちは かいしゃいんです。(Chichi wa kaishain desu.) — Bố tôi là nhân viên công ty.",
+"note": "かいしゃ (công ty) + いん (nhân viên)."
+},
+{
+"type": "hiragana",
+"topic": "Công việc",
+"char": "いしゃ",
+"reading": "isha",
+"meaning": "Bác sĩ / Doctor",
+"example": "いしゃに なりたいです。(Isha ni naritai desu.) — Muốn thành bác sĩ.",
+"note": "Lịch sự: おいしゃさん."
+},
+{
+"type": "hiragana",
+"topic": "Công việc",
+"char": "てんいん",
+"reading": "ten'in",
+"meaning": "Nhân viên bán hàng / Shop clerk",
+"example": "てんいんに ききます。(Ten'in ni kikimasu.) — Hỏi nhân viên cửa hàng.",
+"note": "みせ (cửa hàng) + いん (nhân viên)."
+},
+{
+"type": "hiragana",
+"topic": "Công việc",
+"char": "けいさつ",
+"reading": "keisatsu",
+"meaning": "Cảnh sát / Police",
+"example": "けいさつを よびます。(Keisatsu o yobimasu.) — Gọi cảnh sát.",
+"note": ""
+},
+{
+"type": "hiragana",
+"topic": "Địa điểm trong phố",
+"char": "まち",
+"reading": "machi",
+"meaning": "Phố · thị trấn / Town",
+"example": "まちを あるきます。(Machi o arukimasu.) — Đi dạo phố.",
+"note": ""
+},
+{
+"type": "hiragana",
+"topic": "Địa điểm trong phố",
+"char": "みせ",
+"reading": "mise",
+"meaning": "Cửa hàng / Shop · store",
+"example": "みせで かいます。(Mise de kaimasu.) — Mua ở cửa hàng.",
+"note": ""
+},
+{
+"type": "hiragana",
+"topic": "Địa điểm trong phố",
+"char": "ぎんこう",
+"reading": "ginkou",
+"meaning": "Ngân hàng / Bank",
+"example": "ぎんこうへ いきます。(Ginkou e ikimasu.) — Đi ngân hàng.",
+"note": ""
+},
+{
+"type": "hiragana",
+"topic": "Địa điểm trong phố",
+"char": "こうえん",
+"reading": "kouen",
+"meaning": "Công viên / Park",
+"example": "こうえんで あそびます。(Kouen de asobimasu.) — Chơi ở công viên.",
+"note": ""
+},
+{
+"type": "hiragana",
+"topic": "Địa điểm trong phố",
+"char": "としょかん",
+"reading": "toshokan",
+"meaning": "Thư viện / Library",
+"example": "としょかんで べんきょうします。(Toshokan de benkyou shimasu.) — Học ở thư viện.",
+"note": ""
+},
+{
+"type": "hiragana",
+"topic": "Địa điểm trong phố",
+"char": "ゆうびんきょく",
+"reading": "yuubinkyoku",
+"meaning": "Bưu điện / Post office",
+"example": "ゆうびんきょくで きってを かいます。(Yuubinkyoku de kitte o kaimasu.) — Mua tem ở bưu điện.",
+"note": "きって = con tem."
+},
+{
+"type": "katakana",
+"topic": "Địa điểm trong phố",
+"char": "レストラン",
+"reading": "resutoran",
+"meaning": "Nhà hàng / Restaurant",
+"example": "レストランで たべます。(Resutoran de tabemasu.) — Ăn ở nhà hàng.",
+"note": "Katakana."
+},
+{
+"type": "katakana",
+"topic": "Địa điểm trong phố",
+"char": "スーパー",
+"reading": "suupaa",
+"meaning": "Siêu thị / Supermarket",
+"example": "スーパーで かいます。(Suupaa de kaimasu.) — Mua ở siêu thị.",
+"note": "Katakana (rút gọn của supermarket)."
+},
+{
+"type": "hiragana",
+"topic": "Sở thích",
+"char": "おんがく",
+"reading": "ongaku",
+"meaning": "Âm nhạc / Music",
+"example": "おんがくを ききます。(Ongaku o kikimasu.) — Nghe nhạc.",
+"note": ""
+},
+{
+"type": "hiragana",
+"topic": "Sở thích",
+"char": "えいが",
+"reading": "eiga",
+"meaning": "Phim / Movie",
+"example": "えいがを みます。(Eiga o mimasu.) — Xem phim.",
+"note": "Rạp phim: えいがかん."
+},
+{
+"type": "hiragana",
+"topic": "Sở thích",
+"char": "りょうり",
+"reading": "ryouri",
+"meaning": "Nấu ăn · món ăn / Cooking",
+"example": "りょうりを します。(Ryouri o shimasu.) — Nấu ăn.",
+"note": "Cũng nghĩa 'món ăn'."
+},
+{
+"type": "hiragana",
+"topic": "Sở thích",
+"char": "しゃしん",
+"reading": "shashin",
+"meaning": "Ảnh chụp / Photograph",
+"example": "しゃしんを とります。(Shashin o torimasu.) — Chụp ảnh.",
+"note": "'Chụp ảnh' dùng とる."
+},
+{
+"type": "katakana",
+"topic": "Sở thích",
+"char": "スポーツ",
+"reading": "supootsu",
+"meaning": "Thể thao / Sports",
+"example": "スポーツが すきです。(Supootsu ga suki desu.) — Thích thể thao.",
+"note": "Katakana."
+},
+{
+"type": "katakana",
+"topic": "Sở thích",
+"char": "サッカー",
+"reading": "sakkaa",
+"meaning": "Bóng đá / Soccer",
+"example": "サッカーを します。(Sakkaa o shimasu.) — Chơi bóng đá.",
+"note": "Katakana."
+},
+{
+"type": "katakana",
+"topic": "Sở thích",
+"char": "ギター",
+"reading": "gitaa",
+"meaning": "Đàn ghi-ta / Guitar",
+"example": "ギターを ひきます。(Gitaa o hikimasu.) — Chơi ghi-ta.",
+"note": "'Chơi đàn' dùng ひく. Katakana."
+},
+{
+"type": "hiragana",
+"topic": "Số & Thời gian",
+"char": "きのう",
+"reading": "kinou",
+"meaning": "Hôm qua / Yesterday",
+"example": "きのう べんきょうしました。(Kinou benkyou shimashita.) — Hôm qua đã học.",
+"note": "Hôm nay: きょう; ngày mai: あした."
+},
+{
+"type": "hiragana",
+"topic": "Số & Thời gian",
+"char": "あさ",
+"reading": "asa",
+"meaning": "Buổi sáng / Morning",
+"example": "あさ おきます。(Asa okimasu.) — Buổi sáng thức dậy.",
+"note": "Bữa sáng: あさごはん."
+},
+{
+"type": "hiragana",
+"topic": "Số & Thời gian",
+"char": "ひる",
+"reading": "hiru",
+"meaning": "Buổi trưa / Noon · daytime",
+"example": "ひるに たべます。(Hiru ni tabemasu.) — Ăn vào buổi trưa.",
+"note": "Bữa trưa: ひるごはん."
+},
+{
+"type": "hiragana",
+"topic": "Số & Thời gian",
+"char": "よる",
+"reading": "yoru",
+"meaning": "Buổi tối / Night",
+"example": "よる ねます。(Yoru nemasu.) — Buổi tối đi ngủ.",
+"note": "Bữa tối: ばんごはん."
+},
+{
+"type": "hiragana",
+"topic": "Số & Thời gian",
+"char": "まいにち",
+"reading": "mainichi",
+"meaning": "Mỗi ngày / Every day",
+"example": "まいにち べんきょうします。(Mainichi benkyou shimasu.) — Học mỗi ngày.",
+"note": "まい (mỗi) + にち (ngày)."
+}
 ];
 window.NIHONGO_KANA_INFO = {
 "あ": {
