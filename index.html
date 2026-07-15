@@ -343,6 +343,7 @@
         </div>
         <div id="topic-list-mgr"></div>
       </div>
+      <input id="m-search" type="search" placeholder="🔍 Tìm ký tự / cách đọc / nghĩa / topic…" autocomplete="off" style="margin-bottom:10px">
       <div id="manage-list"></div>
     </div>
   </section>
@@ -766,7 +767,16 @@ $('save-card').onclick=()=>{
   const data={type:$('in-type').value,topic:$('in-topic').value.trim(),char:ch,reading:$('in-reading').value.trim(),meaning:me,example:$('in-example').value.trim(),note:$('in-note').value.trim()};
   const eid=$('edit-id').textContent;
   if(eid){ const c=cards.find(x=>x.id===eid); Object.assign(c,data); toast('Đã cập nhật thẻ'); exitEdit(); }
-  else { cards.push({id:id(),...data}); toast('Đã thêm thẻ ✓'); }
+  else {
+    const dups=cards.filter(c=>c.char===ch);
+    if(dups.length){
+      const d=dups[0];
+      if(!confirm(`⚠ Ký tự "${ch}" đã có ${dups.length} thẻ trong bộ`
+        +(d.reading||d.meaning?` (vd: ${[d.reading,d.meaning].filter(Boolean).join(' — ')})`:'')+`.\n\n`
+        +`OK = vẫn thêm thẻ mới\nCancel = huỷ (mở Quản lý, tìm ký tự này để Sửa thẻ cũ)`)) return;
+    }
+    cards.push({id:id(),...data}); toast('Đã thêm thẻ ✓');
+  }
   save(); clearForm(); refreshTopicList(); updateDueBadge();
 };
 function clearForm(){ ['in-char','in-reading','in-meaning','in-example','in-note','in-topic','romaji-in'].forEach(x=>$(x).value=''); $('pv-hira').textContent='';$('pv-kata').textContent=''; }
@@ -823,8 +833,11 @@ function renderManage(){
   renderTopicManager();
   populateVoices();
   fillTopicSelect('m-topic');
-  const f=$('m-topic').value; const list=cards.filter(c=>f==='all'||c.topic===f);
-  $('m-count').textContent=`${list.length} thẻ`;
+  const f=$('m-topic').value;
+  const q=($('m-search').value||'').trim().toLowerCase();
+  const list=cards.filter(c=>(f==='all'||c.topic===f) && (!q ||
+    [c.char,c.reading,c.meaning,c.topic,c.note,c.example].some(v=>(v||'').toLowerCase().includes(q))));
+  $('m-count').textContent = q ? `${list.length} thẻ khớp "${q}"` : `${list.length} thẻ`;
   $('manage-list').innerHTML = list.length? list.map(c=>`
     <div class="list-item">
       <div class="lc">${esc(c.char)}</div>
@@ -839,6 +852,7 @@ function renderManage(){
     </div>`).join('') : '<div class="empty">Chưa có thẻ nào.</div>';
 }
 $('m-topic').onchange=renderManage;
+$('m-search').oninput=renderManage;
 function delCard(cid){ if(!confirm('Xoá thẻ này?'))return; cards=cards.filter(c=>c.id!==cid); save(); renderManage(); updateDueBadge(); toast('Đã xoá'); }
 $('export').onclick=()=>{ const blob=new Blob([JSON.stringify(cards,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='nihongo-flashcards.json'; a.click(); };
 $('import-btn').onclick=()=>$('import-file').click();
@@ -862,18 +876,48 @@ const GOOGLE_CLIENT_ID='769453018538-lucpdkkmdqpsi7u0uqcude3ab5os8idc.apps.googl
 const SYNC_SCOPES='https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.file';
 const SHEET_NAME='Nihongo Flashcards';
 const SHEET_HEADER=['type','topic','char','reading','meaning','example','note','srs'];
-let gTokenClient=null, gToken=null, gSheetId=(prefs.spreadsheetId||null), gPushTimer=null;
+let gTokenClient=null, gToken=(prefs.syncToken||null), gTokenExp=Number(prefs.syncTokenExp||0), gSheetId=(prefs.spreadsheetId||null), gPushTimer=null;
 function setSyncStatus(m){ const el=$('sync-status'); if(el) el.textContent=m; }
 function ensureGsi(cb){ if(window.google&&google.accounts&&google.accounts.oauth2){ cb(); } else { setSyncStatus('Đang tải Google…'); setTimeout(()=>ensureGsi(cb),300); } }
 function gInit(){ if(gTokenClient) return;
-  gTokenClient=google.accounts.oauth2.initTokenClient({ client_id:GOOGLE_CLIENT_ID, scope:SYNC_SCOPES,
-    callback:(resp)=>{ if(resp&&resp.access_token){ gToken=resp.access_token; prefs.syncEnabled=true; savePrefs(); onConnected(); } else { setSyncStatus('Đăng nhập thất bại'); } },
-    error_callback:()=>{ setSyncStatus('Chưa kết nối — bấm Kết nối'); } });
+  gTokenClient=google.accounts.oauth2.initTokenClient({ client_id:GOOGLE_CLIENT_ID, scope:SYNC_SCOPES, callback:()=>{}, error_callback:()=>{} });
 }
-function connect(interactive){ ensureGsi(()=>{ gInit(); try{ gTokenClient.requestAccessToken({prompt: interactive?'consent':''}); }catch(e){ setSyncStatus('Lỗi: '+e.message); } }); }
-async function gFetch(url,opts){ opts=opts||{}; opts.headers=Object.assign({Authorization:'Bearer '+gToken}, opts.headers||{});
-  const r=await fetch(url,opts);
-  if(r.status===401){ gToken=null; throw new Error('Hết phiên — Kết nối lại'); }
+// Lấy access token. interactive=false -> im lặng, không popup (nếu phiên Google còn sống + đã đồng ý trước đó).
+function requestToken(interactive){
+  return new Promise((resolve,reject)=>{
+    ensureGsi(()=>{ gInit();
+      gTokenClient.callback=(resp)=>{
+        if(resp&&resp.access_token){
+          gToken=resp.access_token;
+          gTokenExp=Date.now()+(((resp.expires_in||3600)-90)*1000); // làm mới sớm 90s trước hạn
+          prefs.syncEnabled=true; prefs.syncToken=gToken; prefs.syncTokenExp=gTokenExp; savePrefs();
+          resolve(gToken);
+        } else reject(new Error('no_token'));
+      };
+      gTokenClient.error_callback=(err)=>reject(err||new Error('auth_error'));
+      try{ gTokenClient.requestAccessToken({prompt: interactive?'consent':''}); }
+      catch(e){ reject(e); }
+    });
+  });
+}
+// Token còn hạn thì tái sử dụng; hết hạn thì tự làm mới im lặng.
+async function ensureToken(){ if(gToken && Date.now()<gTokenExp) return gToken; return await requestToken(false); }
+function connect(interactive){
+  setSyncStatus(interactive?'Đang đăng nhập…':'Đang kết nối lại…');
+  requestToken(interactive).then(()=>onConnected())
+    .catch(()=>{ prefs.syncToken=null; prefs.syncTokenExp=0; savePrefs();
+      setSyncStatus(interactive?'Đăng nhập thất bại — thử lại':'Chưa kết nối — bấm Kết nối'); });
+}
+async function gFetch(url,opts){ opts=opts||{};
+  let tok=await ensureToken();
+  opts.headers=Object.assign({}, opts.headers||{}, {Authorization:'Bearer '+tok});
+  let r=await fetch(url,opts);
+  if(r.status===401){ // token bị từ chối -> làm mới im lặng 1 lần rồi thử lại
+    gToken=null; gTokenExp=0;
+    tok=await requestToken(false);
+    opts.headers.Authorization='Bearer '+tok;
+    r=await fetch(url,opts);
+  }
   if(!r.ok) throw new Error('API '+r.status);
   return r.status===204?null:r.json();
 }
@@ -963,7 +1007,10 @@ if(!prefs.kanaFlashcardsRemoved){
   if(cards.length!==before) save();
 }
 $('f-type').value=prefs.focusType; fillTopicSelect('f-topic'); refreshDeck(); updateDueBadge();
-if(prefs.syncEnabled){ setSyncStatus('Đang kết nối lại…'); connect(false); }
+if(prefs.syncEnabled){
+  if(gToken && Date.now()<gTokenExp){ setSyncStatus('Đang đồng bộ…'); onConnected(); } // token còn hạn -> vào thẳng
+  else { setSyncStatus('Đang kết nối lại…'); connect(false); }                          // hết hạn -> làm mới im lặng
+}
 </script>
 </body>
 </html>
