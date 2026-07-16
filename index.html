@@ -29,6 +29,9 @@
   .tabs{display:flex;gap:6px;background:var(--panel);padding:4px;border-radius:12px;border:1px solid var(--line);flex-wrap:wrap}
   .tab{border:0;background:transparent;color:var(--muted);padding:8px 13px;border-radius:9px;cursor:pointer;font-size:14px;font-weight:600}
   .tab.active{background:var(--accent);color:#fff}
+  .seg{display:inline-flex;gap:6px;background:var(--panel);padding:4px;border-radius:12px;border:1px solid var(--line)}
+  .seg-btn{border:0;background:transparent;color:var(--muted);padding:8px 16px;border-radius:9px;cursor:pointer;font-size:14px;font-weight:600}
+  .seg-btn.active{background:var(--accent);color:#fff}
   .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
   .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
   label{font-size:13px;color:var(--muted);font-weight:600;display:block;margin:0 0 4px}
@@ -183,7 +186,13 @@
 
   <!-- ================= CHART (Hiragana gojūon) ================= -->
   <section id="view-chart" class="hide">
-    <p class="center" style="color:var(--muted);margin:0 0 14px"><small class="muted">Bảng chữ Hiragana. Nhấn vào từng chữ để xem cách đọc, ví dụ, mẹo nhớ và 🔊 nghe.</small></p>
+    <div class="center" style="margin:0 0 12px">
+      <div class="seg" id="chart-script-toggle">
+        <button class="seg-btn active" data-script="hiragana">あ Hiragana</button>
+        <button class="seg-btn" data-script="katakana">ア Katakana</button>
+      </div>
+    </div>
+    <p class="center" style="color:var(--muted);margin:0 0 14px"><small class="muted" id="chart-hint"></small></p>
     <div id="chart-body"></div>
   </section>
 
@@ -537,42 +546,52 @@ const KANA_ROMAJI={'あ':'a','い':'i','う':'u','え':'e','お':'o','か':'ka',
  'にゃ':'nya','にゅ':'nyu','にょ':'nyo','ひゃ':'hya','ひゅ':'hyu','ひょ':'hyo','みゃ':'mya','みゅ':'myu','みょ':'myo',
  'りゃ':'rya','りゅ':'ryu','りょ':'ryo','ぎゃ':'gya','ぎゅ':'gyu','ぎょ':'gyo','じゃ':'ja','じゅ':'ju','じょ':'jo',
  'びゃ':'bya','びゅ':'byu','びょ':'byo','ぴゃ':'pya','ぴゅ':'pyu','ぴょ':'pyo'};
-function chartCell(ch){
-  if(!ch) return '<div class="cell empty"></div>';
-  return `<button class="cell" data-char="${esc(ch)}"><span class="k">${esc(ch)}</span><span class="r">${esc(KANA_ROMAJI[ch]||'')}</span></button>`;
+let chartScript = (prefs.chartScript==='katakana') ? 'katakana' : 'hiragana';
+function chartCell(base){
+  if(!base) return '<div class="cell empty"></div>';
+  const disp = chartScript==='katakana' ? hiraToKata(base) : base;   // layout hiragana, hiển thị theo script chọn
+  return `<button class="cell" data-char="${esc(disp)}" data-base="${esc(base)}"><span class="k">${esc(disp)}</span><span class="r">${esc(KANA_ROMAJI[base]||'')}</span></button>`;
 }
 function chartGrid(rows,cls){
   return `<div class="chart ${cls||''}">`+rows.map(r=>r.map(chartCell).join('')).join('')+'</div>';
 }
 function renderChart(){
+  const isKata = chartScript==='katakana';
+  $('chart-hint').textContent = (isKata?'Bảng chữ Katakana':'Bảng chữ Hiragana')
+    + '. Nhấn vào từng chữ để xem cách đọc'+(isKata?'':', ví dụ, mẹo nhớ')+' và 🔊 nghe.';
+  document.querySelectorAll('#chart-script-toggle .seg-btn').forEach(b=>b.classList.toggle('active', b.dataset.script===chartScript));
   $('chart-body').innerHTML =
     '<div class="chart-h">Âm cơ bản (Gojūon)</div>'+chartGrid(GOJUON)+
     '<div class="chart-h">Âm đục &amp; bán đục (Dakuten / Handakuten)</div>'+chartGrid(DAKUTEN.concat(HANDAKUTEN))+
     '<div class="chart-h">Âm ghép (Yōon)</div>'+chartGrid(YOON,'yoon');
 }
+$('chart-script-toggle').addEventListener('click',e=>{ const b=e.target.closest('[data-script]'); if(!b) return;
+  chartScript=b.dataset.script; prefs.chartScript=chartScript; savePrefs(); renderChart(); });
 function kanaCategory(ch){
   if(DAKUTEN.flat().includes(ch)) return 'Âm đục (dakuten)';
   if(HANDAKUTEN.flat().includes(ch)) return 'Âm bán đục (handakuten)';
   if(YOON.flat().includes(ch)) return 'Âm ghép (yōon)';
   return '';
 }
-function openChartDetail(ch){
-  const info=(window.NIHONGO_KANA_INFO&&window.NIHONGO_KANA_INFO[ch]) || cards.find(x=>x.char===ch);
-  let h=`<div class="detail-char">${esc(ch)}</div><div class="detail-rom">${esc(KANA_ROMAJI[ch]||'')}</div>`;
-  h+=`<div class="center"><button class="btn ghost sm" data-speak="${esc(ch)}">🔊 Nghe</button></div>`;
-  if(info){
+function openChartDetail(disp, base){
+  base = base || disp;
+  const info=(window.NIHONGO_KANA_INFO&&window.NIHONGO_KANA_INFO[base]) || cards.find(x=>x.char===base);
+  let h=`<div class="detail-char">${esc(disp)}</div><div class="detail-rom">${esc(KANA_ROMAJI[base]||'')}</div>`;
+  h+=`<div class="center"><button class="btn ghost sm" data-speak="${esc(disp)}">🔊 Nghe</button></div>`;
+  // Ví dụ & mẹo nhớ trong KANA_INFO gắn với hình chữ hiragana -> chỉ hiển thị ở chế độ Hiragana
+  if(chartScript!=='katakana' && info){
     if(info.meaning) h+=`<div class="detail-mean">${esc(info.meaning)}</div>`;
     if(info.example&&info.example.trim()) h+=`<div class="block"><span class="lbl">Ví dụ</span>${esc(info.example)}</div>`;
     const note=(info.note||'').replace(/^\s*mẹo nhớ:\s*/i,'').trim();
     if(note) h+=`<div class="block"><span class="lbl">Mẹo nhớ</span>${esc(note)}</div>`;
   } else {
-    const cat=kanaCategory(ch);
-    if(cat) h+=`<div class="detail-mean">${esc(cat)}</div>`;
+    const cat=kanaCategory(base);
+    h+=`<div class="detail-mean">${esc(chartScript==='katakana'?('Katakana'+(cat?' · '+cat:'')):(cat||'Âm cơ bản (gojūon)'))}</div>`;
   }
   $('chart-detail').innerHTML=h; $('chart-modal').classList.remove('hide');
 }
 function closeChartModal(){ $('chart-modal').classList.add('hide'); }
-$('chart-body').addEventListener('click',e=>{ const b=e.target.closest('[data-char]'); if(b) openChartDetail(b.getAttribute('data-char')); });
+$('chart-body').addEventListener('click',e=>{ const b=e.target.closest('[data-char]'); if(b) openChartDetail(b.getAttribute('data-char'), b.getAttribute('data-base')); });
 $('chart-modal-close').onclick=closeChartModal;
 $('chart-modal').addEventListener('click',e=>{ if(e.target===$('chart-modal')) closeChartModal(); });
 
