@@ -65,6 +65,6 @@ App tạo sheet với dòng 1 là tiêu đề cột:
 
 ## Lưu ý / khắc phục sự cố
 - **"Google chưa xác minh ứng dụng":** bình thường ở chế độ Testing → **Advanced → Go to Nihongo Flashcards (unsafe)** (an toàn, app của chính bạn).
-- **Đăng nhập lại sau ~1 giờ:** token hết hạn theo phiên; bấm lại nút Đồng bộ là xong.
+- **Giữ đăng nhập lâu (không phải login lại mỗi phiên):** app nhớ đúng tài khoản (email) và **tự làm mới token im lặng** khi bạn mở lại — miễn là bạn **vẫn đang đăng nhập Google trong trình duyệt đó** (Google giữ phiên hàng tuần/tháng nếu chọn "stay signed in"). Access token của Google chỉ sống ~1 giờ và **không có refresh token cho app tĩnh chạy trên trình duyệt**, nên không thể "giữ token cứng 30 ngày" — thay vào đó app làm mới tự động nên bạn gần như không thấy popup. Chỉ phải bấm **Kết nối** lại nếu bạn đăng xuất Google, đổi máy/trình duyệt, hoặc trình duyệt chặn cookie của accounts.google.com (Safari/iOS ITP có thể chặn — khi đó thi thoảng cần bấm lại).
 - Chỉ chạy trên `https://thaole29.github.io` (không chạy khi mở file trực tiếp).
 - Client ID là thông tin **công khai an toàn**, không phải mật khẩu.

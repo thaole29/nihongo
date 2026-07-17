@@ -85,6 +85,17 @@
   .list-item .lmeta .r{font-weight:600}
   .list-item .lmeta .m{color:var(--muted);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .toolbar{display:flex;gap:8px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:14px}
+  .pager{display:flex;gap:10px;align-items:center;justify-content:center;margin-top:14px;flex-wrap:wrap}
+  .pager .pinfo{color:var(--muted);font-size:13px;font-weight:600}
+  .hand-wrap{display:flex;justify-content:center}
+  #hand-canvas{border:2px dashed var(--accent);border-radius:16px;background:var(--panel);
+    touch-action:none;cursor:crosshair;width:100%;max-width:320px;aspect-ratio:1;
+    background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+    background-size:50% 50%;background-position:center}
+  .hand-cands{display:flex;flex-wrap:wrap;gap:8px;min-height:44px;align-items:center}
+  .hand-cands .hc{font-size:26px;min-width:48px;height:48px;padding:0 8px;border:1px solid var(--line);border-radius:12px;
+    background:var(--bg);color:var(--ink);cursor:pointer;font-weight:600}
+  .hand-cands .hc:hover,.hand-cands .hc.sel{border-color:var(--accent);background:var(--accent-soft)}
 
   .grade{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:560px;margin:0 auto}
   .grade button{flex-direction:column;padding:12px 6px;font-size:13px}
@@ -145,6 +156,7 @@
       <button class="tab" data-view="review" id="tab-review">Ôn tập</button>
       <button class="tab" data-view="quiz">Quiz</button>
       <button class="tab" data-view="add">Thêm thẻ</button>
+      <button class="tab" data-view="hand">✍️ Viết tay</button>
       <button class="tab" data-view="manage">Quản lý</button>
     </div>
   </header>
@@ -278,12 +290,21 @@
       <p style="margin:0 0 16px"><small class="muted">Mặt trước = ký tự tiếng Nhật · Mặt sau = đọc + nghĩa + ví dụ.</small></p>
       <div class="helper">
         <label style="color:var(--accent)">⌨️ Gõ romaji → kana (viết tiếng Nhật bằng chữ latin)</label>
-        <input id="romaji-in" placeholder="vd: konnichiwa, sushi, arigatou..." autocomplete="off">
+        <div class="row" style="gap:6px;flex-wrap:nowrap">
+          <input id="romaji-in" placeholder="vd: konnichiwa, sushi, arigatou..." autocomplete="off" style="flex:1;min-width:0">
+          <button type="button" class="btn ghost sm" id="romaji-copy" title="Copy chữ đã gõ để dán nơi khác" style="flex:none">📋</button>
+        </div>
         <div class="preview">
           <div class="pv"><small class="muted">Hiragana</small><div class="pvchar" id="pv-hira"></div>
-            <button type="button" class="btn ghost sm" data-fill="hira">↑ Dùng cho ký tự</button></div>
+            <div class="row" style="gap:6px">
+              <button type="button" class="btn ghost sm" data-fill="hira">↑ Dùng cho ký tự</button>
+              <button type="button" class="btn ghost sm" data-copy="hira" title="Copy Hiragana">📋</button>
+            </div></div>
           <div class="pv"><small class="muted">Katakana</small><div class="pvchar" id="pv-kata"></div>
-            <button type="button" class="btn ghost sm" data-fill="kata">↑ Dùng cho ký tự</button></div>
+            <div class="row" style="gap:6px">
+              <button type="button" class="btn ghost sm" data-fill="kata">↑ Dùng cho ký tự</button>
+              <button type="button" class="btn ghost sm" data-copy="kata" title="Copy Katakana">📋</button>
+            </div></div>
         </div>
       </div>
       <div class="grid2">
@@ -357,6 +378,42 @@
       </div>
       <input id="m-search" type="search" placeholder="🔍 Tìm ký tự / cách đọc / nghĩa / topic…" autocomplete="off" style="margin-bottom:10px">
       <div id="manage-list"></div>
+      <div id="manage-pager" class="pager hide"></div>
+    </div>
+  </section>
+
+  <!-- ================= HANDWRITING (thử nghiệm) ================= -->
+  <section id="view-hand" class="hide">
+    <div class="panel">
+      <h2 style="margin:0 0 4px;font-size:18px">✍️ Viết tay <small class="muted" style="font-weight:400">· thử nghiệm</small></h2>
+      <p style="margin:0 0 14px"><small class="muted">Vẽ <b>từng ký tự</b> bằng <b>chuột / ngón tay</b> → bấm ký tự ở phần gợi ý để <b>nối vào câu</b> bên dưới. Vẽ tiếp chữ sau để soạn cả <b>cụm từ / câu</b>.</small></p>
+      <div class="hand-wrap">
+        <canvas id="hand-canvas" width="320" height="320"></canvas>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn ghost sm" id="hand-undo">↶ Hoàn tác nét</button>
+        <button class="btn ghost sm" id="hand-clear">🗑 Xoá khung vẽ</button>
+        <button class="btn sm" id="hand-recog">🔍 Nhận dạng</button>
+        <small class="muted" id="hand-status"></small>
+      </div>
+      <div style="margin-top:14px">
+        <label>Kết quả gợi ý (bấm để nối vào câu)</label>
+        <div id="hand-cands" class="hand-cands"><small class="muted">Chưa có — hãy vẽ một ký tự.</small></div>
+      </div>
+      <div style="margin-top:14px;border-top:1px solid var(--line);padding-top:12px">
+        <label>📝 Cụm từ / câu đang soạn</label>
+        <input id="hand-buffer" placeholder="Các ký tự đã chọn sẽ nối vào đây… (có thể sửa trực tiếp)" autocomplete="off" style="font-size:22px">
+        <div class="row" style="margin-top:8px">
+          <button class="btn ghost sm" id="hand-space">␣ Dấu cách</button>
+          <button class="btn ghost sm" id="hand-back">⌫ Xoá ký tự cuối</button>
+          <button class="btn ghost sm" id="hand-bufclear">🧹 Xoá hết câu</button>
+        </div>
+        <div class="row" style="margin-top:10px">
+          <button class="btn ghost sm" data-hand-to="copy">📋 Copy câu</button>
+          <button class="btn ghost sm" data-hand-to="search">🔍 Tìm trong Quản lý</button>
+          <button class="btn ghost sm" data-hand-to="char">➕ Điền vào Thêm thẻ</button>
+        </div>
+      </div>
     </div>
   </section>
 </div>
@@ -490,13 +547,14 @@ function switchView(v, isBack){
   if(!isBack && curView!==v) viewHistory.push(curView);
   curView=v;
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.view===v));
-  ['study','chart','review','quiz','add','manage'].forEach(x=>$('view-'+x).classList.toggle('hide',x!==v));
+  ['study','chart','review','quiz','add','manage','hand'].forEach(x=>$('view-'+x).classList.toggle('hide',x!==v));
   if(v==='chart'){ renderChart(); }
   if(v==='study'){ $('f-type').value=prefs.focusType; fillTopicSelect('f-topic'); refreshDeck(); }
   if(v==='review'){ $('r-type').value=prefs.focusType; fillTopicSelect('r-topic'); startReview(); }
   if(v==='quiz'){ $('q-type').value=prefs.focusType; fillTopicSelect('q-topic'); showQuizSetup(); }
   if(v==='add'){ refreshTopicList(); }
   if(v==='manage'){ renderManage(); }
+  if(v==='hand'){ initHand(); }
   updateDueBadge();
   updateBackBtn();
 }
@@ -786,6 +844,17 @@ document.querySelectorAll('[data-fill]').forEach(b=>b.onclick=()=>{
   const val=b.dataset.fill==='hira'?$('pv-hira').textContent:$('pv-kata').textContent;
   if(val){ $('in-char').value=val; $('in-type').value=b.dataset.fill==='hira'?'hiragana':'katakana'; toast('Đã điền ký tự'); }
 });
+/* Copy nhanh để dán sang ô/app khác */
+async function copyText(t){
+  t=(t||'').trim(); if(!t) return false;
+  try{ await navigator.clipboard.writeText(t); return true; }
+  catch(e){ try{ const ta=document.createElement('textarea'); ta.value=t; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); return true; }catch(_){ return false; } }
+}
+$('romaji-copy').onclick=async()=>{ (await copyText($('romaji-in').value))?toast('Đã copy chữ đã gõ'):toast('Chưa có gì để copy'); };
+document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=async()=>{
+  const val=b.dataset.copy==='hira'?$('pv-hira').textContent:$('pv-kata').textContent;
+  (await copyText(val))?toast('Đã copy '+(b.dataset.copy==='hira'?'Hiragana':'Katakana')):toast('Chưa có gì để copy');
+});
 function refreshTopicList(){ $('topic-list').innerHTML=allTopics().map(x=>`<option value="${esc(x)}">`).join(''); }
 $('save-card').onclick=()=>{
   const ch=$('in-char').value.trim(), me=$('in-meaning').value.trim();
@@ -856,6 +925,7 @@ $('topic-list-mgr').addEventListener('click',e=>{
   const r=e.target.closest('[data-trename]'); if(r){ renameTopic(r.getAttribute('data-trename')); return; }
   const d=e.target.closest('[data-tdelete]'); if(d){ deleteTopic(d.getAttribute('data-tdelete')); return; }
 });
+const MANAGE_PAGE_SIZE=50; let managePage=0;
 function renderManage(){
   renderTopicManager();
   populateVoices();
@@ -864,8 +934,14 @@ function renderManage(){
   const q=($('m-search').value||'').trim().toLowerCase();
   const list=cards.filter(c=>(f==='all'||c.topic===f) && (!q ||
     [c.char,c.reading,c.meaning,c.topic,c.note,c.example].some(v=>(v||'').toLowerCase().includes(q))));
-  $('m-count').textContent = q ? `${list.length} thẻ khớp "${q}"` : `${list.length} thẻ`;
-  $('manage-list').innerHTML = list.length? list.map(c=>`
+  const total=list.length;
+  const pages=Math.max(1,Math.ceil(total/MANAGE_PAGE_SIZE));
+  if(managePage>=pages) managePage=pages-1; if(managePage<0) managePage=0;
+  const start=managePage*MANAGE_PAGE_SIZE;
+  const pageItems=list.slice(start,start+MANAGE_PAGE_SIZE);
+  const rangeTxt = total ? ` · hiện ${start+1}–${start+pageItems.length}` : '';
+  $('m-count').textContent = (q ? `${total} thẻ khớp "${q}"` : `${total} thẻ`) + (total>MANAGE_PAGE_SIZE?rangeTxt:'');
+  $('manage-list').innerHTML = pageItems.length? pageItems.map(c=>`
     <div class="list-item">
       <div class="lc">${esc(c.char)}</div>
       <div class="lmeta">
@@ -876,10 +952,19 @@ function renderManage(){
       <button class="btn ghost sm" data-speak="${esc(c.char)}">🔊</button>
       <button class="btn ghost sm" onclick="loadForEdit('${c.id}')">Sửa</button>
       <button class="btn ghost sm" onclick="delCard('${c.id}')">🗑</button>
-    </div>`).join('') : '<div class="empty">Chưa có thẻ nào.</div>';
+    </div>`).join('') : '<div class="empty">'+(total?'':(q?'Không tìm thấy thẻ khớp.':'Chưa có thẻ nào.'))+'</div>';
+  const pager=$('manage-pager');
+  if(total>MANAGE_PAGE_SIZE){
+    pager.classList.remove('hide');
+    pager.innerHTML=`<button class="btn ghost sm" id="pg-prev" ${managePage===0?'disabled':''}>← Trước</button>`
+      +`<span class="pinfo">Trang ${managePage+1}/${pages}</span>`
+      +`<button class="btn ghost sm" id="pg-next" ${managePage>=pages-1?'disabled':''}>Sau →</button>`;
+    $('pg-prev').onclick=()=>{ if(managePage>0){ managePage--; renderManage(); $('m-search').scrollIntoView({block:'nearest'}); } };
+    $('pg-next').onclick=()=>{ if(managePage<pages-1){ managePage++; renderManage(); $('m-search').scrollIntoView({block:'nearest'}); } };
+  } else { pager.classList.add('hide'); pager.innerHTML=''; }
 }
-$('m-topic').onchange=renderManage;
-$('m-search').oninput=renderManage;
+$('m-topic').onchange=()=>{ managePage=0; renderManage(); };
+$('m-search').oninput=()=>{ managePage=0; renderManage(); };
 function delCard(cid){ if(!confirm('Xoá thẻ này?'))return; cards=cards.filter(c=>c.id!==cid); save(); renderManage(); updateDueBadge(); toast('Đã xoá'); }
 $('export').onclick=()=>{ const blob=new Blob([JSON.stringify(cards,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='nihongo-flashcards.json'; a.click(); };
 $('import-btn').onclick=()=>$('import-file').click();
@@ -900,7 +985,7 @@ $('import-file').onchange=e=>{
 
 /* ---------------- Google Sheet sync ---------------- */
 const GOOGLE_CLIENT_ID='769453018538-lucpdkkmdqpsi7u0uqcude3ab5os8idc.apps.googleusercontent.com';
-const SYNC_SCOPES='https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.file';
+const SYNC_SCOPES='openid email https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.file';
 const SHEET_NAME='Nihongo Flashcards';
 const SHEET_HEADER=['type','topic','char','reading','meaning','example','note','srs'];
 let gTokenClient=null, gToken=(prefs.syncToken||null), gTokenExp=Number(prefs.syncTokenExp||0), gSheetId=(prefs.spreadsheetId||null), gPushTimer=null;
@@ -910,6 +995,7 @@ function gInit(){ if(gTokenClient) return;
   gTokenClient=google.accounts.oauth2.initTokenClient({ client_id:GOOGLE_CLIENT_ID, scope:SYNC_SCOPES, callback:()=>{}, error_callback:()=>{} });
 }
 // Lấy access token. interactive=false -> im lặng, không popup (nếu phiên Google còn sống + đã đồng ý trước đó).
+// hint=email giúp làm mới đúng tài khoản đã dùng, không hiện bảng chọn account -> im lặng bền hơn qua nhiều phiên.
 function requestToken(interactive){
   return new Promise((resolve,reject)=>{
     ensureGsi(()=>{ gInit();
@@ -918,15 +1004,35 @@ function requestToken(interactive){
           gToken=resp.access_token;
           gTokenExp=Date.now()+(((resp.expires_in||3600)-90)*1000); // làm mới sớm 90s trước hạn
           prefs.syncEnabled=true; prefs.syncToken=gToken; prefs.syncTokenExp=gTokenExp; savePrefs();
+          scheduleTokenRefresh();
+          fetchSyncEmail();
           resolve(gToken);
         } else reject(new Error('no_token'));
       };
       gTokenClient.error_callback=(err)=>reject(err||new Error('auth_error'));
-      try{ gTokenClient.requestAccessToken({prompt: interactive?'consent':''}); }
+      try{
+        const opts={prompt: interactive?'consent':''};
+        if(prefs.syncEmail) opts.hint=prefs.syncEmail; // giữ đúng account -> im lặng, không phải đăng nhập lại
+        gTokenClient.requestAccessToken(opts);
+      }
       catch(e){ reject(e); }
     });
   });
 }
+// Chủ động làm mới token trước khi hết hạn để phiên đang mở không bao giờ đứt.
+let gRefreshTimer=null;
+function scheduleTokenRefresh(){
+  clearTimeout(gRefreshTimer);
+  const ms=gTokenExp-Date.now()-60000; // làm mới 1 phút trước hạn nội bộ
+  if(ms>0 && ms<24*3600*1000) gRefreshTimer=setTimeout(()=>{ requestToken(false).catch(()=>{}); }, ms);
+}
+// Lấy email tài khoản 1 lần để dùng làm hint + hiển thị "đã kết nối".
+async function fetchSyncEmail(){
+  if(prefs.syncEmail){ reflectSyncAccount(); return; }
+  try{ const d=await gFetch('https://www.googleapis.com/oauth2/v3/userinfo');
+    if(d&&d.email){ prefs.syncEmail=d.email; savePrefs(); reflectSyncAccount(); } }catch(e){}
+}
+function reflectSyncAccount(){ const b=$('sync-connect'); if(b&&prefs.syncEmail){ b.title='Đã kết nối: '+prefs.syncEmail; } }
 // Token còn hạn thì tái sử dụng; hết hạn thì tự làm mới im lặng.
 async function ensureToken(){ if(gToken && Date.now()<gTokenExp) return gToken; return await requestToken(false); }
 function connect(interactive){
@@ -1035,6 +1141,87 @@ $('sync-connect').onclick=()=>connect(true);
 $('sync-now').onclick=syncNowManual;
 $('sync-open').onclick=()=>{ if(gSheetId) window.open('https://docs.google.com/spreadsheets/d/'+gSheetId,'_blank'); else toast('Chưa có Sheet — kết nối trước'); };
 
+/* ---------------- Viết tay (handwriting) — thử nghiệm ----------------
+   Bắt nét bằng Pointer Events (chuột + cảm ứng), gửi ink lên Google Input Tools
+   (dịch vụ nhận dạng chữ viết tay công khai, không cần API key) để đoán ký tự. */
+let handInited=false, handStrokes=[], handStroke=null, handDrawing=false, handRecogTimer=null;
+function clearHandCanvas(){ handStrokes=[]; handStroke=null; const cv=$('hand-canvas'); if(cv){ const ctx=cv.getContext('2d'); ctx.clearRect(0,0,cv.width,cv.height); } }
+// Nối 1 ký tự vào câu đang soạn (tại vị trí con trỏ), rồi xoá khung vẽ để viết chữ tiếp theo.
+function handAppend(ch){
+  const inp=$('hand-buffer');
+  const s=(inp.selectionStart!=null)?inp.selectionStart:inp.value.length;
+  const e=(inp.selectionEnd!=null)?inp.selectionEnd:inp.value.length;
+  inp.value=inp.value.slice(0,s)+ch+inp.value.slice(e);
+  const pos=s+ch.length; try{ inp.focus(); inp.setSelectionRange(pos,pos); }catch(_){}
+  clearHandCanvas();
+  $('hand-cands').innerHTML='<small class="muted">✓ Đã nối "'+esc(ch)+'". Vẽ ký tự tiếp theo…</small>';
+}
+function initHand(){
+  if(handInited) return; handInited=true;
+  const cv=$('hand-canvas'), ctx=cv.getContext('2d');
+  ctx.lineWidth=8; ctx.lineCap='round'; ctx.lineJoin='round';
+  function stroke(){ return getComputedStyle(document.documentElement).getPropertyValue('--ink').trim()||'#000'; }
+  function pos(e){ const r=cv.getBoundingClientRect();
+    return { x:(e.clientX-r.left)*(cv.width/r.width), y:(e.clientY-r.top)*(cv.height/r.height), t:Math.round(performance.now()) }; }
+  function redraw(){ ctx.clearRect(0,0,cv.width,cv.height); ctx.strokeStyle=stroke();
+    for(const s of handStrokes){ if(s.x.length<1) continue; ctx.beginPath(); ctx.moveTo(s.x[0],s.y[0]);
+      for(let i=1;i<s.x.length;i++) ctx.lineTo(s.x[i],s.y[i]); if(s.x.length===1) ctx.lineTo(s.x[0]+0.1,s.y[0]); ctx.stroke(); } }
+  function down(e){ e.preventDefault(); handDrawing=true; const p=pos(e); handStroke={x:[p.x],y:[p.y],t:[p.t]}; try{cv.setPointerCapture(e.pointerId);}catch(_){}; }
+  function move(e){ if(!handDrawing||!handStroke) return; e.preventDefault(); const p=pos(e);
+    handStroke.x.push(p.x); handStroke.y.push(p.y); handStroke.t.push(p.t); redraw();
+    ctx.strokeStyle=stroke(); ctx.beginPath(); ctx.moveTo(handStroke.x[0],handStroke.y[0]);
+    for(let i=1;i<handStroke.x.length;i++) ctx.lineTo(handStroke.x[i],handStroke.y[i]); ctx.stroke(); }
+  function up(e){ if(!handDrawing) return; handDrawing=false; if(handStroke&&handStroke.x.length){ handStrokes.push(handStroke); } handStroke=null; redraw();
+    clearTimeout(handRecogTimer); handRecogTimer=setTimeout(recognizeHand,500); }
+  cv.addEventListener('pointerdown',down);
+  cv.addEventListener('pointermove',move);
+  cv.addEventListener('pointerup',up);
+  cv.addEventListener('pointercancel',up);
+  cv.addEventListener('pointerleave',up);
+  $('hand-clear').onclick=()=>{ handStrokes=[]; handStroke=null; redraw(); $('hand-cands').innerHTML='<small class="muted">Chưa có — hãy vẽ một ký tự.</small>'; $('hand-status').textContent=''; };
+  $('hand-undo').onclick=()=>{ handStrokes.pop(); redraw(); if(handStrokes.length) recognizeHand(); else $('hand-cands').innerHTML='<small class="muted">Chưa có — hãy vẽ một ký tự.</small>'; };
+  $('hand-recog').onclick=recognizeHand;
+  // Nút soạn câu
+  $('hand-space').onclick=()=>handAppend(' ');
+  $('hand-back').onclick=()=>{ const inp=$('hand-buffer'); let s=(inp.selectionStart!=null)?inp.selectionStart:inp.value.length; const e=(inp.selectionEnd!=null)?inp.selectionEnd:s;
+    if(e>s){ inp.value=inp.value.slice(0,s)+inp.value.slice(e); } // xoá vùng chọn
+    else if(s>0){ inp.value=inp.value.slice(0,s-1)+inp.value.slice(s); s--; } // xoá 1 ký tự trước con trỏ
+    try{ inp.focus(); inp.setSelectionRange(s,s); }catch(_){}
+  };
+  $('hand-bufclear').onclick=()=>{ $('hand-buffer').value=''; $('hand-buffer').focus(); };
+  document.querySelectorAll('[data-hand-to]').forEach(b=>b.onclick=()=>handApply(b.dataset.handTo));
+  redraw();
+}
+async function recognizeHand(){
+  const cv=$('hand-canvas'); if(!handStrokes.length){ return; }
+  $('hand-status').textContent='Đang nhận dạng…';
+  const ink=handStrokes.map(s=>[s.x.map(Math.round),s.y.map(Math.round),s.t]);
+  const body={ options:'enable_pre_space', requests:[{ writing_guide:{ writing_area_width:cv.width, writing_area_height:cv.height },
+    ink, language:'ja' }] };
+  try{
+    const r=await fetch('https://inputtools.google.com/request?itc=ja-t-i0-handwrit&app=nihongo&cs=1&oe=UTF-8',
+      { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+    const d=await r.json();
+    if(d[0]==='SUCCESS' && d[1] && d[1][0] && d[1][0][1]){ showHandCands(d[1][0][1]); $('hand-status').textContent=''; }
+    else { $('hand-cands').innerHTML='<small class="muted">Không đoán được — thử vẽ rõ hơn.</small>'; $('hand-status').textContent=''; }
+  }catch(e){ $('hand-cands').innerHTML='<small class="muted">⚠ Không gọi được dịch vụ nhận dạng (cần mạng / có thể bị chặn CORS trên trình duyệt này).</small>'; $('hand-status').textContent=''; }
+}
+function showHandCands(cands){
+  const box=$('hand-cands');
+  box.innerHTML = cands.slice(0,12).map(c=>`<button class="hc" data-hc="${esc(c)}">${esc(c)}</button>`).join('');
+  box.querySelectorAll('[data-hc]').forEach(b=>b.onclick=()=>handAppend(b.getAttribute('data-hc')));
+}
+function handApply(to){
+  const text=($('hand-buffer').value||'').trim();
+  if(!text){ toast('Câu đang trống — vẽ & chọn ký tự trước'); return; }
+  if(to==='copy'){ copyText(text).then(ok=>toast(ok?'Đã copy câu':'Copy thất bại')); return; }
+  if(to==='search'){ switchView('manage'); $('m-search').value=text; managePage=0; renderManage(); toast('Đang tìm "'+text+'"'); return; }
+  if(to==='char'){ switchView('add'); $('in-char').value=text;
+    if(/^[぀-ゟ]+$/.test(text)) $('in-type').value='hiragana';
+    else if(/^[゠-ヿ]+$/.test(text)) $('in-type').value='katakana'; else $('in-type').value='kanji';
+    toast('Đã điền vào Thêm thẻ'); }
+}
+
 /* ---------------- utils ---------------- */
 function esc(s){ return (s||'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
 let toastT; function toast(m){ const t=$('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),1800); }
@@ -1066,7 +1253,8 @@ if(!prefs.syncEnabled){
 }
 $('f-type').value=prefs.focusType; fillTopicSelect('f-topic'); refreshDeck(); updateDueBadge();
 if(prefs.syncEnabled){
-  if(gToken && Date.now()<gTokenExp){ setSyncStatus('Đang đồng bộ…'); onConnected(); } // token còn hạn -> vào thẳng
+  reflectSyncAccount();
+  if(gToken && Date.now()<gTokenExp){ setSyncStatus('Đang đồng bộ…'); scheduleTokenRefresh(); onConnected(); } // token còn hạn -> vào thẳng
   else { setSyncStatus('Đang kết nối lại…'); connect(false); }                          // hết hạn -> làm mới im lặng
 }
 </script>
