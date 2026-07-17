@@ -57,6 +57,7 @@
   .card-stage{perspective:1200px;margin:0 auto 18px;max-width:560px}
   .card{position:relative;width:100%;min-height:320px;cursor:pointer;transition:transform .5s;transform-style:preserve-3d}
   .card.flipped{transform:rotateY(180deg)}
+  .card.no-anim{transition:none}
   .face{position:absolute;inset:0;backface-visibility:hidden;border:1px solid var(--line);border-radius:20px;
     background:var(--panel);box-shadow:var(--shadow);padding:24px;display:flex;flex-direction:column;overflow:auto}
   .face.back{transform:rotateY(180deg)}
@@ -664,7 +665,7 @@ function renderStudy(){
   const has=deck.length>0;
   $('study-body').classList.toggle('hide',!has); $('study-empty').classList.toggle('hide',has);
   if(!has) return;
-  const c=deck[pos]; $('card').classList.remove('flipped');
+  const c=deck[pos]; unflipInstant($('card'));
   $('counter').textContent=`${pos+1} / ${deck.length}`;
   const label=typeLabel(c.type);
   $('front-badge').className='badge '+c.type; $('front-badge').textContent=label;
@@ -688,6 +689,16 @@ let _rt; window.addEventListener('resize',()=>{ clearTimeout(_rt); _rt=setTimeou
   document.querySelectorAll('[data-fit]').forEach(el=>{ if(el.offsetParent!==null) fitChar(el,el.dataset.fit,+el.dataset.max); });
 },150); });
 function toggleBlock(box,txt,val){ if(val&&val.trim()){ $(box).classList.remove('hide'); $(txt).textContent=val; } else $(box).classList.add('hide'); }
+// Bỏ lật NGAY (không animation) khi chuyển sang thẻ khác — tránh thẻ đang mở
+// mặt sau "lật ngược" chậm 0.5s làm lộ đáp án của thẻ kế tiếp.
+function unflipInstant(el){
+  if(el.classList.contains('flipped')){
+    el.classList.add('no-anim');
+    el.classList.remove('flipped');
+    void el.offsetWidth;            // ép reflow để trạng thái không-lật áp dụng tức thì
+    el.classList.remove('no-anim');
+  }
+}
 function flipStudy(){ if(deck.length) $('card').classList.toggle('flipped'); }
 $('card').onclick=(e)=>{ if(e.target.closest('button,a,[data-speak]')) return; flipStudy(); }; $('flip').onclick=flipStudy;
 $('prev').onclick=()=>{ if(deck.length){ pos=(pos-1+deck.length)%deck.length; renderStudy(); } };
@@ -713,7 +724,7 @@ function nextReview(){
   if(!has){ $('review-done').innerHTML='🎉 Hết thẻ cần ôn!<br><small class="muted">Quay lại sau, hoặc qua tab Học để xem tất cả.</small>'; return; }
   rCard=rQueue[0]; rShown=false;
   const dir=$('r-dir').value; const c=rCard;
-  $('r-card').classList.remove('flipped');
+  unflipInstant($('r-card'));
   $('r-reveal-row').classList.remove('hide'); $('r-grade-row').classList.add('hide');
   $('r-counter').textContent=`Còn lại: ${rQueue.length}`;
   $('rf-badge').className='badge '+c.type; $('rf-badge').textContent=typeLabel(c.type);
