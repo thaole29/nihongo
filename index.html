@@ -1117,6 +1117,10 @@ function mergeNewDefaults(){
   prefs.mergedDefaultChars=[...seen]; savePrefs();
   return added;
 }
+// Các topic giao tiếp cũ đã gộp về 1 topic chung. Đổi tên tại chỗ (idempotent). Trả về số thẻ đã đổi.
+const COMM_LEGACY_TOPICS=new Set(['Chào hỏi','Nhờ vả / Xin giúp đỡ','Khen ngợi / Tán thành','Không hiểu / Hỏi lại','Đồng ý / Từ chối / Phản hồi','Lịch sự hằng ngày','Động viên / Chúc mừng']);
+const COMM_TARGET_TOPIC='Chào hỏi & Giao tiếp cơ bản';
+function consolidateCommTopics(){ let n=0; cards.forEach(c=>{ if(COMM_LEGACY_TOPICS.has(c.topic)){ c.topic=COMM_TARGET_TOPIC; n++; } }); return n; }
 async function reconcile(){
   const vals=await gReadAll();
   const remoteTs=Number((vals[0]&&vals[0][9])||0);
@@ -1127,12 +1131,14 @@ async function reconcile(){
     applyingRemote=true; cards=matrixToCards(vals); save(); applyingRemote=false;
     prefs.syncModified=remoteTs; savePrefs(); localTs=remoteTs; pulled=true;
   }
+  const renamed=consolidateCommTopics();        // đổi topic giao tiếp cũ (nếu bản kéo về còn dùng tên cũ)
   const added=mergeNewDefaults();               // gộp thẻ mặc định mới vào bản hiện tại
-  if(added){                                     // có thẻ mới -> lưu local + đẩy bản gộp lên Sheet
+  if(added||renamed){                            // có thay đổi cục bộ -> lưu local + đẩy lên Sheet
     applyingRemote=true; save(); applyingRemote=false;
     prefs.syncModified=Date.now(); savePrefs(); rerender();
     await gWriteAll(Number(prefs.syncModified));
-    setSyncStatus('Đã thêm '+added+' thẻ mới & đẩy lên Sheet ✓ (tổng '+cards.length+')');
+    setSyncStatus(added ? ('Đã thêm '+added+' thẻ mới & đẩy lên Sheet ✓ (tổng '+cards.length+')')
+                        : ('Đã gộp topic giao tiếp & đẩy lên Sheet ✓ ('+cards.length+' thẻ)'));
     return;
   }
   if(pulled){ rerender(); setSyncStatus('Đã kéo '+cards.length+' thẻ từ Sheet ✓'); return; }
@@ -1256,6 +1262,13 @@ if(!prefs.kanaFlashcardsRemoved){
   cards=cards.filter(c=>c.topic!=='Bảng chữ Hiragana');
   prefs.kanaFlashcardsRemoved=true; savePrefs();
   if(cards.length!==before) save();
+}
+// Migration 1 lần: gộp các topic giao tiếp vào chung 'Chào hỏi & Giao tiếp cơ bản'
+if(!prefs.commTopicMerged){
+  const changed=consolidateCommTopics();
+  if(prefs.extraTopics&&prefs.extraTopics.length) prefs.extraTopics=prefs.extraTopics.filter(t=>!COMM_LEGACY_TOPICS.has(t));
+  prefs.commTopicMerged=true; savePrefs();
+  if(changed) save();
 }
 // Tự động gộp thẻ mặc định mới. Nếu bật sync thì reconcile lo (gộp sau khi kéo bản mới nhất, tránh ghi đè máy khác).
 if(!prefs.syncEnabled){

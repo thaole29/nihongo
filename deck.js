@@ -2,7 +2,7 @@
 window.NIHONGO_DEFAULT_DECK = [
 {
 "type": "hiragana",
-"topic": "Chào hỏi",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "こんにちは",
 "reading": "konnichiwa",
 "meaning": "Xin chào / Hello",
@@ -11,7 +11,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Chào hỏi",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "ありがとう",
 "reading": "arigatou",
 "meaning": "Cảm ơn / Thank you",
@@ -20,7 +20,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Chào hỏi",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "はじめまして",
 "reading": "hajimemashite",
 "meaning": "Nice to meet you / Rất vui được gặp bạn",
@@ -29,7 +29,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Chào hỏi",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "わたし",
 "reading": "watashi",
 "meaning": "I / me / tôi",
@@ -38,7 +38,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Chào hỏi",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "こんばんは",
 "reading": "konbanwa",
 "meaning": "Good evening / Chào buổi tối",
@@ -47,7 +47,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Chào hỏi",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "すみません",
 "reading": "sumimasen",
 "meaning": "Excuse me / Sorry / Xin lỗi, làm phiền",
@@ -56,7 +56,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Chào hỏi",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "ごめんなさい",
 "reading": "gomennasai",
 "meaning": "I'm sorry / Xin lỗi",
@@ -65,7 +65,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Chào hỏi",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "はい",
 "reading": "hai",
 "meaning": "Yes / Vâng, có",
@@ -74,7 +74,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Chào hỏi",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "いいえ",
 "reading": "iie",
 "meaning": "No / Không",
@@ -83,7 +83,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Chào hỏi",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "わかりました",
 "reading": "wakarimashita",
 "meaning": "Got it / I understand / Tôi hiểu rồi",
@@ -92,7 +92,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Chào hỏi",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "げんき",
 "reading": "genki",
 "meaning": "Well / energetic / Khoẻ, có sức sống",
@@ -101,7 +101,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Chào hỏi",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "さようなら",
 "reading": "sayounara",
 "meaning": "Goodbye / Tạm biệt",
@@ -524,7 +524,7 @@ window.NIHONGO_DEFAULT_DECK = [
 }
 ,{
 "type": "hiragana",
-"topic": "Chào hỏi",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "あなた",
 "reading": "anata",
 "meaning": "Bạn / You",
@@ -533,7 +533,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Chào hỏi",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "ともだち",
 "reading": "tomodachi",
 "meaning": "Bạn bè / Friend",
@@ -542,7 +542,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Chào hỏi",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "せんせい",
 "reading": "sensei",
 "meaning": "Giáo viên / Teacher",
@@ -551,7 +551,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Chào hỏi",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "がくせい",
 "reading": "gakusei",
 "meaning": "Học sinh / Student",
@@ -560,7 +560,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Chào hỏi",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "にほんご",
 "reading": "nihongo",
 "meaning": "Tiếng Nhật / Japanese (language)",
@@ -569,7 +569,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Chào hỏi",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "えいご",
 "reading": "eigo",
 "meaning": "Tiếng Anh / English (language)",
@@ -578,7 +578,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Chào hỏi",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "です",
 "reading": "desu",
 "meaning": "Là (thể lịch sự) / is · am · are",
@@ -587,7 +587,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Chào hỏi",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "ですか",
 "reading": "desu ka",
 "meaning": "…phải không? / question marker",
@@ -1991,7 +1991,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Nhờ vả / Xin giúp đỡ",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "たすけて",
 "reading": "tasukete",
 "meaning": "Cứu / giúp với! (khẩn cấp)",
@@ -2000,7 +2000,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Nhờ vả / Xin giúp đỡ",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "てつだってください",
 "reading": "tetsudatte kudasai",
 "meaning": "Làm ơn giúp tôi một tay",
@@ -2009,7 +2009,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Nhờ vả / Xin giúp đỡ",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "おねがいします",
 "reading": "onegai shimasu",
 "meaning": "Nhờ bạn / làm ơn",
@@ -2018,7 +2018,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Nhờ vả / Xin giúp đỡ",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "ちょっといいですか",
 "reading": "chotto ii desu ka",
 "meaning": "Cho hỏi một chút được không?",
@@ -2027,7 +2027,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Nhờ vả / Xin giúp đỡ",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "～をください",
 "reading": "~ o kudasai",
 "meaning": "Cho tôi ~",
@@ -2036,7 +2036,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Nhờ vả / Xin giúp đỡ",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "ゆっくりはなしてください",
 "reading": "yukkuri hanashite kudasai",
 "meaning": "Làm ơn nói chậm lại",
@@ -2045,7 +2045,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Nhờ vả / Xin giúp đỡ",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "もういちどおねがいします",
 "reading": "mō ichido onegai shimasu",
 "meaning": "Làm ơn nhắc lại lần nữa",
@@ -2054,7 +2054,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Khen ngợi / Tán thành",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "すごい",
 "reading": "sugoi",
 "meaning": "Tuyệt / ghê thật (thân mật)",
@@ -2063,7 +2063,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Khen ngợi / Tán thành",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "いいですね",
 "reading": "ii desu ne",
 "meaning": "Hay đấy / tốt nhỉ",
@@ -2072,7 +2072,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Khen ngợi / Tán thành",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "よかった",
 "reading": "yokatta",
 "meaning": "May quá / tốt quá rồi (cảm thán điều vừa xảy ra)",
@@ -2081,7 +2081,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Khen ngợi / Tán thành",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "とてもいいです",
 "reading": "totemo ii desu",
 "meaning": "Rất tốt",
@@ -2090,7 +2090,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Khen ngợi / Tán thành",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "じょうずですね",
 "reading": "jōzu desu ne",
 "meaning": "Giỏi quá nhỉ",
@@ -2099,7 +2099,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Khen ngợi / Tán thành",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "かんぺき",
 "reading": "kanpeki",
 "meaning": "Hoàn hảo",
@@ -2108,7 +2108,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Khen ngợi / Tán thành",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "さすが",
 "reading": "sasuga",
 "meaning": "Đúng là… (không hổ danh)",
@@ -2117,7 +2117,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Không hiểu / Hỏi lại",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "わかりません",
 "reading": "wakarimasen",
 "meaning": "Tôi không hiểu",
@@ -2126,7 +2126,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Không hiểu / Hỏi lại",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "しりません",
 "reading": "shirimasen",
 "meaning": "Tôi không biết",
@@ -2135,7 +2135,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Không hiểu / Hỏi lại",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "なんですか",
 "reading": "nan desu ka",
 "meaning": "Cái gì vậy?",
@@ -2144,7 +2144,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Không hiểu / Hỏi lại",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "どういういみですか",
 "reading": "dō iu imi desu ka",
 "meaning": "Nghĩa là gì?",
@@ -2153,7 +2153,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Không hiểu / Hỏi lại",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "にほんごでなんですか",
 "reading": "nihongo de nan desu ka",
 "meaning": "Tiếng Nhật gọi là gì?",
@@ -2162,7 +2162,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Không hiểu / Hỏi lại",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "もういちどいってください",
 "reading": "mō ichido itte kudasai",
 "meaning": "Làm ơn nói lại",
@@ -2171,7 +2171,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Đồng ý / Từ chối / Phản hồi",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "そうです",
 "reading": "sō desu",
 "meaning": "Đúng vậy",
@@ -2180,7 +2180,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Đồng ý / Từ chối / Phản hồi",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "そうですね",
 "reading": "sō desu ne",
 "meaning": "Ừ nhỉ / đúng thế",
@@ -2189,7 +2189,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Đồng ý / Từ chối / Phản hồi",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "もちろん",
 "reading": "mochiron",
 "meaning": "Tất nhiên rồi",
@@ -2198,7 +2198,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Đồng ý / Từ chối / Phản hồi",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "だいじょうぶです",
 "reading": "daijōbu desu",
 "meaning": "Không sao đâu / ổn mà",
@@ -2207,7 +2207,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Đồng ý / Từ chối / Phản hồi",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "けっこうです",
 "reading": "kekkō desu",
 "meaning": "Thôi, đủ rồi (từ chối lịch sự)",
@@ -2216,7 +2216,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Lịch sự hằng ngày",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "どういたしまして",
 "reading": "dō itashimashite",
 "meaning": "Không có gì (đáp lại cảm ơn)",
@@ -2225,7 +2225,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Lịch sự hằng ngày",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "おやすみなさい",
 "reading": "oyasumi nasai",
 "meaning": "Chúc ngủ ngon",
@@ -2234,7 +2234,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Lịch sự hằng ngày",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "いってきます",
 "reading": "ittekimasu",
 "meaning": "Tôi đi đây (khi ra khỏi nhà)",
@@ -2243,7 +2243,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Lịch sự hằng ngày",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "いってらっしゃい",
 "reading": "itterasshai",
 "meaning": "Đi cẩn thận nhé (người ở lại nói)",
@@ -2252,7 +2252,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Lịch sự hằng ngày",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "ただいま",
 "reading": "tadaima",
 "meaning": "Tôi về rồi",
@@ -2261,7 +2261,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Lịch sự hằng ngày",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "おかえりなさい",
 "reading": "okaeri nasai",
 "meaning": "Mừng bạn về",
@@ -2270,7 +2270,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Lịch sự hằng ngày",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "いただきます",
 "reading": "itadakimasu",
 "meaning": "(Nói trước khi ăn)",
@@ -2279,7 +2279,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Lịch sự hằng ngày",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "ごちそうさまでした",
 "reading": "gochisōsama deshita",
 "meaning": "(Nói sau khi ăn)",
@@ -2288,7 +2288,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Động viên / Chúc mừng",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "がんばって",
 "reading": "ganbatte",
 "meaning": "Cố lên!",
@@ -2297,7 +2297,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Động viên / Chúc mừng",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "おめでとう",
 "reading": "omedetō",
 "meaning": "Chúc mừng!",
@@ -2306,7 +2306,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Động viên / Chúc mừng",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
 "char": "ざんねん",
 "reading": "zannen",
 "meaning": "Tiếc quá",
