@@ -1988,6 +1988,330 @@ window.NIHONGO_DEFAULT_DECK = [
 "meaning": "Mỗi ngày / Every day",
 "example": "まいにち べんきょうします。(Mainichi benkyou shimasu.) — Học mỗi ngày.",
 "note": "まい (mỗi) + にち (ngày)."
+},
+{
+"type": "hiragana",
+"topic": "Nhờ vả / Xin giúp đỡ",
+"char": "たすけて",
+"reading": "tasukete",
+"meaning": "Cứu / giúp với! (khẩn cấp)",
+"example": "たすけて！だれかきて！(Tasukete! Dareka kite!) — Cứu với! Ai đó đến đây!",
+"note": "Dùng lúc khẩn cấp. Lịch sự hơn: たすけてください."
+},
+{
+"type": "hiragana",
+"topic": "Nhờ vả / Xin giúp đỡ",
+"char": "てつだってください",
+"reading": "tetsudatte kudasai",
+"meaning": "Làm ơn giúp tôi một tay",
+"example": "これをてつだってください。(Kore o tetsudatte kudasai.) — Làm ơn giúp tôi cái này.",
+"note": "てつだう (giúp một tay) + てください."
+},
+{
+"type": "hiragana",
+"topic": "Nhờ vả / Xin giúp đỡ",
+"char": "おねがいします",
+"reading": "onegai shimasu",
+"meaning": "Nhờ bạn / làm ơn",
+"example": "これ、おねがいします。(Kore, onegai shimasu.) — Cái này nhờ bạn nhé.",
+"note": "Rất thông dụng khi nhờ vả hoặc gọi món."
+},
+{
+"type": "hiragana",
+"topic": "Nhờ vả / Xin giúp đỡ",
+"char": "ちょっといいですか",
+"reading": "chotto ii desu ka",
+"meaning": "Cho hỏi một chút được không?",
+"example": "すみません、ちょっといいですか。(Sumimasen, chotto ii desu ka.) — Xin lỗi, cho hỏi một chút được không?",
+"note": "Dùng khi muốn làm phiền hoặc bắt chuyện."
+},
+{
+"type": "hiragana",
+"topic": "Nhờ vả / Xin giúp đỡ",
+"char": "～をください",
+"reading": "~ o kudasai",
+"meaning": "Cho tôi ~",
+"example": "みずをください。(Mizu o kudasai.) — Cho tôi nước.",
+"note": "Thay ～ bằng thứ muốn xin. を đọc là 'o'."
+},
+{
+"type": "hiragana",
+"topic": "Nhờ vả / Xin giúp đỡ",
+"char": "ゆっくりはなしてください",
+"reading": "yukkuri hanashite kudasai",
+"meaning": "Làm ơn nói chậm lại",
+"example": "すみません、ゆっくりはなしてください。(Sumimasen, yukkuri hanashite kudasai.) — Xin lỗi, làm ơn nói chậm lại.",
+"note": "ゆっくり (chậm rãi) + はなす (nói)."
+},
+{
+"type": "hiragana",
+"topic": "Nhờ vả / Xin giúp đỡ",
+"char": "もういちどおねがいします",
+"reading": "mō ichido onegai shimasu",
+"meaning": "Làm ơn nhắc lại lần nữa",
+"example": "もういちどおねがいします。(Mō ichido onegai shimasu.) — Làm ơn nhắc lại lần nữa.",
+"note": "もういちど (một lần nữa) + おねがいします."
+},
+{
+"type": "hiragana",
+"topic": "Khen ngợi / Tán thành",
+"char": "すごい",
+"reading": "sugoi",
+"meaning": "Tuyệt / ghê thật (thân mật)",
+"example": "すごい！じょうずですね。(Sugoi! Jōzu desu ne.) — Tuyệt! Giỏi quá nhỉ.",
+"note": "Thân mật, cảm thán khi ngạc nhiên/khâm phục."
+},
+{
+"type": "hiragana",
+"topic": "Khen ngợi / Tán thành",
+"char": "いいですね",
+"reading": "ii desu ne",
+"meaning": "Hay đấy / tốt nhỉ",
+"example": "このアイデア、いいですね。(Kono aidea, ii desu ne.) — Ý tưởng này hay đấy.",
+"note": "ね thể hiện đồng tình, tìm sự tán thành."
+},
+{
+"type": "hiragana",
+"topic": "Khen ngợi / Tán thành",
+"char": "よかった",
+"reading": "yokatta",
+"meaning": "May quá / tốt quá rồi (cảm thán điều vừa xảy ra)",
+"example": "あ、よかった！みつかった。(A, yokatta! Mitsukatta.) — À, may quá! Tìm thấy rồi.",
+"note": "Quá khứ của いい — cảm thán về việc vừa xảy ra."
+},
+{
+"type": "hiragana",
+"topic": "Khen ngợi / Tán thành",
+"char": "とてもいいです",
+"reading": "totemo ii desu",
+"meaning": "Rất tốt",
+"example": "このほんはとてもいいです。(Kono hon wa totemo ii desu.) — Quyển sách này rất tốt.",
+"note": "とても (rất) + いいです."
+},
+{
+"type": "hiragana",
+"topic": "Khen ngợi / Tán thành",
+"char": "じょうずですね",
+"reading": "jōzu desu ne",
+"meaning": "Giỏi quá nhỉ",
+"example": "にほんご、じょうずですね。(Nihongo, jōzu desu ne.) — Tiếng Nhật giỏi quá nhỉ.",
+"note": "Khen kỹ năng người khác. Nói khiêm tốn về mình: へたです."
+},
+{
+"type": "hiragana",
+"topic": "Khen ngợi / Tán thành",
+"char": "かんぺき",
+"reading": "kanpeki",
+"meaning": "Hoàn hảo",
+"example": "かんぺきです！(Kanpeki desu!) — Hoàn hảo!",
+"note": "Kanji: 完璧. Khen kết quả trọn vẹn."
+},
+{
+"type": "hiragana",
+"topic": "Khen ngợi / Tán thành",
+"char": "さすが",
+"reading": "sasuga",
+"meaning": "Đúng là… (không hổ danh)",
+"example": "さすが！よくできましたね。(Sasuga! Yoku dekimashita ne.) — Đúng là! Làm tốt lắm.",
+"note": "Khen đúng như kỳ vọng, 'quả nhiên/không hổ danh'."
+},
+{
+"type": "hiragana",
+"topic": "Không hiểu / Hỏi lại",
+"char": "わかりません",
+"reading": "wakarimasen",
+"meaning": "Tôi không hiểu",
+"example": "すみません、わかりません。(Sumimasen, wakarimasen.) — Xin lỗi, tôi không hiểu.",
+"note": "わかる (hiểu) thể phủ định. Khác しりません (không biết thông tin)."
+},
+{
+"type": "hiragana",
+"topic": "Không hiểu / Hỏi lại",
+"char": "しりません",
+"reading": "shirimasen",
+"meaning": "Tôi không biết",
+"example": "その人はしりません。(Sono hito wa shirimasen.) — Người đó tôi không biết.",
+"note": "しる (biết) thể phủ định — về thông tin/sự việc."
+},
+{
+"type": "hiragana",
+"topic": "Không hiểu / Hỏi lại",
+"char": "なんですか",
+"reading": "nan desu ka",
+"meaning": "Cái gì vậy?",
+"example": "これはなんですか。(Kore wa nan desu ka.) — Cái này là cái gì vậy?",
+"note": "なん (gì) + ですか."
+},
+{
+"type": "hiragana",
+"topic": "Không hiểu / Hỏi lại",
+"char": "どういういみですか",
+"reading": "dō iu imi desu ka",
+"meaning": "Nghĩa là gì?",
+"example": "それはどういういみですか。(Sore wa dō iu imi desu ka.) — Cái đó nghĩa là gì?",
+"note": "いみ (ý nghĩa). Hỏi nghĩa của từ hoặc câu."
+},
+{
+"type": "hiragana",
+"topic": "Không hiểu / Hỏi lại",
+"char": "にほんごでなんですか",
+"reading": "nihongo de nan desu ka",
+"meaning": "Tiếng Nhật gọi là gì?",
+"example": "これはにほんごでなんですか。(Kore wa nihongo de nan desu ka.) — Cái này tiếng Nhật gọi là gì?",
+"note": "～でなんですか = 'gọi bằng ~ là gì'."
+},
+{
+"type": "hiragana",
+"topic": "Không hiểu / Hỏi lại",
+"char": "もういちどいってください",
+"reading": "mō ichido itte kudasai",
+"meaning": "Làm ơn nói lại",
+"example": "すみません、もういちどいってください。(Sumimasen, mō ichido itte kudasai.) — Xin lỗi, làm ơn nói lại.",
+"note": "いう (nói) + てください."
+},
+{
+"type": "hiragana",
+"topic": "Đồng ý / Từ chối / Phản hồi",
+"char": "そうです",
+"reading": "sō desu",
+"meaning": "Đúng vậy",
+"example": "はい、そうです。(Hai, sō desu.) — Vâng, đúng vậy.",
+"note": "Khẳng định. Phủ định: ちがいます."
+},
+{
+"type": "hiragana",
+"topic": "Đồng ý / Từ chối / Phản hồi",
+"char": "そうですね",
+"reading": "sō desu ne",
+"meaning": "Ừ nhỉ / đúng thế",
+"example": "そうですね、いいてんきです。(Sō desu ne, ii tenki desu.) — Ừ nhỉ, trời đẹp thật.",
+"note": "ね thêm sắc thái đồng tình/đang suy nghĩ."
+},
+{
+"type": "hiragana",
+"topic": "Đồng ý / Từ chối / Phản hồi",
+"char": "もちろん",
+"reading": "mochiron",
+"meaning": "Tất nhiên rồi",
+"example": "もちろんです！(Mochiron desu!) — Tất nhiên rồi!",
+"note": "Nhấn mạnh sự đồng ý chắc chắn."
+},
+{
+"type": "hiragana",
+"topic": "Đồng ý / Từ chối / Phản hồi",
+"char": "だいじょうぶです",
+"reading": "daijōbu desu",
+"meaning": "Không sao đâu / ổn mà",
+"example": "だいじょうぶです、しんぱいしないで。(Daijōbu desu, shinpai shinaide.) — Không sao đâu, đừng lo.",
+"note": "Kanji 大丈夫. Cũng dùng để từ chối nhẹ ('thôi khỏi')."
+},
+{
+"type": "hiragana",
+"topic": "Đồng ý / Từ chối / Phản hồi",
+"char": "けっこうです",
+"reading": "kekkō desu",
+"meaning": "Thôi, đủ rồi (từ chối lịch sự)",
+"example": "いいえ、けっこうです。(Iie, kekkō desu.) — Không, thôi đủ rồi ạ.",
+"note": "Từ chối lịch sự khi được mời thêm."
+},
+{
+"type": "hiragana",
+"topic": "Lịch sự hằng ngày",
+"char": "どういたしまして",
+"reading": "dō itashimashite",
+"meaning": "Không có gì (đáp lại cảm ơn)",
+"example": "「ありがとう」「どういたしまして」— 'Cảm ơn' — 'Không có gì'.",
+"note": "Đáp lại lời cảm ơn."
+},
+{
+"type": "hiragana",
+"topic": "Lịch sự hằng ngày",
+"char": "おやすみなさい",
+"reading": "oyasumi nasai",
+"meaning": "Chúc ngủ ngon",
+"example": "もうおそいね。おやすみなさい。(Mō osoi ne. Oyasumi nasai.) — Muộn rồi nhỉ. Chúc ngủ ngon.",
+"note": "Thân mật: おやすみ."
+},
+{
+"type": "hiragana",
+"topic": "Lịch sự hằng ngày",
+"char": "いってきます",
+"reading": "ittekimasu",
+"meaning": "Tôi đi đây (khi ra khỏi nhà)",
+"example": "いってきます！(Ittekimasu!) — Con đi đây!",
+"note": "Người ra khỏi nhà nói. Đáp lại: いってらっしゃい."
+},
+{
+"type": "hiragana",
+"topic": "Lịch sự hằng ngày",
+"char": "いってらっしゃい",
+"reading": "itterasshai",
+"meaning": "Đi cẩn thận nhé (người ở lại nói)",
+"example": "いってらっしゃい、きをつけて。(Itterasshai, ki o tsukete.) — Đi nhé, cẩn thận đấy.",
+"note": "Người ở lại nói với người ra đi."
+},
+{
+"type": "hiragana",
+"topic": "Lịch sự hằng ngày",
+"char": "ただいま",
+"reading": "tadaima",
+"meaning": "Tôi về rồi",
+"example": "ただいま！(Tadaima!) — Con về rồi!",
+"note": "Người về nhà nói. Đáp lại: おかえりなさい."
+},
+{
+"type": "hiragana",
+"topic": "Lịch sự hằng ngày",
+"char": "おかえりなさい",
+"reading": "okaeri nasai",
+"meaning": "Mừng bạn về",
+"example": "おかえりなさい。つかれた？(Okaeri nasai. Tsukareta?) — Mừng về. Mệt không?",
+"note": "Thân mật: おかえり."
+},
+{
+"type": "hiragana",
+"topic": "Lịch sự hằng ngày",
+"char": "いただきます",
+"reading": "itadakimasu",
+"meaning": "(Nói trước khi ăn)",
+"example": "いただきます！(Itadakimasu!) — Mời cả nhà / xin phép ăn!",
+"note": "Bày tỏ biết ơn trước bữa ăn."
+},
+{
+"type": "hiragana",
+"topic": "Lịch sự hằng ngày",
+"char": "ごちそうさまでした",
+"reading": "gochisōsama deshita",
+"meaning": "(Nói sau khi ăn)",
+"example": "ごちそうさまでした。(Gochisōsama deshita.) — Cảm ơn vì bữa ăn ạ.",
+"note": "Nói sau khi ăn xong. Thân mật: ごちそうさま."
+},
+{
+"type": "hiragana",
+"topic": "Động viên / Chúc mừng",
+"char": "がんばって",
+"reading": "ganbatte",
+"meaning": "Cố lên!",
+"example": "あした、テストでしょ？がんばって！(Ashita, tesuto desho? Ganbatte!) — Mai thi đúng không? Cố lên!",
+"note": "Lịch sự hơn: がんばってください."
+},
+{
+"type": "hiragana",
+"topic": "Động viên / Chúc mừng",
+"char": "おめでとう",
+"reading": "omedetō",
+"meaning": "Chúc mừng!",
+"example": "たんじょうび、おめでとう！(Tanjōbi, omedetō!) — Chúc mừng sinh nhật!",
+"note": "Lịch sự: おめでとうございます."
+},
+{
+"type": "hiragana",
+"topic": "Động viên / Chúc mừng",
+"char": "ざんねん",
+"reading": "zannen",
+"meaning": "Tiếc quá",
+"example": "ざんねんですね。またこんど。(Zannen desu ne. Mata kondo.) — Tiếc quá nhỉ. Lần sau vậy.",
+"note": "Kanji 残念. Bày tỏ tiếc nuối/thất vọng nhẹ."
 }
 ];
 window.NIHONGO_KANA_INFO = {
