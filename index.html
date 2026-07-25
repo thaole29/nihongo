@@ -273,27 +273,51 @@
       </div>
 
       <div id="chat-settings" class="helper hide">
-        <label style="color:var(--accent)">🔑 Gemini API key (miễn phí)</label>
-        <p style="margin:0 0 8px"><small class="muted">Lấy key miễn phí tại
-          <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>.
-          Key chỉ lưu trong trình duyệt máy này (localStorage), không gửi đi đâu khác ngoài Google.</small></p>
-        <div class="row" style="gap:6px;flex-wrap:nowrap">
-          <input id="chat-key" type="password" placeholder="Dán key vào đây…" autocomplete="off" style="flex:1;min-width:0">
-          <button class="btn sm" id="chat-key-save" style="flex:none">Lưu</button>
-        </div>
-        <div id="chat-key-state" style="margin-top:6px;font-size:13px;font-weight:600"></div>
-        <div class="row" style="margin-top:10px">
-          <div style="flex:1;min-width:180px">
+        <label style="color:var(--accent)">🤖 Nguồn AI</label>
+        <select id="chat-provider" style="margin-bottom:12px">
+          <option value="gemini">Google Gemini — tự dán API key miễn phí</option>
+          <option value="nvidia">NVIDIA — qua server riêng, không cần key</option>
+        </select>
+
+        <!-- Gemini: gọi thẳng từ trình duyệt, mỗi người tự dán key của mình -->
+        <div id="chat-gemini-box">
+          <label style="color:var(--accent)">🔑 Gemini API key (miễn phí)</label>
+          <p style="margin:0 0 8px"><small class="muted">Lấy key miễn phí tại
+            <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>.
+            Key chỉ lưu trong trình duyệt máy này (localStorage), không gửi đi đâu khác ngoài Google.</small></p>
+          <div class="row" style="gap:6px;flex-wrap:nowrap">
+            <input id="chat-key" type="password" placeholder="Dán key vào đây…" autocomplete="off" style="flex:1;min-width:0">
+            <button class="btn sm" id="chat-key-save" style="flex:none">Lưu</button>
+          </div>
+          <div id="chat-key-state" style="margin-top:6px;font-size:13px;font-weight:600"></div>
+          <div style="margin-top:10px">
             <label>Model</label>
             <select id="chat-model"></select>
           </div>
-          <div style="flex:1;min-width:180px">
-            <label>Trình độ hội thoại</label>
-            <select id="chat-level">
-              <option value="n5">Vỡ lòng (N5) — câu rất ngắn</option>
-              <option value="n4">Cơ bản (N4) — câu ngắn tự nhiên</option>
-            </select>
+        </div>
+
+        <!-- NVIDIA: đi qua Cloudflare Worker, key nằm ở server nên người dùng không cần key -->
+        <div id="chat-nvidia-box" class="hide">
+          <label style="color:var(--accent)">🌐 Địa chỉ server (Cloudflare Worker)</label>
+          <p style="margin:0 0 8px"><small class="muted">Không cần API key — server giữ key hộ.
+            Chưa có server thì tự dựng theo <code>worker/README.md</code> (miễn phí, không cần thẻ).</small></p>
+          <div class="row" style="gap:6px;flex-wrap:nowrap">
+            <input id="chat-worker" type="text" placeholder="https://nihongo-chat.xxx.workers.dev" autocomplete="off" spellcheck="false" style="flex:1;min-width:0">
+            <button class="btn sm" id="chat-worker-save" style="flex:none">Lưu</button>
           </div>
+          <div id="chat-worker-state" style="margin-top:6px;font-size:13px;font-weight:600"></div>
+          <div style="margin-top:10px">
+            <label>Model <small class="muted" id="chat-nv-model-hint"></small></label>
+            <select id="chat-nv-model"></select>
+          </div>
+        </div>
+
+        <div style="margin-top:10px">
+          <label>Trình độ hội thoại</label>
+          <select id="chat-level">
+            <option value="n5">Vỡ lòng (N5) — câu rất ngắn</option>
+            <option value="n4">Cơ bản (N4) — câu ngắn tự nhiên</option>
+          </select>
         </div>
       </div>
 
@@ -803,10 +827,26 @@ $('r-reveal').onclick=revealReview;
 $('r-card').onclick=(e)=>{ if(e.target.closest('button,a,[data-speak]')) return; if(!rShown) revealReview(); };
 $('r-grade-row').querySelectorAll('[data-grade]').forEach(b=>b.onclick=()=>{ if(!rCard)return; schedule(rCard,b.dataset.grade); nextReview(); });
 
-/* ---------------- Trò chuyện với bot (Google Gemini) ----------------
-   Gọi thẳng Gemini từ trình duyệt; API key do người dùng tự dán, lưu localStorage.
-   Bot trả JSON: { reply, romaji, vi, correction } — correction=null nếu câu người dùng đã đúng. */
+/* ---------------- Trò chuyện với bot ----------------
+   Hai nguồn AI, cùng trả về một cấu trúc { check, reply, romaji, vi }:
+
+   · 'gemini' — gọi THẲNG Gemini từ trình duyệt. Google cho phép CORS nên không
+     cần server, đổi lại mỗi người phải tự dán API key của mình.
+   · 'nvidia' — đi qua Cloudflare Worker (worker/nihongo-worker.js). NVIDIA chặn
+     CORS và key thì không thể nhét vào file public này, nên phải có server đứng
+     giữa. Bù lại người dùng KHÔNG cần key.
+
+   Bot trả correction=null nếu câu người dùng đã đúng. */
 const CHAT_KEY='nihongo_chat_v1';
+
+/* Dán URL worker đã deploy vào đây rồi commit — URL không phải bí mật, key nằm
+   trong secret của Cloudflare. Có sẵn URL thì mọi người mở app là chat được ngay,
+   khỏi dán gì. Để trống thì phải tự dán trong ⚙️ Cài đặt AI. */
+const CHAT_WORKER_URL='https://nihongo-chat.thaolephuong-29.workers.dev';
+
+function chatProvider(){ return prefs.chatProvider==='nvidia' ? 'nvidia' : 'gemini'; }
+/* Bỏ dấu / thừa ở cuối để ghép '/chat', '/models' không thành '//chat'. */
+function workerBase(){ return (prefs.chatWorkerUrl||window.NIHONGO_WORKER_URL||CHAT_WORKER_URL||'').trim().replace(/\/+$/,''); }
 /* Gemini 3.x KHÔNG cho tắt thinking → gửi thinkingConfig sẽ lỗi 400.
    canDisableThink=true: tắt thinking cho nhanh & tránh JSON bị cắt (dòng 2.5/3.5).
    canDisableThink=false: phải chừa maxOutputTokens rộng vì thinking ăn vào hạn mức đó. */
@@ -818,19 +858,44 @@ const CHAT_MODELS=[
 function chatModelCfg(){
   return CHAT_MODELS.find(m=>m.id===$('chat-model').value) || CHAT_MODELS[0];
 }
+
+/* Chủ đề tán gẫu — mỗi phiên bốc ngẫu nhiên một cái, khỏi ngày nào cũng hỏi thời tiết.
+   Phải khai báo TRƯỚC `let chat = loadChat()` bên dưới: loadChat() gọi newSession()
+   và newSession() đọc mảng này ngay lúc script chạy — để dưới là vỡ cả app (TDZ).
+   ⚠️ Danh sách phải TRÙNG THỨ TỰ với CHAT_TOPICS trong worker/nihongo-worker.js:
+   client chỉ gửi CHỈ SỐ (số nguyên) lên worker, worker tự tra tên chủ đề — gửi
+   nguyên chuỗi thì thành lỗ hổng cho người ta nhét prompt tuỳ ý vào. */
+const CHAT_TOPICS=[
+  'thời tiết hôm nay',
+  'món ăn khoái khẩu',
+  'sở thích, lúc rảnh làm gì',
+  'cuối tuần định làm gì',
+  'gia đình',
+  'nơi muốn đi du lịch',
+  'công việc hoặc chuyện học hành',
+  'thú cưng và động vật',
+  'mùa trong năm mình thích',
+  'phim ảnh và âm nhạc'
+];
+
 let chat = loadChat();
 let chatBusy=false;
 
 function todayStr(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+/* Phiên mới = ngày mới hoặc bấm "Cuộc trò chuyện mới". Bốc chủ đề ngay lúc tạo
+   để cả phiên nói cùng một chuyện, không phải mỗi lượt một kiểu. */
+function newSession(){
+  return {date:todayStr(), topic:Math.floor(Math.random()*CHAT_TOPICS.length), messages:[]};
+}
 function loadChat(){
   try{ const d=JSON.parse(localStorage.getItem(CHAT_KEY)); if(d&&Array.isArray(d.messages)) return d; }catch(e){}
-  return {date:todayStr(), messages:[]};
+  return newSession();
 }
 function saveChat(){ try{ localStorage.setItem(CHAT_KEY, JSON.stringify(chat)); }catch(e){} }
 
 /* Mỗi ngày mở tab là một cuộc trò chuyện mới — đúng thói quen "hôm nay chào bot rồi tán gẫu". */
 function openChat(){
-  if(chat.date!==todayStr()){ chat={date:todayStr(), messages:[]}; saveChat(); }
+  if(chat.date!==todayStr()){ chat=newSession(); saveChat(); }
   // Máy có config.local.js thì lấy key sẵn, khỏi phải dán tay lần đầu.
   if(!prefs.geminiKey && window.NIHONGO_LOCAL_GEMINI_KEY){
     prefs.geminiKey=window.NIHONGO_LOCAL_GEMINI_KEY; savePrefs();
@@ -841,9 +906,53 @@ function openChat(){
   $('chat-model').value = CHAT_MODELS.some(m=>m.id===prefs.chatModel) ? prefs.chatModel : CHAT_MODELS[0].id;
   $('chat-level').value = prefs.chatLevel==='n4'?'n4':'n5';
   $('chat-romaji-toggle').checked = prefs.chatRomaji!==false;
-  $('chat-day').textContent = 'Phiên hôm nay · '+chat.date;
-  if(!prefs.geminiKey) $('chat-settings').classList.remove('hide');
+  $('chat-day').textContent = 'Phiên hôm nay · '+chat.date+' · '+CHAT_TOPICS[chatTopicIdx()];
+  /* Có sẵn URL worker (dán trong code / config.local.js) mà người dùng chưa chọn gì
+     → mặc định dùng NVIDIA, vì hướng đó không đòi họ đăng ký key. */
+  if(!prefs.chatProvider && workerBase() && !prefs.geminiKey) prefs.chatProvider='nvidia';
+  $('chat-worker').value = prefs.chatWorkerUrl||'';
+  $('chat-provider').value = chatProvider();
+  applyProvider();
+  if(!chatReady()) $('chat-settings').classList.remove('hide');
   renderChat();
+}
+
+/* Đủ điều kiện gửi chưa: Gemini cần key, NVIDIA cần địa chỉ worker. */
+function chatReady(){
+  return chatProvider()==='nvidia' ? !!workerBase() : !!prefs.geminiKey;
+}
+function applyProvider(){
+  const nv = chatProvider()==='nvidia';
+  $('chat-gemini-box').classList.toggle('hide', nv);
+  $('chat-nvidia-box').classList.toggle('hide', !nv);
+  if(nv){ reflectWorkerState(); loadNvModels(); }
+}
+
+/* Danh sách model NVIDIA đổi liên tục → hỏi thẳng worker thay vì hardcode,
+   khỏi phải sửa app mỗi lần NVIDIA thêm/bỏ model. */
+let nvModelsLoaded='';
+async function loadNvModels(force){
+  const base=workerBase(), sel=$('chat-nv-model'), hint=$('chat-nv-model-hint');
+  if(!base){ sel.innerHTML=''; return; }
+  if(nvModelsLoaded===base && !force) return;
+  hint.textContent=' · đang tải…';
+  try{
+    const r=await fetch(base+'/models');
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const d=await r.json();
+    const list=Array.isArray(d.models)?d.models:[];
+    if(!list.length) throw new Error('rỗng');
+    sel.innerHTML=list.map(id=>`<option value="${esc(id)}">${esc(id)}</option>`).join('');
+    sel.value = list.includes(prefs.chatNvModel) ? prefs.chatNvModel
+              : (list.includes(d.default) ? d.default : list[0]);
+    prefs.chatNvModel=sel.value; savePrefs();
+    nvModelsLoaded=base;
+    hint.textContent=' · '+list.length+' model';
+  }catch(e){
+    /* Không lấy được danh sách vẫn chat được: bỏ trống model → worker dùng DEFAULT_MODEL. */
+    sel.innerHTML='<option value="">(mặc định của server)</option>';
+    hint.textContent=' · không tải được danh sách';
+  }
 }
 
 function renderChat(){
@@ -884,7 +993,7 @@ function renderChat(){
     return `<div class="msg bot">
         <div class="bubble">${esc(m.text)}</div>
         <div class="sub"><span class="rom">${esc(m.romaji||'')}</span>
-          <span class="hide" data-vi="${i}"><br>🇻🇳 ${esc(m.vi||'')}</span></div>
+          <span class="hide" data-vi="${i}"><br>🇻🇳 ${esc(m.vi||'')}${m.why?`<br>💡 ${esc(m.why)}`:''}</span></div>
         <div class="acts">
           <button class="btn ghost sm" data-speak="${esc(m.text)}">🔊 Nghe</button>
           <button class="btn ghost sm" data-vitoggle="${i}">🇻🇳 Xem nghĩa</button>
@@ -913,11 +1022,30 @@ function showTyping(){
 }
 function hideTyping(){ const t=$('chat-typing'); if(t) t.remove(); }
 
+function chatTopicIdx(){
+  if(typeof chat.topic!=='number' || !CHAT_TOPICS[chat.topic]){   // phiên cũ chưa có chủ đề
+    chat.topic=Math.floor(Math.random()*CHAT_TOPICS.length); saveChat();
+  }
+  return chat.topic;
+}
+
 function chatSystemPrompt(){
-  const lv = $('chat-level').value==='n4'
+  const n4 = $('chat-level').value==='n4';
+  const lv = n4
     ? 'Trình độ N4: câu ngắn tự nhiên, dùng được thể ます và thể thường đơn giản.'
-    : 'Trình độ N5 vỡ lòng: câu CỰC ngắn (dưới 12 chữ), chỉ dùng ngữ pháp N5, hạn chế kanji khó.';
+    : 'Trình độ N5 vỡ lòng: câu CỰC ngắn (dưới 12 chữ), chỉ dùng ngữ pháp N5.';
+  /* Người học đang ở giai đoạn hiragana — thấy kanji là chịu, không đọc nổi.
+     Nên ép viết kana, không phải "hạn chế kanji khó" như trước (model tự hiểu
+     rộng ra rồi vẫn xổ 天気, 映画, 楽しかった…). */
+  const kana = n4
+    ? 'CHỮ VIẾT: chủ yếu hiragana. Chỉ được dùng vài kanji cực cơ bản (日, 人, 私, 今日, 何). Phân vân thì chọn hiragana.'
+    : 'CHỮ VIẾT: viết "reply" HOÀN TOÀN bằng hiragana. TUYỆT ĐỐI KHÔNG dùng kanji — kể cả 私, 今日, 天気, 好き, 映画. Từ mượn tiếng nước ngoài thì viết katakana (コーヒー, テレビ, パン).';
   return `Bạn vừa là bạn tán gẫu tiếng Nhật, vừa là giáo viên bắt lỗi cho một người Việt mới học tiếng Nhật.
+
+━━ CHỦ ĐỀ CỦA PHIÊN NÀY ━━
+Hôm nay dẫn câu chuyện quanh chủ đề: ${CHAT_TOPICS[chatTopicIdx()]}.
+Lượt đầu tiên: chào lại thật ngắn rồi hỏi MỘT câu mở đầu về chủ đề này.
+Các lượt sau bám chủ đề, chỉ đổi khi người dùng tự chuyển hướng.
 
 Với MỖI tin nhắn của người dùng, bạn làm 2 việc theo ĐÚNG THỨ TỰ:
 
@@ -938,19 +1066,31 @@ Nếu bạn phân vân giữa đúng và sai → coi là SAI và giải thích. 
 Đừng bỏ qua lỗi chỉ vì bạn vẫn đoán được ý người dùng — người học cần biết mình viết sai chỗ nào.
 Khi has_error = false thì "corrected" chép lại đúng nguyên câu của người dùng, "error_type" và "explain_vi" để chuỗi rỗng.
 Khi has_error = true:
-- "corrected" = câu tiếng Nhật đã sửa hoàn chỉnh.
+- "corrected" = câu tiếng Nhật đã sửa hoàn chỉnh. Giữ nguyên kiểu chữ người dùng đang
+  dùng — họ viết hiragana thì sửa ra hiragana, đừng tự đổi sang kanji.
 - "error_type" = MỘT trong: "chính tả" | "ngữ pháp" | "từ vựng".
 - "explain_vi" = giải thích bằng TIẾNG VIỆT, 1 câu ngắn, chỉ rõ sai ở đâu và sửa thành gì. VD: "Thiếu ん: こにちは → こんにちは."
 
 ━━ VIỆC 2: TRẢ LỜI ĐỂ TÁN GẪU ━━
 - ${lv}
-- Chỉ nói chuyện phiếm đời thường: chào hỏi, thời tiết, đồ ăn, sở thích, công việc, cuối tuần, gia đình, du lịch.
+- ${kana}
+- Chỉ nói chuyện phiếm đời thường, bám chủ đề của phiên nêu ở trên.
 - Hiểu theo Ý người dùng muốn nói (dùng câu đã sửa), đừng bắt bẻ trong lời thoại — phần sửa lỗi đã hiện riêng rồi.
 - Mỗi lượt PHẢI kết thúc bằng ĐÚNG MỘT câu hỏi để người kia trả lời tiếp.
 - Lượt đầu (khi người dùng chào): chào lại thật ngắn rồi hỏi MỘT câu mở đầu chủ đề.
 - Ngắn gọn: tối đa 2 câu + 1 câu hỏi. Không giảng bài, không liệt kê.
 - "reply" CHỈ chứa tiếng Nhật. Tuyệt đối không có tiếng Việt hay tiếng Anh trong "reply".
-- "romaji" = phiên âm romaji của reply. "vi" = nghĩa tiếng Việt của reply.`;
+- "romaji" = phiên âm romaji của reply. "vi" = nghĩa tiếng Việt của reply.
+- "why" = MỘT câu, tối đa 25 từ, giải thích điểm ngữ pháp / cách dùng đáng chú ý
+  nhất trong "reply" để người học hiểu vì sao câu lại nói như vậy.
+  BẮT BUỘC VIẾT BẰNG TIẾNG VIỆT. Được phép trích chữ Nhật để chỉ rõ đang nói về
+  cái gì, nhưng phần giải thích phải là tiếng Việt.
+  ĐÚNG: "か cuối câu biến câu kể thành câu hỏi, không cần đảo trật tự từ."
+  ĐÚNG: "〜がすきです dùng が chứ không phải を để chỉ đối tượng yêu thích."
+  SAI (vì viết bằng tiếng Nhật): "好きの前にが省略できる"
+  SAI (vì viết bằng tiếng Anh): "The particle ka makes it a question."
+  Chỉ nói MỘT điểm, không liệt kê, không giảng bài.
+  Câu quá hiển nhiên (はい, そうですね…) thì để CHUỖI RỖNG — thà không nói còn hơn nói thừa.`;
 }
 
 /* Ép Gemini trả JSON đúng cấu trúc, và ép trường "check" sinh ra TRƯỚC "reply"
@@ -971,10 +1111,11 @@ const CHAT_SCHEMA={
     },
     reply:{type:'STRING'},
     romaji:{type:'STRING'},
-    vi:{type:'STRING'}
+    vi:{type:'STRING'},
+    why:{type:'STRING'}
   },
-  required:['check','reply','romaji','vi'],
-  propertyOrdering:['check','reply','romaji','vi']
+  required:['check','reply','romaji','vi','why'],
+  propertyOrdering:['check','reply','romaji','vi','why']
 };
 
 async function sendChat(){
@@ -983,27 +1124,28 @@ async function sendChat(){
   flushRomaji();
   const text=(inp.value||'').trim();
   if(!text){ inp.focus(); return; }
-  if(!prefs.geminiKey){
+  if(!chatReady()){
     $('chat-settings').classList.remove('hide');
-    toast('Cần dán Gemini API key trước');
-    $('chat-key').focus(); return;
+    if(chatProvider()==='nvidia'){ toast('Cần địa chỉ server trước'); $('chat-worker').focus(); }
+    else { toast('Cần dán Gemini API key trước'); $('chat-key').focus(); }
+    return;
   }
   chat.messages.push({role:'user', text});
   inp.value=''; autoGrow(inp); saveChat(); renderChat();
 
   chatBusy=true; chatStatus('Bot đang soạn…',true); showTyping();
   try{
-    const data=await askGemini();
+    const data=await askBot();
     hideTyping();
     const last=chat.messages[chat.messages.length-1];
     if(last && last.role==='user'){
-      const ck=data.check||{};
+      const ck=verifyCheck(data.check||{}, text);
       last.checked=true;      // đánh dấu đã soi lỗi, để hiện "✓ đúng rồi" khi không có lỗi
       last.correction = ck.has_error
         ? {corrected:ck.corrected||'', error_type:ck.error_type||'', explain_vi:ck.explain_vi||''}
         : null;
     }
-    chat.messages.push({role:'bot', text:data.reply||'', romaji:data.romaji||'', vi:data.vi||''});
+    chat.messages.push({role:'bot', text:data.reply||'', romaji:data.romaji||'', vi:data.vi||'', why:cleanWhy(data.why)});
     saveChat(); renderChat(); chatStatus('');
     if(prefs.chatSpeak!==false) speak(data.reply||'');
   }catch(err){
@@ -1016,6 +1158,67 @@ async function sendChat(){
     chatStatus('⚠ '+err.message);
     renderChat();
   }finally{ chatBusy=false; $('chat-send').disabled=false; }
+}
+
+function askBot(){ return chatProvider()==='nvidia' ? askWorker() : askGemini(); }
+
+/* Lưới an toàn cho phần bắt lỗi — đừng tin has_error của model.
+   Cả Gemini lẫn qwen đều có lúc lặng lẽ sửa câu nhưng vẫn báo has_error=false
+   (vd あ りがとうござます → ありがとうございます mà bảo "đúng rồi"), người học sẽ
+   thấy "✓ Câu này viết đúng rồi!" dù vừa gõ sai — đúng cái lỗi tai hại nhất.
+   Nên tự đối chiếu câu gốc với câu model sửa:
+   · khác nhau mà model bảo đúng → ép thành SAI.
+   · chỉ nâng cấp (đúng→sai), không bao giờ hạ (sai→đúng): model đã bắt được lỗi
+     thì cứ hiện, thà thừa còn hơn bỏ sót.
+   Bỏ khoảng trắng + dấu câu trước khi so để model thêm 。hay ？ không bị tính là lỗi.
+   KHÔNG bỏ ー vì コヒー → コーヒー là lỗi trường âm thật. */
+/* Model đôi khi giải thích ngữ pháp bằng chính tiếng Nhật (vd "好きの前にが省略できる")
+   — người mới học đọc không nổi, thà không hiện còn hơn. Không có chữ latin/tiếng Việt
+   nào thì coi như không có giải thích. Trích chữ Nhật kèm tiếng Việt thì vẫn giữ. */
+function cleanWhy(s){
+  s=String(s||'').trim();
+  return /[a-zA-ZÀ-ỹ]/.test(s) ? s : '';
+}
+
+function verifyCheck(ck, userText){
+  const norm=s=>String(s||'').replace(/[\s、。，．！？!?.,…]/g,'');
+  const corrected=String(ck.corrected||'');
+  if(!ck.has_error && corrected && norm(corrected)!==norm(userText)){
+    return {
+      has_error:true,
+      corrected,
+      error_type: ck.error_type || 'chính tả',
+      explain_vi: ck.explain_vi || ('Câu đúng phải là: '+corrected)
+    };
+  }
+  return ck;
+}
+
+/* Đường đi NVIDIA: worker lo hết phần nặng (API key, system prompt, ép JSON,
+   hạ cấp khi model không nhận tham số) nên phía này chỉ gửi hội thoại thô. */
+async function askWorker(){
+  const base=workerBase();
+  if(!base) throw new Error('Chưa có địa chỉ server — mở ⚙️ Cài đặt AI.');
+  const body={
+    level: $('chat-level').value==='n4'?'n4':'n5',
+    topic: chatTopicIdx(),
+    model: $('chat-nv-model').value||undefined,
+    messages: chat.messages.slice(-20).map(m=>({role:m.role==='user'?'user':'bot', text:m.text||''}))
+  };
+  let r;
+  try{
+    r=await fetch(base+'/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  }catch(e){ throw new Error('Không kết nối được server — kiểm tra mạng hoặc địa chỉ server.'); }
+
+  let d={};
+  try{ d=await r.json(); }catch(_){}
+  if(!r.ok){
+    if(r.status===403) throw new Error('Server từ chối tên miền này — thêm nó vào ALLOWED_ORIGINS của worker.');
+    if(r.status===404) throw new Error('Sai địa chỉ server — kiểm tra lại trong ⚙️ Cài đặt AI.');
+    throw new Error(d.error || ('Lỗi server '+r.status));
+  }
+  if(!d.reply) throw new Error('Bot trả lời rỗng, thử lại.');
+  return d;
 }
 
 async function askGemini(){
@@ -1137,9 +1340,40 @@ $('chat-key-save').onclick=()=>{
 };
 $('chat-model').onchange=()=>{ prefs.chatModel=$('chat-model').value; savePrefs(); };
 $('chat-level').onchange=()=>{ prefs.chatLevel=$('chat-level').value; savePrefs(); };
+
+/* --- Đường đi NVIDIA (qua Cloudflare Worker) --- */
+function reflectWorkerState(){
+  const el=$('chat-worker-state'); if(!el) return;
+  const base=workerBase();
+  if(!base){
+    el.style.color='var(--muted)';
+    el.textContent='Chưa có địa chỉ server. Dựng worker theo worker/README.md rồi dán URL vào đây.';
+  }else if(!prefs.chatWorkerUrl){
+    el.style.color='var(--ok)';
+    el.textContent='✓ Dùng server có sẵn của app — không cần làm gì thêm.';
+  }else{
+    el.style.color='var(--ok)';
+    el.textContent='✓ Đã lưu trên thiết bị này ('+base.replace(/^https?:\/\//,'')+').';
+  }
+}
+$('chat-provider').onchange=()=>{
+  prefs.chatProvider=$('chat-provider').value; savePrefs();
+  applyProvider(); chatStatus('');
+};
+$('chat-worker-save').onclick=()=>{
+  let u=($('chat-worker').value||'').trim().replace(/\/+$/,'');
+  if(u && !/^https?:\/\//i.test(u)) u='https://'+u;   // dán thiếu https:// là chuyện thường
+  prefs.chatWorkerUrl=u; savePrefs();
+  $('chat-worker').value=u;
+  reflectWorkerState(); loadNvModels(true);
+  toast(u?'Đã lưu địa chỉ server ✓':'Đã xoá địa chỉ server');
+  if(u) $('chat-settings').classList.add('hide');
+};
+$('chat-nv-model').onchange=()=>{ prefs.chatNvModel=$('chat-nv-model').value; savePrefs(); };
 $('chat-reset').onclick=()=>{
   if(chat.messages.length && !confirm('Xoá cuộc trò chuyện hiện tại và bắt đầu lại?')) return;
-  chat={date:todayStr(), messages:[]}; saveChat(); renderChat(); chatStatus('');
+  chat=newSession(); saveChat(); renderChat(); chatStatus('');
+  $('chat-day').textContent='Phiên hôm nay · '+chat.date+' · '+CHAT_TOPICS[chatTopicIdx()];
 };
 
 /* ---------------- Add / Edit ---------------- */

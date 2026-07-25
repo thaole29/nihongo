@@ -1,2 +1,5 @@
 .DS_Store
 config.local.js
+
+# Wrangler tự sinh khi deploy — chứa account ID + email Cloudflare, không đưa lên public repo.
+.wrangler/

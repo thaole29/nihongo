@@ -1,0 +1,21 @@
+name = "nihongo-chat"
+main = "nihongo-worker.js"
+compatibility_date = "2026-07-01"
+
+# Chỉ phục vụ qua nihongo-chat.<subdomain>.workers.dev.
+# preview_urls sinh thêm hostname riêng cho mỗi version — không cần, tắt cho đỡ bề mặt tấn công.
+workers_dev = true
+preview_urls = false
+
+# Biến công khai (không phải secret) — sửa thoải mái rồi `wrangler deploy` lại.
+[vars]
+# Danh sách domain được gọi worker, cách nhau bằng dấu phẩy.
+# "null" = mở index.html trực tiếp bằng file:// — bỏ đi nếu muốn chặt hơn.
+ALLOWED_ORIGINS = "https://thaole29.github.io,http://localhost:8000,http://127.0.0.1:8000,null"
+
+# Model dùng khi client không chỉ định. Xem danh sách thật ở https://build.nvidia.com/models
+# Đo thực tế: gpt-oss-120b bắt lỗi 6/6, qwen3-next bỏ sót. Chi tiết trong README.
+DEFAULT_MODEL = "openai/gpt-oss-120b"
+
+# API key KHÔNG đặt ở đây (file này lên git). Nạp bằng:
+#   wrangler secret put NVIDIA_API_KEY
