@@ -76,6 +76,17 @@
   .center{text-align:center}
 
   .helper{background:var(--accent-soft);border:1px dashed var(--accent);border-radius:12px;padding:12px;margin-bottom:16px}
+  /* Cài đặt AI nằm cuối tab Trò chuyện: chỉnh một lần rồi thôi, nên thu nhỏ và
+     làm nhạt đi để không kéo mắt khỏi khung chat. */
+  .helper.tiny{font-size:13px;padding:10px;margin-bottom:0;border-style:dotted;opacity:.9}
+  .helper.tiny label{font-size:12px}
+  .helper.tiny select,.helper.tiny input{font-size:13px;padding:6px 8px}
+  .link-sm{background:none;border:0;padding:2px;color:var(--muted);font-size:12px;
+           cursor:pointer;text-decoration:underline;opacity:.55}
+  .link-sm:hover{opacity:1;color:var(--accent)}
+  /* Trình độ hội thoại nằm ở thanh trên chứ không chôn trong Cài đặt AI: đây là
+     thứ người học đổi khi lên trình, không phải cấu hình kỹ thuật. */
+  .lvl-sel{width:auto;font-size:13px;padding:6px 10px;border-radius:8px}
   .preview{display:flex;gap:16px;margin-top:8px;flex-wrap:wrap}
   .preview .pv{flex:1;min-width:120px}
   .preview .pvchar{font-size:30px;min-height:40px;font-weight:600}
@@ -267,12 +278,30 @@
           <div><small class="muted" id="chat-day"></small></div>
         </div>
         <div class="row">
+          <select id="chat-level" class="lvl-sel" title="Trình độ hội thoại — câu bot nói dễ hay khó">
+            <option value="n5">N5 · vỡ lòng</option>
+            <option value="n4">N4 · cơ bản</option>
+          </select>
           <button class="btn ghost sm" id="chat-reset">🗑 Cuộc trò chuyện mới</button>
-          <button class="btn ghost sm" id="chat-settings-btn">⚙️ Cài đặt AI</button>
         </div>
       </div>
 
-      <div id="chat-settings" class="helper hide">
+      <div class="chat-log" id="chat-log"></div>
+
+      <div class="chat-input">
+        <textarea id="chat-input" rows="1" placeholder="Gõ tiếng Nhật… (Enter để gửi, Shift+Enter xuống dòng)"></textarea>
+        <button class="btn" id="chat-send" style="flex:none">Gửi</button>
+      </div>
+      <div class="row" style="margin-top:8px;justify-content:space-between">
+        <label class="switch"><input type="checkbox" id="chat-romaji-toggle"> ⌨️ Gõ romaji → kana</label>
+        <small class="muted" id="chat-status"></small>
+      </div>
+
+      <!-- Cài đặt AI để cuối cùng: chỉnh một lần rồi thôi, người học không cần đụng tới -->
+      <div style="margin-top:16px;text-align:right">
+        <button class="link-sm" id="chat-settings-btn">⚙️ Cài đặt AI</button>
+      </div>
+      <div id="chat-settings" class="helper tiny hide">
         <label style="color:var(--accent)">🤖 Nguồn AI</label>
         <select id="chat-provider" style="margin-bottom:12px">
           <option value="gemini">Google Gemini — tự dán API key miễn phí</option>
@@ -311,25 +340,6 @@
             <select id="chat-nv-model"></select>
           </div>
         </div>
-
-        <div style="margin-top:10px">
-          <label>Trình độ hội thoại</label>
-          <select id="chat-level">
-            <option value="n5">Vỡ lòng (N5) — câu rất ngắn</option>
-            <option value="n4">Cơ bản (N4) — câu ngắn tự nhiên</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="chat-log" id="chat-log"></div>
-
-      <div class="chat-input">
-        <textarea id="chat-input" rows="1" placeholder="Gõ tiếng Nhật… (Enter để gửi, Shift+Enter xuống dòng)"></textarea>
-        <button class="btn" id="chat-send" style="flex:none">Gửi</button>
-      </div>
-      <div class="row" style="margin-top:8px;justify-content:space-between">
-        <label class="switch"><input type="checkbox" id="chat-romaji-toggle"> ⌨️ Gõ romaji → kana</label>
-        <small class="muted" id="chat-status"></small>
       </div>
     </div>
   </section>
