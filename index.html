@@ -105,17 +105,36 @@
   .g-good{background:var(--ok)!important;color:#fff!important;border:0!important}
   .g-easy{background:var(--accent)!important;color:#fff!important;border:0!important}
 
-  .choice{display:block;width:100%;text-align:left;margin:8px 0;padding:14px;border:1px solid var(--line);border-radius:12px;
-    background:var(--bg);color:var(--ink);font-size:18px;cursor:pointer;font-weight:600}
-  .choice:hover{border-color:var(--accent)}
-  .choice.correct{background:color-mix(in srgb,var(--ok) 18%,transparent);border-color:var(--ok)}
-  .choice.wrong{background:color-mix(in srgb,var(--bad) 18%,transparent);border-color:var(--bad)}
-  .q-char{font-size:56px;text-align:center;font-weight:600;margin:6px 0 14px;white-space:nowrap;overflow:hidden}
-  .q-mean{font-size:26px;text-align:center;font-weight:600;margin:10px 0 18px}
-  .fb{text-align:center;font-weight:700;margin:10px 0}
-  .fb.ok{color:var(--ok)} .fb.bad{color:var(--bad)}
-  .bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:14px}
-  .bar>span{display:block;height:100%;background:var(--accent);transition:width .3s}
+  /* Trò chuyện với bot */
+  .chat-log{display:flex;flex-direction:column;gap:14px;min-height:320px;max-height:60vh;overflow-y:auto;padding:4px 2px 10px}
+  .msg{display:flex;flex-direction:column;max-width:82%}
+  .msg.me{align-self:flex-end;align-items:flex-end}
+  .msg.bot{align-self:flex-start;align-items:flex-start}
+  .bubble{border:1px solid var(--line);border-radius:16px;padding:11px 14px;background:var(--panel);font-size:19px;line-height:1.6;word-break:break-word}
+  .msg.me .bubble{background:var(--accent);border-color:var(--accent);color:#fff;border-bottom-right-radius:5px}
+  .msg.bot .bubble{border-bottom-left-radius:5px}
+  .msg .sub{font-size:13px;color:var(--muted);margin-top:5px;line-height:1.5}
+  .msg .sub .rom{font-style:italic}
+  .msg .acts{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+  .fix{border:1px solid #c9820a;background:color-mix(in srgb,#c9820a 12%,transparent);border-radius:12px;
+    padding:9px 12px;margin-top:7px;font-size:14px;align-self:flex-end;max-width:82%}
+  .fix .fix-h{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#c9820a;margin-bottom:3px}
+  .fix .fix-jp{font-size:17px;font-weight:600}
+  .fix .fix-vi{color:var(--muted);margin-top:3px}
+  .ok-chip{align-self:flex-end;font-size:12.5px;font-weight:600;color:var(--ok);margin-top:5px}
+  .chat-empty{text-align:center;color:var(--muted);padding:26px 10px;margin:auto}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:12px}
+  .chip{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;
+    padding:7px 14px;font-size:17px;cursor:pointer;font-family:inherit}
+  .chip:hover{border-color:var(--accent);background:var(--accent-soft)}
+  .chat-input{display:flex;gap:8px;align-items:flex-end;margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
+  .chat-input textarea{min-height:46px;max-height:130px;font-size:18px}
+  .switch{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);font-weight:600;cursor:pointer;margin:0}
+  .switch input{width:auto;margin:0;accent-color:var(--accent)}
+  .typing span{display:inline-block;width:7px;height:7px;margin-right:3px;border-radius:50%;background:var(--muted);
+    animation:blink 1.2s infinite}
+  .typing span:nth-child(2){animation-delay:.2s} .typing span:nth-child(3){animation-delay:.4s}
+  @keyframes blink{0%,60%,100%{opacity:.25}30%{opacity:1}}
 
   /* Hiragana chart */
   .chart{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;max-width:520px;margin:0 auto 6px}
@@ -152,23 +171,30 @@
       <h1>日本語 <span>Flashcards</span></h1>
     </div>
     <div class="tabs">
-      <button class="tab active" data-view="study">Học</button>
+      <button class="tab active" data-view="study" id="tab-study">Học</button>
       <button class="tab" data-view="chart">Bảng chữ</button>
-      <button class="tab" data-view="review" id="tab-review">Ôn tập</button>
-      <button class="tab" data-view="quiz">Quiz</button>
+      <button class="tab" data-view="chat">💬 Trò chuyện</button>
       <button class="tab" data-view="add">Thêm thẻ</button>
       <button class="tab" data-view="hand">✍️ Viết tay</button>
       <button class="tab" data-view="manage">Quản lý</button>
     </div>
   </header>
 
-  <!-- ================= STUDY ================= -->
+  <!-- ================= STUDY (Lướt thẻ + Ôn tập SRS) ================= -->
   <section id="view-study">
+    <div class="center" style="margin:0 0 14px">
+      <div class="seg" id="study-mode-toggle">
+        <button class="seg-btn active" data-mode="flip">🃏 Lướt thẻ</button>
+        <button class="seg-btn" data-mode="review" id="mode-review-btn">🔁 Ôn tập</button>
+      </div>
+    </div>
     <div class="filters">
       <div><label>Phân loại</label>
         <select id="f-type"><option value="all">Tất cả</option><option value="hiragana">Hiragana</option><option value="katakana">Katakana</option><option value="kanji">Kanji</option></select></div>
       <div><label>Topic</label><select id="f-topic"><option value="all">Tất cả</option></select></div>
-      <div><button class="btn ghost sm" id="shuffle">🔀 Xáo trộn</button></div>
+      <div id="dir-wrap" class="hide"><label>Chiều hỏi</label>
+        <select id="r-dir"><option value="jp2mean">Ký tự → Nghĩa</option><option value="mean2jp">Nghĩa → Ký tự (ngược)</option></select></div>
+      <div id="shuffle-wrap"><button class="btn ghost sm" id="shuffle">🔀 Xáo trộn</button></div>
     </div>
     <div id="study-body">
       <div class="counter" id="counter"></div>
@@ -195,30 +221,8 @@
     </div>
     <div class="empty hide" id="study-empty">Chưa có thẻ nào khớp bộ lọc.<br><br>
       <button class="btn" onclick="switchView('add')">+ Thêm thẻ đầu tiên</button></div>
-  </section>
 
-  <!-- ================= CHART (Hiragana gojūon) ================= -->
-  <section id="view-chart" class="hide">
-    <div class="center" style="margin:0 0 12px">
-      <div class="seg" id="chart-script-toggle">
-        <button class="seg-btn active" data-script="hiragana">あ Hiragana</button>
-        <button class="seg-btn" data-script="katakana">ア Katakana</button>
-      </div>
-    </div>
-    <p class="center" style="color:var(--muted);margin:0 0 14px"><small class="muted" id="chart-hint"></small></p>
-    <div id="chart-body"></div>
-  </section>
-
-  <!-- ================= REVIEW (SRS) ================= -->
-  <section id="view-review" class="hide">
-    <div class="filters">
-      <div><label>Phân loại</label>
-        <select id="r-type"><option value="all">Tất cả</option><option value="hiragana">Hiragana</option><option value="katakana">Katakana</option><option value="kanji">Kanji</option></select></div>
-      <div><label>Topic</label><select id="r-topic"><option value="all">Tất cả</option></select></div>
-      <div><label>Chiều hỏi</label>
-        <select id="r-dir"><option value="jp2mean">Ký tự → Nghĩa</option><option value="mean2jp">Nghĩa → Ký tự (ngược)</option></select></div>
-    </div>
-    <div id="review-body">
+    <div id="review-body" class="hide">
       <div class="counter" id="r-counter"></div>
       <div class="card-stage"><div class="card" id="r-card">
         <div class="face front">
@@ -242,44 +246,66 @@
     <div class="empty hide" id="review-done"></div>
   </section>
 
-  <!-- ================= QUIZ ================= -->
-  <section id="view-quiz" class="hide">
-    <div class="panel" id="quiz-setup">
-      <h2 style="margin:0 0 14px;font-size:18px">Tạo bài quiz</h2>
-      <div class="grid2">
-        <div class="field"><label>Kiểu câu hỏi</label>
-          <select id="q-mode">
-            <option value="reading">Nhìn ký tự → gõ cách đọc</option>
-            <option value="meaning">Nhìn ký tự → chọn nghĩa</option>
-            <option value="char">Nhìn nghĩa → chọn ký tự (ngược)</option>
-          </select></div>
-        <div class="field"><label>Số câu</label>
-          <select id="q-count"><option>10</option><option>20</option><option>30</option><option value="all">Tất cả</option></select></div>
-        <div class="field"><label>Phân loại</label>
-          <select id="q-type"><option value="all">Tất cả</option><option value="hiragana">Hiragana</option><option value="katakana">Katakana</option><option value="kanji">Kanji</option></select></div>
-        <div class="field"><label>Topic</label><select id="q-topic"><option value="all">Tất cả</option></select></div>
-      </div>
-      <button class="btn" id="q-start">Bắt đầu ▶</button>
-      <p style="margin:12px 0 0"><small class="muted">Câu sai sẽ được đánh dấu “hay quên” và ưu tiên trong tab Ôn tập.</small></p>
-    </div>
-
-    <div id="quiz-play" class="hide">
-      <div class="bar"><span id="q-bar"></span></div>
-      <div class="counter" id="q-progress"></div>
-      <div class="panel">
-        <div id="q-question"></div>
-        <div id="q-answer-area"></div>
-        <div class="fb hide" id="q-feedback"></div>
-        <div class="center hide" id="q-next-row"><button class="btn" id="q-next">Câu tiếp →</button></div>
+  <!-- ================= CHART (Hiragana gojūon) ================= -->
+  <section id="view-chart" class="hide">
+    <div class="center" style="margin:0 0 12px">
+      <div class="seg" id="chart-script-toggle">
+        <button class="seg-btn active" data-script="hiragana">あ Hiragana</button>
+        <button class="seg-btn" data-script="katakana">ア Katakana</button>
       </div>
     </div>
+    <p class="center" style="color:var(--muted);margin:0 0 14px"><small class="muted" id="chart-hint"></small></p>
+    <div id="chart-body"></div>
+  </section>
 
-    <div id="quiz-result" class="hide">
-      <div class="panel center">
-        <div class="stat" id="q-score"></div>
-        <div class="muted" id="q-score-sub" style="margin-bottom:16px"></div>
-        <div id="q-wrong-list" style="text-align:left"></div>
-        <button class="btn" id="q-again" style="margin-top:16px">Làm bài mới</button>
+  <!-- ================= CHAT (luyện giao tiếp với bot) ================= -->
+  <section id="view-chat" class="hide">
+    <div class="panel">
+      <div class="toolbar" style="margin-bottom:10px">
+        <div>
+          <b style="font-size:16px">💬 Tán gẫu tiếng Nhật</b>
+          <div><small class="muted" id="chat-day"></small></div>
+        </div>
+        <div class="row">
+          <button class="btn ghost sm" id="chat-reset">🗑 Cuộc trò chuyện mới</button>
+          <button class="btn ghost sm" id="chat-settings-btn">⚙️ Cài đặt AI</button>
+        </div>
+      </div>
+
+      <div id="chat-settings" class="helper hide">
+        <label style="color:var(--accent)">🔑 Gemini API key (miễn phí)</label>
+        <p style="margin:0 0 8px"><small class="muted">Lấy key miễn phí tại
+          <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>.
+          Key chỉ lưu trong trình duyệt máy này (localStorage), không gửi đi đâu khác ngoài Google.</small></p>
+        <div class="row" style="gap:6px;flex-wrap:nowrap">
+          <input id="chat-key" type="password" placeholder="Dán key vào đây…" autocomplete="off" style="flex:1;min-width:0">
+          <button class="btn sm" id="chat-key-save" style="flex:none">Lưu</button>
+        </div>
+        <div id="chat-key-state" style="margin-top:6px;font-size:13px;font-weight:600"></div>
+        <div class="row" style="margin-top:10px">
+          <div style="flex:1;min-width:180px">
+            <label>Model</label>
+            <select id="chat-model"></select>
+          </div>
+          <div style="flex:1;min-width:180px">
+            <label>Trình độ hội thoại</label>
+            <select id="chat-level">
+              <option value="n5">Vỡ lòng (N5) — câu rất ngắn</option>
+              <option value="n4">Cơ bản (N4) — câu ngắn tự nhiên</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-log" id="chat-log"></div>
+
+      <div class="chat-input">
+        <textarea id="chat-input" rows="1" placeholder="Gõ tiếng Nhật… (Enter để gửi, Shift+Enter xuống dòng)"></textarea>
+        <button class="btn" id="chat-send" style="flex:none">Gửi</button>
+      </div>
+      <div class="row" style="margin-top:8px;justify-content:space-between">
+        <label class="switch"><input type="checkbox" id="chat-romaji-toggle"> ⌨️ Gõ romaji → kana</label>
+        <small class="muted" id="chat-status"></small>
       </div>
     </div>
   </section>
@@ -429,6 +455,9 @@
 <div class="toast" id="toast"></div>
 
 <script src="deck.js"></script>
+<!-- Cấu hình riêng của máy (API key) — đã gitignore nên KHÔNG có trên bản GitHub Pages.
+     Thiếu file này chỉ 404 vô hại, app sẽ hỏi key trong ⚙️ Cài đặt AI như bình thường. -->
+<script src="config.local.js" onerror="void 0"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script>
 /* ---------------- Storage ---------------- */
@@ -535,7 +564,7 @@ function schedule(c,grade){
   c.srs=s; save();
 }
 function dueCount(){ return cards.filter(c=>(prefs.focusType==='all'||c.type===prefs.focusType)&&isDue(c)).length; }
-function updateDueBadge(){ const n=dueCount(); $('tab-review').textContent = n? `Ôn tập (${n})` : 'Ôn tập'; }
+function updateDueBadge(){ const n=dueCount(); $('mode-review-btn').textContent = n? `🔁 Ôn tập (${n})` : '🔁 Ôn tập'; }
 
 /* ---------------- View switching ---------------- */
 const $=id=>document.getElementById(id);
@@ -548,11 +577,10 @@ function switchView(v, isBack){
   if(!isBack && curView!==v) viewHistory.push(curView);
   curView=v;
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.view===v));
-  ['study','chart','review','quiz','add','manage','hand'].forEach(x=>$('view-'+x).classList.toggle('hide',x!==v));
+  ['study','chart','chat','add','manage','hand'].forEach(x=>$('view-'+x).classList.toggle('hide',x!==v));
   if(v==='chart'){ renderChart(); }
-  if(v==='study'){ $('f-type').value=prefs.focusType; fillTopicSelect('f-topic'); refreshDeck(); }
-  if(v==='review'){ $('r-type').value=prefs.focusType; fillTopicSelect('r-topic'); startReview(); }
-  if(v==='quiz'){ $('q-type').value=prefs.focusType; fillTopicSelect('q-topic'); showQuizSetup(); }
+  if(v==='study'){ $('f-type').value=prefs.focusType; fillTopicSelect('f-topic'); applyStudyMode(); }
+  if(v==='chat'){ openChat(); }
   if(v==='add'){ refreshTopicList(); }
   if(v==='manage'){ renderManage(); }
   if(v==='hand'){ initHand(); }
@@ -654,7 +682,27 @@ $('chart-body').addEventListener('click',e=>{ const b=e.target.closest('[data-ch
 $('chart-modal-close').onclick=closeChartModal;
 $('chart-modal').addEventListener('click',e=>{ if(e.target===$('chart-modal')) closeChartModal(); });
 
-/* ---------------- Study ---------------- */
+/* ---------------- Học: 2 chế độ trong cùng 1 tab (Lướt thẻ ⇄ Ôn tập SRS) ----------------
+   Hai chế độ dùng chung bộ lọc Phân loại / Topic; chỉ đổi phần thân hiển thị. */
+let studyMode = (prefs.studyMode==='review') ? 'review' : 'flip';
+function applyStudyMode(){
+  document.querySelectorAll('#study-mode-toggle .seg-btn').forEach(b=>b.classList.toggle('active',b.dataset.mode===studyMode));
+  $('dir-wrap').classList.toggle('hide', studyMode!=='review');
+  $('shuffle-wrap').classList.toggle('hide', studyMode==='review');
+  if(studyMode==='review'){
+    $('study-body').classList.add('hide'); $('study-empty').classList.add('hide');
+    startReview();
+  }else{
+    $('review-body').classList.add('hide'); $('review-done').classList.add('hide');
+    refreshDeck();
+  }
+}
+$('study-mode-toggle').addEventListener('click',e=>{
+  const b=e.target.closest('[data-mode]'); if(!b||b.dataset.mode===studyMode) return;
+  studyMode=b.dataset.mode; prefs.studyMode=studyMode; savePrefs(); applyStudyMode();
+});
+
+/* ---------------- Chế độ Lướt thẻ ---------------- */
 let deck=[], pos=0;
 function refreshDeck(){
   const ty=$('f-type').value, tp=$('f-topic').value;
@@ -703,25 +751,25 @@ function flipStudy(){ if(deck.length) $('card').classList.toggle('flipped'); }
 $('card').onclick=(e)=>{ if(e.target.closest('button,a,[data-speak]')) return; flipStudy(); }; $('flip').onclick=flipStudy;
 $('prev').onclick=()=>{ if(deck.length){ pos=(pos-1+deck.length)%deck.length; renderStudy(); } };
 $('next').onclick=()=>{ if(deck.length){ pos=(pos+1)%deck.length; renderStudy(); } };
-$('f-type').onchange=()=>{ prefs.focusType=$('f-type').value; savePrefs(); refreshDeck(); }; $('f-topic').onchange=refreshDeck;
+$('f-type').onchange=()=>{ prefs.focusType=$('f-type').value; savePrefs(); applyStudyMode(); }; $('f-topic').onchange=applyStudyMode;
 $('shuffle').onclick=()=>{ for(let i=deck.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [deck[i],deck[j]]=[deck[j],deck[i]]; } pos=0; renderStudy(); };
 
-/* ---------------- Review (SRS) ---------------- */
+/* ---------------- Chế độ Ôn tập (SRS) ---------------- */
 let rQueue=[], rCard=null, rShown=false;
 function startReview(){
-  const ty=$('r-type').value, tp=$('r-topic').value;
+  const ty=$('f-type').value, tp=$('f-topic').value;
   rQueue=cards.filter(c=>(ty==='all'||c.type===ty)&&(tp==='all'||c.topic===tp)&&isDue(c))
               .sort((a,b)=>((a.srs?.due||0)-(b.srs?.due||0)));
   nextReview();
 }
-$('r-type').onchange=()=>{ prefs.focusType=$('r-type').value; savePrefs(); startReview(); }; $('r-topic').onchange=startReview; $('r-dir').onchange=startReview;
+$('r-dir').onchange=startReview;
 function nextReview(){
   // refresh due state (an 'again' card may have become due again)
   rQueue=rQueue.filter(isDue).sort((a,b)=>((a.srs?.due||0)-(b.srs?.due||0)));
   const has=rQueue.length>0;
   $('review-body').classList.toggle('hide',!has); $('review-done').classList.toggle('hide',has);
   updateDueBadge();
-  if(!has){ $('review-done').innerHTML='🎉 Hết thẻ cần ôn!<br><small class="muted">Quay lại sau, hoặc qua tab Học để xem tất cả.</small>'; return; }
+  if(!has){ $('review-done').innerHTML='🎉 Hết thẻ cần ôn!<br><small class="muted">Quay lại sau, hoặc chuyển sang <b>Lướt thẻ</b> để xem tất cả.</small>'; return; }
   rCard=rQueue[0]; rShown=false;
   const dir=$('r-dir').value; const c=rCard;
   unflipInstant($('r-card'));
@@ -755,99 +803,344 @@ $('r-reveal').onclick=revealReview;
 $('r-card').onclick=(e)=>{ if(e.target.closest('button,a,[data-speak]')) return; if(!rShown) revealReview(); };
 $('r-grade-row').querySelectorAll('[data-grade]').forEach(b=>b.onclick=()=>{ if(!rCard)return; schedule(rCard,b.dataset.grade); nextReview(); });
 
-/* ---------------- Quiz ---------------- */
-let quiz=null;
-function showQuizSetup(){ $('quiz-setup').classList.remove('hide'); $('quiz-play').classList.add('hide'); $('quiz-result').classList.add('hide'); }
-$('q-type').onchange=()=>{ prefs.focusType=$('q-type').value; savePrefs(); };
-$('q-start').onclick=()=>{
-  const mode=$('q-mode').value, ty=$('q-type').value, tp=$('q-topic').value;
-  let pool=cards.filter(c=>(ty==='all'||c.type===ty)&&(tp==='all'||c.topic===tp));
-  if(mode==='meaning') pool=pool.filter(c=>c.meaning&&c.meaning.trim());
-  if(mode==='reading') pool=pool.filter(c=>c.reading&&c.reading.trim());
-  if(mode==='char') pool=pool.filter(c=>c.meaning&&c.meaning.trim());
-  if(pool.length<1){ toast('Không đủ thẻ cho bộ lọc này'); return; }
-  if((mode==='meaning'||mode==='char')&&pool.length<2){ toast('Cần ít nhất 2 thẻ cho trắc nghiệm'); return; }
-  pool=shuffle(pool.slice());
-  const cnt=$('q-count').value; const n=cnt==='all'?pool.length:Math.min(parseInt(cnt),pool.length);
-  quiz={mode,pool,items:pool.slice(0,n),i:0,correct:0,wrong:[]};
-  $('quiz-setup').classList.add('hide'); $('quiz-result').classList.add('hide'); $('quiz-play').classList.remove('hide');
-  renderQuestion();
+/* ---------------- Trò chuyện với bot (Google Gemini) ----------------
+   Gọi thẳng Gemini từ trình duyệt; API key do người dùng tự dán, lưu localStorage.
+   Bot trả JSON: { reply, romaji, vi, correction } — correction=null nếu câu người dùng đã đúng. */
+const CHAT_KEY='nihongo_chat_v1';
+/* Gemini 3.x KHÔNG cho tắt thinking → gửi thinkingConfig sẽ lỗi 400.
+   canDisableThink=true: tắt thinking cho nhanh & tránh JSON bị cắt (dòng 2.5/3.5).
+   canDisableThink=false: phải chừa maxOutputTokens rộng vì thinking ăn vào hạn mức đó. */
+const CHAT_MODELS=[
+  {id:'gemini-3.5-flash',      label:'gemini-3.5-flash (khuyên dùng)', canDisableThink:true,  max:1500},
+  {id:'gemini-3.6-flash',      label:'gemini-3.6-flash (mới nhất)',    canDisableThink:false, max:4000},
+  {id:'gemini-3.1-flash-lite', label:'gemini-3.1-flash-lite (nhẹ)',    canDisableThink:true,  max:1500}
+];
+function chatModelCfg(){
+  return CHAT_MODELS.find(m=>m.id===$('chat-model').value) || CHAT_MODELS[0];
+}
+let chat = loadChat();
+let chatBusy=false;
+
+function todayStr(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function loadChat(){
+  try{ const d=JSON.parse(localStorage.getItem(CHAT_KEY)); if(d&&Array.isArray(d.messages)) return d; }catch(e){}
+  return {date:todayStr(), messages:[]};
+}
+function saveChat(){ try{ localStorage.setItem(CHAT_KEY, JSON.stringify(chat)); }catch(e){} }
+
+/* Mỗi ngày mở tab là một cuộc trò chuyện mới — đúng thói quen "hôm nay chào bot rồi tán gẫu". */
+function openChat(){
+  if(chat.date!==todayStr()){ chat={date:todayStr(), messages:[]}; saveChat(); }
+  // Máy có config.local.js thì lấy key sẵn, khỏi phải dán tay lần đầu.
+  if(!prefs.geminiKey && window.NIHONGO_LOCAL_GEMINI_KEY){
+    prefs.geminiKey=window.NIHONGO_LOCAL_GEMINI_KEY; savePrefs();
+  }
+  $('chat-key').value = prefs.geminiKey||'';
+  reflectKeyState();
+  $('chat-model').innerHTML = CHAT_MODELS.map(m=>`<option value="${m.id}">${esc(m.label)}</option>`).join('');
+  $('chat-model').value = CHAT_MODELS.some(m=>m.id===prefs.chatModel) ? prefs.chatModel : CHAT_MODELS[0].id;
+  $('chat-level').value = prefs.chatLevel==='n4'?'n4':'n5';
+  $('chat-romaji-toggle').checked = prefs.chatRomaji!==false;
+  $('chat-day').textContent = 'Phiên hôm nay · '+chat.date;
+  if(!prefs.geminiKey) $('chat-settings').classList.remove('hide');
+  renderChat();
+}
+
+function renderChat(){
+  const box=$('chat-log');
+  if(!chat.messages.length){
+    box.innerHTML = `<div class="chat-empty">
+        <div style="font-size:38px">🤖</div>
+        <b>Chào bot bằng tiếng Nhật để bắt đầu nhé!</b><br>
+        <small class="muted">Bot sẽ hỏi lại bạn một câu, rồi hai bên tán gẫu tự nhiên.<br>
+        Bot cũng sửa lỗi chính tả / ngữ pháp nếu bạn viết sai.</small>
+        <div class="chips">
+          <button class="chip" data-say="おはよう">おはよう</button>
+          <button class="chip" data-say="こんにちは">こんにちは</button>
+          <button class="chip" data-say="こんばんは">こんばんは</button>
+        </div>
+      </div>`;
+    box.querySelectorAll('[data-say]').forEach(b=>b.onclick=()=>{ $('chat-input').value=b.dataset.say; sendChat(); });
+    return;
+  }
+  box.innerHTML = chat.messages.map((m,i)=>{
+    if(m.role==='user'){
+      let h=`<div class="msg me"><div class="bubble">${esc(m.text)}</div></div>`;
+      if(m.correction){
+        const kind=m.correction.error_type ? ' · '+m.correction.error_type : '';
+        h+=`<div class="fix">
+              <div class="fix-h">✏️ Sửa lại cho đúng${esc(kind)}</div>
+              <div class="fix-jp">${esc(m.correction.corrected||'')}</div>
+              <div class="fix-vi">${esc(m.correction.explain_vi||'')}</div>
+              <div class="acts" style="justify-content:flex-end">
+                <button class="btn ghost sm" data-speak="${esc(m.correction.corrected||'')}">🔊 Nghe câu đúng</button>
+              </div>
+            </div>`;
+      }else if(m.checked){
+        h+=`<div class="ok-chip">✓ Câu này viết đúng rồi!</div>`;
+      }
+      return h;
+    }
+    return `<div class="msg bot">
+        <div class="bubble">${esc(m.text)}</div>
+        <div class="sub"><span class="rom">${esc(m.romaji||'')}</span>
+          <span class="hide" data-vi="${i}"><br>🇻🇳 ${esc(m.vi||'')}</span></div>
+        <div class="acts">
+          <button class="btn ghost sm" data-speak="${esc(m.text)}">🔊 Nghe</button>
+          <button class="btn ghost sm" data-vitoggle="${i}">🇻🇳 Xem nghĩa</button>
+        </div>
+      </div>`;
+  }).join('');
+  box.querySelectorAll('[data-vitoggle]').forEach(b=>b.onclick=()=>{
+    const el=box.querySelector(`[data-vi="${b.dataset.vitoggle}"]`);
+    const shown=!el.classList.contains('hide');
+    el.classList.toggle('hide',shown);
+    b.textContent = shown ? '🇻🇳 Xem nghĩa' : '🙈 Ẩn nghĩa';
+  });
+  box.scrollTop = box.scrollHeight;
+}
+
+function chatStatus(m,busy){
+  $('chat-status').textContent = m||'';
+  $('chat-send').disabled = !!busy;
+}
+function showTyping(){
+  const box=$('chat-log');
+  const d=document.createElement('div');
+  d.className='msg bot'; d.id='chat-typing';
+  d.innerHTML='<div class="bubble typing"><span></span><span></span><span></span></div>';
+  box.appendChild(d); box.scrollTop=box.scrollHeight;
+}
+function hideTyping(){ const t=$('chat-typing'); if(t) t.remove(); }
+
+function chatSystemPrompt(){
+  const lv = $('chat-level').value==='n4'
+    ? 'Trình độ N4: câu ngắn tự nhiên, dùng được thể ます và thể thường đơn giản.'
+    : 'Trình độ N5 vỡ lòng: câu CỰC ngắn (dưới 12 chữ), chỉ dùng ngữ pháp N5, hạn chế kanji khó.';
+  return `Bạn vừa là bạn tán gẫu tiếng Nhật, vừa là giáo viên bắt lỗi cho một người Việt mới học tiếng Nhật.
+
+Với MỖI tin nhắn của người dùng, bạn làm 2 việc theo ĐÚNG THỨ TỰ:
+
+━━ VIỆC 1: BẮT LỖI (làm TRƯỚC, quan trọng hơn việc trả lời) ━━
+Đọc lại câu người dùng vừa viết, SOI TỪNG CHỮ KANA MỘT, đối chiếu với cách viết chuẩn.
+Phải báo lỗi trong TẤT CẢ các trường hợp sau:
+- Thiếu / thừa / sai một chữ kana. VD: こにちは (thiếu ん) → こんにちは ; ありがとうござます (thiếu い) → ありがとうございます ; がっこ → がっこう
+- Sai kana nhỏ っ ゃ ゅ ょ (viết thành kana to). VD: しゆみ → しゅみ ; きて (ý là "cắt") → きって
+- Thiếu / thừa dấu đục ﾞ ﾟ. VD: たべます viết thành だべます ; ふん → ぷん
+- Sai trường âm hoặc sai ー trong katakana. VD: コヒー → コーヒー
+- Sai trợ từ (は を が に で へ も と). VD: わたしがくせいです → わたしはがくせいです
+- Chia động từ / tính từ sai. VD: たべるます → たべます ; おいしいです viết thành おいしいだ
+- Dùng sai thể lịch sự, sai trật tự từ, dùng sai từ vựng.
+- Người dùng viết bằng romaji, tiếng Việt hoặc tiếng Anh → coi như "sai", đoán ý họ muốn nói và viết lại thành câu tiếng Nhật đúng.
+
+QUY TẮC VÀNG: chỉ đặt has_error = false khi câu HOÀN TOÀN đúng chính tả và đúng ngữ pháp.
+Nếu bạn phân vân giữa đúng và sai → coi là SAI và giải thích. Thà bắt nhầm còn hơn bỏ sót.
+Đừng bỏ qua lỗi chỉ vì bạn vẫn đoán được ý người dùng — người học cần biết mình viết sai chỗ nào.
+Khi has_error = false thì "corrected" chép lại đúng nguyên câu của người dùng, "error_type" và "explain_vi" để chuỗi rỗng.
+Khi has_error = true:
+- "corrected" = câu tiếng Nhật đã sửa hoàn chỉnh.
+- "error_type" = MỘT trong: "chính tả" | "ngữ pháp" | "từ vựng".
+- "explain_vi" = giải thích bằng TIẾNG VIỆT, 1 câu ngắn, chỉ rõ sai ở đâu và sửa thành gì. VD: "Thiếu ん: こにちは → こんにちは."
+
+━━ VIỆC 2: TRẢ LỜI ĐỂ TÁN GẪU ━━
+- ${lv}
+- Chỉ nói chuyện phiếm đời thường: chào hỏi, thời tiết, đồ ăn, sở thích, công việc, cuối tuần, gia đình, du lịch.
+- Hiểu theo Ý người dùng muốn nói (dùng câu đã sửa), đừng bắt bẻ trong lời thoại — phần sửa lỗi đã hiện riêng rồi.
+- Mỗi lượt PHẢI kết thúc bằng ĐÚNG MỘT câu hỏi để người kia trả lời tiếp.
+- Lượt đầu (khi người dùng chào): chào lại thật ngắn rồi hỏi MỘT câu mở đầu chủ đề.
+- Ngắn gọn: tối đa 2 câu + 1 câu hỏi. Không giảng bài, không liệt kê.
+- "reply" CHỈ chứa tiếng Nhật. Tuyệt đối không có tiếng Việt hay tiếng Anh trong "reply".
+- "romaji" = phiên âm romaji của reply. "vi" = nghĩa tiếng Việt của reply.`;
+}
+
+/* Ép Gemini trả JSON đúng cấu trúc, và ép trường "check" sinh ra TRƯỚC "reply"
+   để model soi lỗi rồi mới nghĩ câu trả lời (khác thứ tự này thì nó hay bỏ sót lỗi nhỏ). */
+const CHAT_SCHEMA={
+  type:'OBJECT',
+  properties:{
+    check:{
+      type:'OBJECT',
+      properties:{
+        has_error:{type:'BOOLEAN'},
+        corrected:{type:'STRING'},
+        error_type:{type:'STRING'},
+        explain_vi:{type:'STRING'}
+      },
+      required:['has_error','corrected','error_type','explain_vi'],
+      propertyOrdering:['has_error','corrected','error_type','explain_vi']
+    },
+    reply:{type:'STRING'},
+    romaji:{type:'STRING'},
+    vi:{type:'STRING'}
+  },
+  required:['check','reply','romaji','vi'],
+  propertyOrdering:['check','reply','romaji','vi']
 };
-function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
-function renderQuestion(){
-  const c=quiz.items[quiz.i], mode=quiz.mode;
-  $('q-progress').textContent=`Câu ${quiz.i+1} / ${quiz.items.length} · Đúng ${quiz.correct}`;
-  $('q-bar').style.width=(quiz.i/quiz.items.length*100)+'%';
-  $('q-feedback').classList.add('hide'); $('q-next-row').classList.add('hide');
-  const q=$('q-question'), area=$('q-answer-area'); area.innerHTML='';
-  if(mode==='reading'){
-    q.innerHTML=`<div class="center"><span class="badge ${c.type}">${typeLabel(c.type)}</span></div><div class="q-char">${esc(c.char)}</div>`;
-    fitChar(q.querySelector('.q-char'),c.char,56);
-    area.innerHTML=`<label>Gõ cách đọc (romaji hoặc kana)</label><input id="q-input" autocomplete="off" placeholder="vd: nihongo / にほんご">
-      <div class="center" style="margin-top:12px"><button class="btn" id="q-submit">Kiểm tra</button></div>`;
-    const inp=$('q-input'); inp.focus();
-    inp.onkeydown=e=>{ if(e.key==='Enter') gradeTyped(); };
-    $('q-submit').onclick=gradeTyped;
-  }else if(mode==='meaning'){
-    q.innerHTML=`<div class="center"><span class="badge ${c.type}">${typeLabel(c.type)}</span></div><div class="q-char">${esc(c.char)}</div>
-      <div class="center"><button class="btn ghost sm" data-speak="${esc(c.char)}">🔊 Nghe</button></div>`;
-    fitChar(q.querySelector('.q-char'),c.char,56);
-    buildChoices(area,c,'meaning');
-  }else{ // char (reverse)
-    q.innerHTML=`<div class="q-mean">${esc(c.meaning)}</div>`;
-    buildChoices(area,c,'char');
+
+async function sendChat(){
+  if(chatBusy) return;
+  const inp=$('chat-input');
+  flushRomaji();
+  const text=(inp.value||'').trim();
+  if(!text){ inp.focus(); return; }
+  if(!prefs.geminiKey){
+    $('chat-settings').classList.remove('hide');
+    toast('Cần dán Gemini API key trước');
+    $('chat-key').focus(); return;
+  }
+  chat.messages.push({role:'user', text});
+  inp.value=''; autoGrow(inp); saveChat(); renderChat();
+
+  chatBusy=true; chatStatus('Bot đang soạn…',true); showTyping();
+  try{
+    const data=await askGemini();
+    hideTyping();
+    const last=chat.messages[chat.messages.length-1];
+    if(last && last.role==='user'){
+      const ck=data.check||{};
+      last.checked=true;      // đánh dấu đã soi lỗi, để hiện "✓ đúng rồi" khi không có lỗi
+      last.correction = ck.has_error
+        ? {corrected:ck.corrected||'', error_type:ck.error_type||'', explain_vi:ck.explain_vi||''}
+        : null;
+    }
+    chat.messages.push({role:'bot', text:data.reply||'', romaji:data.romaji||'', vi:data.vi||''});
+    saveChat(); renderChat(); chatStatus('');
+    if(prefs.chatSpeak!==false) speak(data.reply||'');
+  }catch(err){
+    hideTyping();
+    // Gửi hỏng: trả câu vừa gõ về ô nhập để gửi lại, tránh để lại lượt "user"
+    // cụt lủn trong lịch sử (Gemini không nhận 2 lượt user liên tiếp).
+    const last=chat.messages[chat.messages.length-1];
+    if(last && last.role==='user'){ chat.messages.pop(); saveChat(); }
+    inp.value=text; autoGrow(inp);
+    chatStatus('⚠ '+err.message);
+    renderChat();
+  }finally{ chatBusy=false; $('chat-send').disabled=false; }
+}
+
+async function askGemini(){
+  const cfg=chatModelCfg(), model=cfg.id;
+  // Chỉ gửi 20 lượt gần nhất để giữ request nhẹ và nhanh.
+  const hist=chat.messages.slice(-20).map(m=>({
+    role: m.role==='user'?'user':'model',
+    parts:[{text: m.role==='user' ? m.text : (m.text||'')}]
+  }));
+  const body={
+    systemInstruction:{parts:[{text:chatSystemPrompt()}]},
+    contents:hist,
+    generationConfig:{
+      temperature:0.9,
+      maxOutputTokens:cfg.max,
+      responseMimeType:'application/json',
+      responseSchema:CHAT_SCHEMA
+    }
+  };
+  // Model nào cho tắt thinking thì tắt: nhanh hơn và tránh thinking ăn hết
+  // maxOutputTokens làm JSON bị cắt cụt. Gemini 3.x không cho tắt → bỏ qua.
+  if(cfg.canDisableThink) body.generationConfig.thinkingConfig={thinkingBudget:0};
+  const url=`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
+  const post=b=>fetch(url,{method:'POST',
+    headers:{'Content-Type':'application/json','x-goog-api-key':prefs.geminiKey},
+    body:JSON.stringify(b)});
+  // Thang tự hạ cấp: model mới/cũ nhận tham số khác nhau, gặp 400 thì bỏ dần
+  // tham số tuỳ chọn rồi thử lại thay vì để hỏng cả lượt chat.
+  let r, msg='';
+  const degrade=[
+    ()=>{ if(!body.generationConfig.thinkingConfig) return false; delete body.generationConfig.thinkingConfig; return true; },
+    ()=>{ if(!body.generationConfig.responseSchema) return false; delete body.generationConfig.responseSchema; return true; }
+  ];
+  for(let step=0; step<=degrade.length; step++){
+    try{ r=await post(body); }
+    catch(e){ throw new Error('Không kết nối được — kiểm tra mạng.'); }
+    if(r.ok) break;
+    msg='Lỗi API '+r.status;
+    try{ const e=await r.json(); if(e.error&&e.error.message) msg=e.error.message; }catch(_){}
+    if(r.status!==400) break;
+    if(/api key/i.test(msg)) break;
+    if(step===degrade.length || !degrade[step]()) break;
+  }
+  if(!r.ok){
+    if(r.status===400 && /api key/i.test(msg)) msg='API key không hợp lệ — kiểm tra lại trong ⚙️ Cài đặt AI.';
+    if(r.status===404 && /no longer available/i.test(msg)) msg='Model này không còn dùng được — chọn model khác trong ⚙️ Cài đặt AI.';
+    if(r.status===429) msg='Đã chạm hạn mức miễn phí, thử lại sau ít phút.';
+    throw new Error(msg);
+  }
+  const d=await r.json();
+  const txt=(((d.candidates||[])[0]||{}).content||{}).parts?.map(p=>p.text||'').join('')||'';
+  if(!txt) throw new Error('Bot không trả lời được, thử gửi lại.');
+  let out;
+  try{ out=JSON.parse(txt); }
+  catch(e){
+    const m=txt.match(/\{[\s\S]*\}/);          // phòng khi model bọc JSON trong text
+    if(!m) throw new Error('Bot trả về dữ liệu lạ, thử lại.');
+    out=JSON.parse(m[0]);
+  }
+  if(!out.reply) throw new Error('Bot trả lời rỗng, thử lại.');
+  return out;
+}
+
+/* --- Gõ romaji → kana ngay trong ô chat ---
+   Giữ lại phần đuôi romaji chưa đủ để ghép (vd "k", "ky", "n") để không convert sớm. */
+const RKEYS=Object.keys(RMAP);
+function isPartialRomaji(s){ return RKEYS.some(k=>k!==s && k.startsWith(s)); }
+function romajiToHiraLive(s){
+  const m=/[a-zA-Z]+$/.exec(s);
+  if(!m) return romajiToHira(s);
+  const head=s.slice(0,m.index), tail=m[0].toLowerCase();
+  for(let hold=Math.min(3,tail.length); hold>=1; hold--){
+    const cand=tail.slice(tail.length-hold);
+    if(isPartialRomaji(cand)) return romajiToHira(head+tail.slice(0,tail.length-hold))+cand;
+  }
+  return romajiToHira(head+tail);
+}
+function autoGrow(el){ el.style.height='auto'; el.style.height=Math.min(130,el.scrollHeight)+'px'; }
+/* Chốt phần romaji còn treo ở cuối (vd "…もn" → "…もん") khi gửi / rời ô nhập. */
+function flushRomaji(){
+  const el=$('chat-input');
+  if(!$('chat-romaji-toggle').checked) return;
+  const conv=romajiToHira(el.value);
+  if(conv!==el.value){ el.value=conv; try{ el.setSelectionRange(conv.length,conv.length); }catch(_){} }
+}
+$('chat-input').addEventListener('blur',flushRomaji);
+
+$('chat-input').addEventListener('input',e=>{
+  const el=e.target;
+  if($('chat-romaji-toggle').checked && el.selectionStart===el.value.length){
+    const conv=romajiToHiraLive(el.value);
+    if(conv!==el.value){ el.value=conv; el.setSelectionRange(conv.length,conv.length); }
+  }
+  autoGrow(el);
+});
+$('chat-input').addEventListener('keydown',e=>{
+  if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendChat(); }
+});
+$('chat-send').onclick=sendChat;
+$('chat-romaji-toggle').onchange=e=>{ prefs.chatRomaji=e.target.checked; savePrefs(); };
+$('chat-settings-btn').onclick=()=>$('chat-settings').classList.toggle('hide');
+/* Cho thấy rõ key đã nằm sẵn trong máy — chỉ phải dán 1 lần cho mỗi trình duyệt. */
+function reflectKeyState(){
+  const el=$('chat-key-state'); if(!el) return;
+  if(prefs.geminiKey){
+    const k=prefs.geminiKey;
+    el.style.color='var(--ok)';
+    el.textContent='✓ Đã lưu trên thiết bị này ('+k.slice(0,6)+'…'+k.slice(-4)+') — không cần dán lại lần sau.';
+  }else{
+    el.style.color='var(--muted)';
+    el.textContent='Chưa có key. Dán một lần duy nhất, trình duyệt sẽ nhớ cho các lần sau.';
   }
 }
-function buildChoices(area,c,kind){
-  const key=kind==='meaning'?'meaning':'char';
-  const src=(quiz&&quiz.pool&&quiz.pool.length>1)?quiz.pool:cards;
-  const others=shuffle(src.filter(x=>x.id!==c.id && x[key] && x[key]!==c[key]));
-  const seen=new Set([c[key]]); const distract=[];
-  for(const o of others){ if(!seen.has(o[key])){ seen.add(o[key]); distract.push(o); } if(distract.length>=3) break; }
-  const opts=shuffle([c,...distract]);
-  area.innerHTML=opts.map(o=>`<button class="choice" data-correct="${o.id===c.id?1:0}">${esc(o[key])}</button>`).join('');
-  area.querySelectorAll('.choice').forEach(btn=>btn.onclick=()=>{
-    const ok=btn.dataset.correct==='1';
-    area.querySelectorAll('.choice').forEach(b=>{ b.disabled=true; if(b.dataset.correct==='1') b.classList.add('correct'); });
-    if(!ok) btn.classList.add('wrong');
-    finishQuestion(ok,c, kind==='char'?c.char:c.meaning);
-  });
-}
-function gradeTyped(){
-  const c=quiz.items[quiz.i]; const val=$('q-input').value;
-  if(!val.trim()){ toast('Nhập đáp án đã'); return; }
-  const ok=readingMatch(val,c);
-  finishQuestion(ok,c, c.reading||'');
-  $('q-input').disabled=true; $('q-submit').disabled=true;
-}
-function readingMatch(input,c){
-  const u=input.toLowerCase().trim();
-  const cand=new Set([u.replace(/\s/g,''), romajiToHira(u).replace(/\s/g,''), hiraToKata(romajiToHira(u)).replace(/\s/g,'')]);
-  const parts=(c.reading||'').toLowerCase().split(/[\/,、;]|\s{2,}/).map(x=>x.trim()).filter(Boolean);
-  parts.push((c.reading||'').toLowerCase());
-  const targets=new Set(parts.map(p=>p.replace(/\s/g,'')));
-  for(const x of cand){ if(x && targets.has(x)) return true; }
-  return false;
-}
-function finishQuestion(ok,c,answer){
-  const fb=$('q-feedback'); fb.classList.remove('hide','ok','bad'); fb.classList.add(ok?'ok':'bad');
-  fb.innerHTML = ok? '✓ Chính xác!' : `✗ Sai · Đáp án: <b>${esc(answer)}</b>`+(c.reading&&quiz.mode!=='reading'?` (${esc(c.reading)})`:'');
-  if(ok){ quiz.correct++; schedule(c,'good'); } else { quiz.wrong.push(c); schedule(c,'again'); }
-  $('q-next-row').classList.remove('hide'); $('q-next').focus();
-  updateDueBadge();
-}
-$('q-next').onclick=()=>{ quiz.i++; if(quiz.i>=quiz.items.length) showResult(); else renderQuestion(); };
-function showResult(){
-  $('quiz-play').classList.add('hide'); $('quiz-result').classList.remove('hide');
-  const total=quiz.items.length, pct=Math.round(quiz.correct/total*100);
-  $('q-score').textContent=`${quiz.correct}/${total}`;
-  $('q-score-sub').textContent=`${pct}% đúng`+(quiz.wrong.length?` · ${quiz.wrong.length} câu sai đã đưa vào Ôn tập`:' · Xuất sắc! 🎉');
-  $('q-wrong-list').innerHTML = quiz.wrong.length? '<h3 style="font-size:15px">Cần ôn lại:</h3>'+quiz.wrong.map(c=>`
-    <div class="list-item"><div class="lc">${esc(c.char)}</div>
-      <div class="lmeta"><div class="r">${esc(c.reading||'')}</div><div class="m">${esc(c.meaning||'')}</div></div>
-      <button class="btn ghost sm" data-speak="${esc(c.char)}">🔊</button></div>`).join('') : '';
-}
-$('q-again').onclick=showQuizSetup;
+$('chat-key-save').onclick=()=>{
+  const k=($('chat-key').value||'').trim();
+  prefs.geminiKey=k; savePrefs(); reflectKeyState();
+  toast(k?'Đã lưu API key ✓':'Đã xoá API key');
+  if(k) $('chat-settings').classList.add('hide');
+};
+$('chat-model').onchange=()=>{ prefs.chatModel=$('chat-model').value; savePrefs(); };
+$('chat-level').onchange=()=>{ prefs.chatLevel=$('chat-level').value; savePrefs(); };
+$('chat-reset').onclick=()=>{
+  if(chat.messages.length && !confirm('Xoá cuộc trò chuyện hiện tại và bắt đầu lại?')) return;
+  chat={date:todayStr(), messages:[]}; saveChat(); renderChat(); chatStatus('');
+};
 
 /* ---------------- Add / Edit ---------------- */
 $('romaji-in').addEventListener('input',e=>{ const h=romajiToHira(e.target.value); $('pv-hira').textContent=h; $('pv-kata').textContent=hiraToKata(h); });
@@ -1246,12 +1539,14 @@ let toastT; function toast(m){ const t=$('toast'); t.textContent=m; t.classList.
 /* keyboard */
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape' && !$('chart-modal').classList.contains('hide')){ closeChartModal(); return; }
-  if(!$('view-study').classList.contains('hide')){
+  if(e.target.closest('input,textarea,select')) return;   // đang gõ (vd ô chat) thì bỏ qua phím tắt
+  if($('view-study').classList.contains('hide')) return;
+  if(studyMode==='review'){
+    if(e.code==='Space'){ e.preventDefault(); if(!rShown) revealReview(); }
+  }else{
     if(e.code==='Space'){e.preventDefault();flipStudy();}
     if(e.code==='ArrowRight')$('next').click();
     if(e.code==='ArrowLeft')$('prev').click();
-  }else if(!$('view-review').classList.contains('hide')){
-    if(e.code==='Space'){ e.preventDefault(); if(!rShown) revealReview(); }
   }
 });
 
@@ -1275,7 +1570,7 @@ if(!prefs.syncEnabled){
   const addedDef=mergeNewDefaults();
   if(addedDef){ save(); toast('Đã thêm '+addedDef+' từ mới vào bộ thẻ'); }
 }
-$('f-type').value=prefs.focusType; fillTopicSelect('f-topic'); refreshDeck(); updateDueBadge();
+$('f-type').value=prefs.focusType; fillTopicSelect('f-topic'); applyStudyMode(); updateDueBadge();
 if(prefs.syncEnabled){
   reflectSyncAccount();
   if(gToken && Date.now()<gTokenExp){ setSyncStatus('Đang đồng bộ…'); scheduleTokenRefresh(); onConnected(); } // token còn hạn -> vào thẳng
