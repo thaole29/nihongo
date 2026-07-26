@@ -1055,7 +1055,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Du lịch",
+"topic": "Trạng từ",
 "char": "まっすぐ",
 "reading": "massugu",
 "meaning": "Thẳng / Straight ahead",
@@ -2864,7 +2864,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Số & Thời gian",
+"topic": "Trạng từ",
 "char": "ときどき",
 "reading": "tokidoki",
 "meaning": "Thỉnh thoảng / Sometimes",
@@ -2873,7 +2873,7 @@ window.NIHONGO_DEFAULT_DECK = [
 },
 {
 "type": "hiragana",
-"topic": "Số & Thời gian",
+"topic": "Trạng từ",
 "char": "いつも",
 "reading": "itsumo",
 "meaning": "Luôn luôn / Always",
@@ -3014,6 +3014,168 @@ window.NIHONGO_DEFAULT_DECK = [
 "meaning": "Gần / Near",
 "example": "えきの ちかくに すんでいます。(Eki no chikaku ni sunde imasu.) — Tôi sống gần ga.",
 "note": "Kanji 近く. Từ tính từ ちかい."
+},
+{
+"type": "hiragana",
+"topic": "Trạng từ",
+"char": "とても",
+"reading": "totemo",
+"meaning": "Rất / Very",
+"example": "この ケーキは とても あまいです。(Kono keeki wa totemo amai desu.) — Bánh này rất ngọt.",
+"note": "Đứng trước tính từ. Câu phủ định thì dùng あまり thay vì とても."
+},
+{
+"type": "hiragana",
+"topic": "Trạng từ",
+"char": "ゆっくり",
+"reading": "yukkuri",
+"meaning": "Chậm rãi / Slowly",
+"example": "ゆっくり はなして ください。(Yukkuri hanashite kudasai.) — Xin hãy nói chậm lại.",
+"note": "Câu cửa miệng khi nghe không kịp. Cũng nghĩa \"thong thả, thoải mái\"."
+},
+{
+"type": "hiragana",
+"topic": "Trạng từ",
+"char": "もういちど",
+"reading": "mou ichido",
+"meaning": "Một lần nữa / Once more",
+"example": "もういちど おねがいします。(Mou ichido onegaishimasu.) — Cho tôi xin lại lần nữa.",
+"note": "もう (thêm) + いちど (một lần). Kanji もう一度."
+},
+{
+"type": "hiragana",
+"topic": "Trạng từ",
+"char": "よく",
+"reading": "yoku",
+"meaning": "Thường xuyên / giỏi / Often, well",
+"example": "よく えいがを みます。(Yoku eiga o mimasu.) — Tôi hay xem phim.",
+"note": "Hai nghĩa: \"thường xuyên\" và \"giỏi\" (よく できました = làm tốt lắm)."
+},
+{
+"type": "hiragana",
+"topic": "Trạng từ",
+"char": "たいてい",
+"reading": "taitei",
+"meaning": "Hầu như luôn / Usually",
+"example": "たいてい ７じに おきます。(Taitei shichi-ji ni okimasu.) — Thường thì tôi dậy lúc 7 giờ.",
+"note": "Mức độ: いつも > たいてい > よく > ときどき > あまり > ぜんぜん."
+},
+{
+"type": "hiragana",
+"topic": "Trạng từ",
+"char": "あまり",
+"reading": "amari",
+"meaning": "Không mấy / Not much",
+"example": "あまり からく ないです。(Amari karaku nai desu.) — Không cay lắm.",
+"note": "BẮT BUỘC đi với thể phủ định. あまり + ～ない."
+},
+{
+"type": "hiragana",
+"topic": "Trạng từ",
+"char": "ぜんぜん",
+"reading": "zenzen",
+"meaning": "Hoàn toàn không / Not at all",
+"example": "ぜんぜん わかりません。(Zenzen wakarimasen.) — Tôi hoàn toàn không hiểu.",
+"note": "Cũng bắt buộc đi với phủ định. Mạnh hơn あまり. Kanji 全然."
+},
+{
+"type": "hiragana",
+"topic": "Trạng từ",
+"char": "まだ",
+"reading": "mada",
+"meaning": "Vẫn còn / chưa / Still, not yet",
+"example": "まだ たべて いません。(Mada tabete imasen.) — Tôi vẫn chưa ăn.",
+"note": "Câu khẳng định = \"vẫn còn\"; câu phủ định = \"chưa\". Ngược với もう."
+},
+{
+"type": "hiragana",
+"topic": "Trạng từ",
+"char": "もう",
+"reading": "mou",
+"meaning": "Đã / rồi / Already",
+"example": "もう ばんごはんを たべました。(Mou bangohan o tabemashita.) — Tôi ăn tối rồi.",
+"note": "Khẳng định = \"đã ~ rồi\". Phủ định もう～ない = \"không còn ~ nữa\"."
+},
+{
+"type": "hiragana",
+"topic": "Trạng từ",
+"char": "すこし",
+"reading": "sukoshi",
+"meaning": "Một chút / A little",
+"example": "すこし つかれました。(Sukoshi tsukaremashita.) — Tôi hơi mệt.",
+"note": "Kanji 少し. Trang trọng hơn ちょっと."
+},
+{
+"type": "hiragana",
+"topic": "Trạng từ",
+"char": "ちょっと",
+"reading": "chotto",
+"meaning": "Một chút / A bit",
+"example": "ちょっと まって ください。(Chotto matte kudasai.) — Đợi một chút nhé.",
+"note": "Thân mật hơn すこし. Nói trống 「ちょっと…」 là cách từ chối khéo."
+},
+{
+"type": "hiragana",
+"topic": "Trạng từ",
+"char": "たくさん",
+"reading": "takusan",
+"meaning": "Nhiều / A lot",
+"example": "たくさん たべて ください。(Takusan tabete kudasai.) — Ăn nhiều vào nhé.",
+"note": "Ngược với すこし. Đứng trước động từ hoặc sau danh từ."
+},
+{
+"type": "hiragana",
+"topic": "Trạng từ",
+"char": "だいたい",
+"reading": "daitai",
+"meaning": "Đại khái / khoảng chừng / About",
+"example": "だいたい ３０ぷん かかります。(Daitai sanjuppun kakarimasu.) — Mất khoảng 30 phút.",
+"note": "Kanji 大体. Nói con số áng chừng."
+},
+{
+"type": "hiragana",
+"topic": "Trạng từ",
+"char": "ほんとうに",
+"reading": "hontou ni",
+"meaning": "Thật sự / Really",
+"example": "ほんとうに ありがとう。(Hontou ni arigatou.) — Thật sự cảm ơn bạn.",
+"note": "Kanji 本当に. Bỏ に thì ほんとう = \"thật/sự thật\"."
+},
+{
+"type": "hiragana",
+"topic": "Trạng từ",
+"char": "いちばん",
+"reading": "ichiban",
+"meaning": "Nhất / Most",
+"example": "なつが いちばん すきです。(Natsu ga ichiban suki desu.) — Tôi thích mùa hè nhất.",
+"note": "Kanji 一番. Mức cao nhất khi so từ 3 thứ trở lên."
+},
+{
+"type": "hiragana",
+"topic": "Trạng từ",
+"char": "もっと",
+"reading": "motto",
+"meaning": "Nhiều hơn / hơn nữa / More",
+"example": "もっと ください。(Motto kudasai.) — Cho tôi thêm nữa.",
+"note": "Từ gần \"more\" nhất, dùng độc lập được. もっと やすい = rẻ hơn nữa."
+},
+{
+"type": "hiragana",
+"topic": "Trạng từ",
+"char": "より",
+"reading": "yori",
+"meaning": "Hơn (so sánh) / Than",
+"example": "でんしゃは バスより はやいです。(Densha wa basu yori hayai desu.) — Tàu điện nhanh hơn xe buýt.",
+"note": "Không phải trạng từ mà là trợ từ so sánh. Mẫu: A は B より + tính từ."
+},
+{
+"type": "hiragana",
+"topic": "Trạng từ",
+"char": "ほうが",
+"reading": "hou ga",
+"meaning": "Bên… thì hơn / Rather",
+"example": "この ほうが いいです。(Kono hou ga ii desu.) — Cái này thì tốt hơn.",
+"note": "Mẫu đầy đủ: A のほうが B より + tính từ. Dùng khi chọn giữa 2 thứ."
 }
 ];
 window.NIHONGO_KANA_INFO = {

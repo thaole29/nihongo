@@ -1845,6 +1845,11 @@ function mergeNewDefaults(){
 const COMM_LEGACY_TOPICS=new Set(['Chào hỏi','Nhờ vả / Xin giúp đỡ','Khen ngợi / Tán thành','Không hiểu / Hỏi lại','Đồng ý / Từ chối / Phản hồi','Lịch sự hằng ngày','Động viên / Chúc mừng']);
 const COMM_TARGET_TOPIC='Chào hỏi & Giao tiếp cơ bản';
 function consolidateCommTopics(){ let n=0; cards.forEach(c=>{ if(COMM_LEGACY_TOPICS.has(c.topic)){ c.topic=COMM_TARGET_TOPIC; n++; } }); return n; }
+// Ba trạng từ này trước nằm rải ở 'Số & Thời gian' và 'Du lịch'. Từ khi có topic
+// 'Trạng từ' thì gom về một mối, nếu không người học mở topic đó sẽ không thấy
+// いつも/ときどき trong khi よく/たいてい lại nằm ở đấy. Đổi theo char, idempotent.
+const ADV_MOVE={'いつも':'Trạng từ','ときどき':'Trạng từ','まっすぐ':'Trạng từ'};
+function moveAdverbTopics(){ let n=0; cards.forEach(c=>{ const t=ADV_MOVE[c.char]; if(t&&c.topic!==t){ c.topic=t; n++; } }); return n; }
 async function reconcile(){
   const vals=await gReadAll();
   const remoteTs=Number((vals[0]&&vals[0][9])||0);
@@ -1855,7 +1860,7 @@ async function reconcile(){
     applyingRemote=true; cards=matrixToCards(vals); save(); applyingRemote=false;
     prefs.syncModified=remoteTs; savePrefs(); localTs=remoteTs; pulled=true;
   }
-  const renamed=consolidateCommTopics();        // đổi topic giao tiếp cũ (nếu bản kéo về còn dùng tên cũ)
+  const renamed=consolidateCommTopics()+moveAdverbTopics();   // sửa topic cũ (nếu bản kéo về còn dùng tên cũ)
   const added=mergeNewDefaults();               // gộp thẻ mặc định mới vào bản hiện tại
   if(added||renamed){                            // có thay đổi cục bộ -> lưu local + đẩy lên Sheet
     applyingRemote=true; save(); applyingRemote=false;
@@ -1995,6 +2000,12 @@ if(!prefs.commTopicMerged){
   if(prefs.extraTopics&&prefs.extraTopics.length) prefs.extraTopics=prefs.extraTopics.filter(t=>!COMM_LEGACY_TOPICS.has(t));
   prefs.commTopicMerged=true; savePrefs();
   if(changed) save();
+}
+// Migration 1 lần: gom trạng từ rải rác về topic 'Trạng từ'
+if(!prefs.advTopicMoved){
+  const moved=moveAdverbTopics();
+  prefs.advTopicMoved=true; savePrefs();
+  if(moved) save();
 }
 // Tự động gộp thẻ mặc định mới. Nếu bật sync thì reconcile lo (gộp sau khi kéo bản mới nhất, tránh ghi đè máy khác).
 if(!prefs.syncEnabled){
