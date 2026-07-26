@@ -77,6 +77,8 @@ Model mặc định `openai/gpt-oss-120b` — đo ngày 25/07/2026 trên 6 ca l�
 - `hiragana_kana.json` — 46 chữ Hiragana あ–ん (có mẹo nhớ hình dạng).
 - `starter_vocab.json` — 60 từ vựng cơ bản (Chào hỏi / Đồ ăn / Thời tiết / Đồ trong nhà / Du lịch).
 
+Bộ mặc định hiện có **335 thẻ** trên 20 topic. Thêm thẻ mới vào `deck.js` thì máy đã dùng app cũng nhận được: `mergeNewDefaults()` gộp thẻ chưa có theo `char`, giữ nguyên tiến độ SRS của thẻ cũ và **không** dựng lại thẻ bạn đã chủ động xoá.
+
 Import không tạo bản trùng (upsert theo ký tự, giữ nguyên tiến độ SRS).
 
 ## Chạy local
