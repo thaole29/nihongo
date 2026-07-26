@@ -8,8 +8,12 @@ Web app flashcard học tiếng Nhật — chạy hoàn toàn trong trình duy�
 - **Học** — một tab, hai chế độ dùng chung bộ lọc Phân loại / Topic:
   - *Lướt thẻ* — thẻ lật, mặt trước là ký tự (Hiragana / Katakana / Kanji), mặt sau có cách đọc, nghĩa (Anh + Việt), câu ví dụ kèm phiên âm, và note.
   - *Ôn tập (SRS)* — lặp lại ngắt quãng, ưu tiên thẻ hay quên; đảo chiều Ký tự ⇄ Nghĩa. Số thẻ đến hạn hiện ngay trên nút.
-- **Trò chuyện** — tán gẫu tiếng Nhật với bot AI. Mỗi ngày mở tab là một phiên mới và app **bốc ngẫu nhiên một chủ đề** trong 10 chủ đề (thời tiết, đồ ăn, thú cưng, gia đình…) — hiện ngay dưới tiêu đề, bấm 🗑 *Cuộc trò chuyện mới* để đổi chủ đề khác. Bạn chào, bot hỏi lại một câu rồi hai bên nói chuyện tự nhiên (chọn N5 hoặc N4).
+- **Trò chuyện** — tán gẫu tiếng Nhật với bot AI. Mỗi phiên app bốc ngẫu nhiên **một trong hai kiểu**, hiện ngay dưới tiêu đề; bấm 🗑 *Cuộc trò chuyện mới* để đổi:
+  - *Tán gẫu* — 10 chủ đề (thời tiết, đồ ăn, thú cưng, gia đình…). Bạn chào, bot hỏi lại rồi hai bên nói chuyện tự nhiên.
+  - *Đóng vai tình huống* — 8 bối cảnh thật: ☕ quán cà phê · 🏨 lễ tân khách sạn · 🚃 trên tàu điện · 🏪 konbini · 🍜 quán ramen · 🗺️ hỏi đường · 👕 cửa hàng quần áo · 🏫 bạn cùng lớp mới. Bot nhập vai nhân viên/người lạ và dẫn tình huống đi theo đúng các bước ngoài đời (gọi đồ → nóng hay đá → size → tại chỗ hay mang đi → báo giá), dạy bạn những câu **bạn** cần nói khi sang Nhật.
+  - **Trình độ N5 / N4** — đổi ở dropdown ngay trên thanh tiêu đề của tab.
   - **Ưu tiên hiragana** — ở N5 bot viết **thuần hiragana**, không kanji (katakana cho từ mượn: コーヒー). N4 mới cho vài kanji cực cơ bản. Câu sửa lỗi giữ nguyên kiểu chữ bạn gõ.
+  - **Không lặp trong một phiên** — mỗi lượt bot tự viết một *sổ tay* nén (đã biết gì / đã hỏi gì / đã khen gì) và app gửi trả lại ở lượt sau, nên hội thoại dài bao nhiêu cũng không quên. Bot cũng phải khai báo *kiểu lượt* và không được lặp kiểu của lượt trước — nên nó luân phiên kể chuyện mình, rủ rê, ngạc nhiên, dạy từ mới thay vì lượt nào cũng "khen + hỏi".
   - **Sửa lỗi chính tả / ngữ pháp** kèm giải thích tiếng Việt. App tự đối chiếu câu gốc với câu bot sửa: khác nhau mà bot bảo "đúng rồi" thì vẫn hiện thẻ sửa — không tin has_error của model.
   - Mỗi câu trả lời có romaji + nút 🔊 nghe. Bấm **🇻🇳 Xem nghĩa** ra một lượt cả nghĩa tiếng Việt lẫn **💡 giải thích ngắn gọn điểm ngữ pháp** trong câu (bỏ qua khi câu quá hiển nhiên).
   - Ô nhập có công tắc **gõ romaji → kana**.
