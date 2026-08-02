@@ -1122,7 +1122,9 @@ function renderChat(){
     return `<div class="msg bot">
         <div class="bubble">${esc(m.text)}</div>
         <div class="sub"><span class="rom">${esc(m.romaji||'')}</span>
-          <span class="hide" data-vi="${i}"><br>🇻🇳 ${esc(m.vi||'')}${m.why?`<br>💡 ${esc(m.why)}`:''}</span></div>
+          <span class="hide" data-vi="${i}"><br>${m.vi ? '🇻🇳 '+esc(m.vi)
+              : '<i>Bot dịch nghĩa không phải tiếng Việt nên đã bỏ — gửi lại để dịch lại.</i>'
+            }${m.why?`<br>💡 ${esc(m.why)}`:''}</span></div>
         <div class="acts">
           <button class="btn ghost sm" data-speak="${esc(m.text)}">🔊 Nghe</button>
           <button class="btn ghost sm" data-vitoggle="${i}">🇻🇳 Xem nghĩa</button>
@@ -1317,7 +1319,13 @@ người dùng ĐÃ cho biết: địa điểm, việc định làm, thời gian
   (「わたしは 30ぷん はしります。」), hoặc chuyển hẳn sang hướng khác.
 - KHÔNG BAO GIỜ lặp lại nguyên câu hỏi đã dùng ở lượt trước, dù đổi vài chữ.
 - "reply" CHỈ chứa tiếng Nhật. Tuyệt đối không có tiếng Việt hay tiếng Anh trong "reply".
-- "romaji" = phiên âm romaji của reply. "vi" = nghĩa tiếng Việt của reply.
+- "romaji" = phiên âm romaji của reply.
+- "vi" = nghĩa của reply, BẮT BUỘC dịch sang TIẾNG VIỆT. Người học là người Việt,
+  không đọc được tiếng Trung. TUYỆT ĐỐI KHÔNG viết trường này bằng tiếng Trung,
+  tiếng Anh hay tiếng Nhật.
+  ĐÚNG: "Bạn mua thịt xông khói và thịt rồi. Còn cần gì nữa không?"
+  SAI (tiếng Trung): "您已经买了烟肉和肉。还有其他想要的东西吗？"
+  SAI (tiếng Anh):   "You already bought bacon and meat."
 ━━ LÀM CHO VUI, ĐỪNG NHƯ PHỎNG VẤN ━━
 - "move" = kiểu của lượt này, PHẢI là MỘT trong đúng các chuỗi sau:
   ${moveList().map(m=>'"'+m+'"').join(' | ')}
@@ -1410,10 +1418,10 @@ async function sendChat(){
       const ck=verifyCheck(data.check||{}, text);
       last.checked=true;      // đánh dấu đã soi lỗi, để hiện "✓ đúng rồi" khi không có lỗi
       last.correction = ck.has_error
-        ? {corrected:ck.corrected||'', error_type:ck.error_type||'', explain_vi:ck.explain_vi||''}
+        ? {corrected:ck.corrected||'', error_type:ck.error_type||'', explain_vi:viOnly(ck.explain_vi)}
         : null;
     }
-    chat.messages.push({role:'bot', text:data.reply||'', romaji:data.romaji||'', vi:data.vi||'', why:cleanWhy(data.why)});
+    chat.messages.push({role:'bot', text:data.reply||'', romaji:data.romaji||'', vi:viOnly(data.vi), why:viOnly(data.why)});
     if(data.memo) chat.memo=String(data.memo).slice(0,MEMO_MAX);   // bộ nhớ cho lượt sau
     if(moveList().includes(data.move)) chat.lastMove=data.move;    // để lượt sau đổi kiểu
     saveChat(); renderChat(); chatStatus('');
@@ -1442,10 +1450,15 @@ function askBot(){ return chatProvider()==='nvidia' ? askWorker() : askGemini();
      thì cứ hiện, thà thừa còn hơn bỏ sót.
    Bỏ khoảng trắng + dấu câu trước khi so để model thêm 。hay ？ không bị tính là lỗi.
    KHÔNG bỏ ー vì コヒー → コーヒー là lỗi trường âm thật. */
-/* Model đôi khi giải thích ngữ pháp bằng chính tiếng Nhật (vd "好きの前にが省略できる")
-   — người mới học đọc không nổi, thà không hiện còn hơn. Không có chữ latin/tiếng Việt
-   nào thì coi như không có giải thích. Trích chữ Nhật kèm tiếng Việt thì vẫn giữ. */
-function cleanWhy(s){
+/* Lọc MỌI trường đáng lẽ phải là tiếng Việt. Model hay trượt ngôn ngữ:
+   · giải thích ngữ pháp bằng chính tiếng Nhật ("好きの前にが省略できる")
+   · dịch nghĩa ra TIẾNG TRUNG ("您已经买了烟肉和肉。还有其他想要的东西吗？") —
+     dòng qwen bên NVIDIA đặc biệt hay bị.
+   Người học đọc không nổi thì thà không hiện còn hơn hiện bậy.
+   Nhận diện bằng "có chữ latin hay không" chứ KHÔNG bằng dải ký tự CJK: tiếng
+   Việt luôn có chữ latin, còn chặn theo CJK sẽ giết nhầm câu tiếng Việt có trích
+   chữ Nhật (rất hay gặp: 「は」 đọc là "wa"). */
+function viOnly(s){
   s=String(s||'').trim();
   return /[a-zA-ZÀ-ỹ]/.test(s) ? s : '';
 }
@@ -1712,7 +1725,8 @@ function askSystemPrompt(deck){
   return `Bạn là giáo viên tiếng Nhật đang giải đáp cho một người Việt tự học.
 ${lv}
 Người học gõ MỘT câu hỏi (thường bằng tiếng Việt, có thể kèm câu tiếng Nhật họ tự viết).
-Trả lời NGẮN GỌN và bằng TIẾNG VIỆT.
+Trả lời NGẮN GỌN và bằng TIẾNG VIỆT. Mọi trường tiếng Việt phải THẬT SỰ là tiếng
+Việt — tuyệt đối không tiếng Trung, không tiếng Anh, không tiếng Nhật.
 ${deckBlock}
 ━━ NGUYÊN TẮC SỐ MỘT: THÀ THIẾU CÒN HƠN SAI ━━
 - TUYỆT ĐỐI KHÔNG bịa: không bịa quy tắc ngữ pháp, không bịa từ, không bịa cách
@@ -1796,6 +1810,11 @@ const ASK_SCHEMA={
 function verifyAsk(a, qText){
   const norm=s=>String(s||'').replace(/[\s、。，．！？!?.,…「」『』]/g,'');
   if(!ASK_VERDICTS.includes(a.verdict)) a.verdict='không xét';
+  /* Cùng lưới lọc ngôn ngữ với tab Trò chuyện — model trượt sang tiếng Trung ở
+     bất kỳ trường tiếng Việt nào thì bỏ trường đó, đừng đổ chữ Trung ra màn hình. */
+  a.answer_vi=viOnly(a.answer_vi); a.corrected_vi=viOnly(a.corrected_vi); a.caveat=viOnly(a.caveat);
+  a.points=(Array.isArray(a.points)?a.points:[]).map(p=>({point:(p&&p.point)||'',detail:viOnly(p&&p.detail)})).filter(p=>p.detail);
+  a.examples=(Array.isArray(a.examples)?a.examples:[]).map(x=>({jp:(x&&x.jp)||'',romaji:(x&&x.romaji)||'',vi:viOnly(x&&x.vi)})).filter(x=>x.jp);
   const subj=String(a.subject||''), cor=String(a.corrected||'');
   const trusted = subj && norm(qText).includes(norm(subj));
   if(trusted && cor && a.verdict==='đúng' && norm(cor)!==norm(subj)){

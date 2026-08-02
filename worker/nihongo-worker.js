@@ -272,7 +272,13 @@ người dùng ĐÃ cho biết: địa điểm, việc định làm, thời gian
   (「わたしは 30ぷん はしります。」), hoặc chuyển hẳn sang hướng khác.
 - KHÔNG BAO GIỜ lặp lại nguyên câu hỏi đã dùng ở lượt trước, dù đổi vài chữ.
 - "reply" CHỈ chứa tiếng Nhật. Tuyệt đối không có tiếng Việt hay tiếng Anh trong "reply".
-- "romaji" = phiên âm romaji của reply. "vi" = nghĩa tiếng Việt của reply.
+- "romaji" = phiên âm romaji của reply.
+- "vi" = nghĩa của reply, BẮT BUỘC dịch sang TIẾNG VIỆT. Người học là người Việt,
+  không đọc được tiếng Trung. TUYỆT ĐỐI KHÔNG viết trường này bằng tiếng Trung,
+  tiếng Anh hay tiếng Nhật.
+  ĐÚNG: "Bạn mua thịt xông khói và thịt rồi. Còn cần gì nữa không?"
+  SAI (tiếng Trung): "您已经买了烟肉和肉。还有其他想要的东西吗？"
+  SAI (tiếng Anh):   "You already bought bacon and meat."
 ━━ LÀM CHO VUI, ĐỪNG NHƯ PHỎNG VẤN ━━
 - "move" = kiểu của lượt này, PHẢI là MỘT trong đúng các chuỗi sau:
   ${MOVES.map(m => `"${m}"`).join(' | ')}
@@ -378,12 +384,15 @@ function stripThink(s) {
   return String(s || '').replace(/<think>[\s\S]*?<\/think>/gi, '').trim();
 }
 
-/* Model hay giải thích ngữ pháp bằng chính tiếng Nhật (「んです」は…) hoặc tiếng
-   Trung, dù prompt ghi rõ phải tiếng Việt. Người mới học đọc không nổi → thà bỏ.
-   Không có chữ latin/tiếng Việt nào = không phải tiếng Việt. Trích chữ Nhật kèm
-   giải thích tiếng Việt thì vẫn giữ. Client cũng lọc, nhưng worker không nên
-   trả ra thứ mình biết là hỏng. */
-function cleanWhy(s) {
+/* Lọc MỌI trường đáng lẽ phải là tiếng Việt. Model hay trượt ngôn ngữ dù prompt
+   ghi rõ: giải thích ngữ pháp bằng chính tiếng Nhật (「んです」は…), hoặc dịch
+   nghĩa ra tiếng Trung (您已经买了烟肉和肉…) — dòng qwen đặc biệt hay bị.
+   Người mới học đọc không nổi → thà bỏ.
+   Nhận diện bằng "có chữ latin hay không", KHÔNG chặn theo dải CJK: tiếng Việt
+   luôn có chữ latin, còn chặn theo CJK sẽ giết nhầm câu tiếng Việt trích chữ
+   Nhật (「は」 đọc là "wa"). Client cũng lọc, nhưng worker không nên trả ra thứ
+   mình đã biết là hỏng. */
+function viOnly(s) {
   s = String(s || '').trim();
   return /[a-zA-ZÀ-ỹ]/.test(s) ? s : '';
 }
@@ -491,12 +500,12 @@ async function handleChat(request, env, origin) {
             has_error: !!ck.has_error,
             corrected: String(ck.corrected || ''),
             error_type: String(ck.error_type || ''),
-            explain_vi: String(ck.explain_vi || '')
+            explain_vi: viOnly(ck.explain_vi)
           },
           reply: String(out.reply || ''),
           romaji: String(out.romaji || ''),
-          vi: String(out.vi || ''),
-          why: cleanWhy(out.why),
+          vi: viOnly(out.vi),
+          why: viOnly(out.why),
           memo: String(out.memo || '').slice(0, MEMO_MAX),
           move: (CHAT_MOVES.includes(out.move) || ROLE_MOVES.includes(out.move)) ? out.move : '',
           model
@@ -566,7 +575,8 @@ function askSystemPrompt(level, deck) {
   return `Bạn là giáo viên tiếng Nhật đang giải đáp cho một người Việt tự học.
 ${lv}
 Người học gõ MỘT câu hỏi (thường bằng tiếng Việt, có thể kèm câu tiếng Nhật họ tự viết).
-Trả lời NGẮN GỌN và bằng TIẾNG VIỆT.
+Trả lời NGẮN GỌN và bằng TIẾNG VIỆT. Mọi trường tiếng Việt phải THẬT SỰ là tiếng
+Việt — tuyệt đối không tiếng Trung, không tiếng Anh, không tiếng Nhật.
 ${deckBlock}
 ━━ NGUYÊN TẮC SỐ MỘT: THÀ THIẾU CÒN HƠN SAI ━━
 - TUYỆT ĐỐI KHÔNG bịa: không bịa quy tắc ngữ pháp, không bịa từ, không bịa cách
@@ -722,9 +732,11 @@ async function handleAsk(request, env, origin) {
       const msg = ((d.choices || [])[0] || {}).message || {};
       const out = parseChatJson(msg.content);
       if (out && (out.answer_vi || out.corrected)) {
-        const arr = (v, keys, max) => (Array.isArray(v) ? v : []).slice(0, max).map(o => {
+        /* viKeys = những khoá bắt buộc phải là tiếng Việt (detail, vi) → lọc qua
+           viOnly; các khoá còn lại (jp, romaji, point) giữ nguyên. */
+        const arr = (v, keys, max, viKeys) => (Array.isArray(v) ? v : []).slice(0, max).map(o => {
           const row = {};
-          for (const k of keys) row[k] = String((o && o[k]) || '');
+          for (const k of keys) row[k] = (viKeys || []).includes(k) ? viOnly(o && o[k]) : String((o && o[k]) || '');
           return row;
         }).filter(row => keys.some(k => row[k]));
         return json({
@@ -732,11 +744,13 @@ async function handleAsk(request, env, origin) {
           verdict: ASK_VERDICTS.includes(out.verdict) ? out.verdict : 'không xét',
           corrected: String(out.corrected || ''),
           corrected_romaji: String(out.corrected_romaji || ''),
-          corrected_vi: String(out.corrected_vi || ''),
-          answer_vi: String(out.answer_vi || ''),
-          points: arr(out.points, ['point', 'detail'], 3),
-          examples: arr(out.examples, ['jp', 'romaji', 'vi'], 2),
-          caveat: String(out.caveat || ''),
+          /* Cùng lưới lọc ngôn ngữ với /chat: mọi trường đáng lẽ là tiếng Việt
+             đều phải qua viOnly(), kẻo model trả tiếng Trung ra thẳng màn hình. */
+          corrected_vi: viOnly(out.corrected_vi),
+          answer_vi: viOnly(out.answer_vi),
+          points: arr(out.points, ['point', 'detail'], 3, ['detail']),
+          examples: arr(out.examples, ['jp', 'romaji', 'vi'], 2, ['vi']),
+          caveat: viOnly(out.caveat),
           model
         }, 200, origin);
       }
