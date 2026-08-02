@@ -3176,6 +3176,465 @@ window.NIHONGO_DEFAULT_DECK = [
 "meaning": "Bên… thì hơn / Rather",
 "example": "この ほうが いいです。(Kono hou ga ii desu.) — Cái này thì tốt hơn.",
 "note": "Mẫu đầy đủ: A のほうが B より + tính từ. Dùng khi chọn giữa 2 thứ."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "つくります",
+"reading": "tsukurimasu",
+"meaning": "Làm / tạo ra / Make",
+"example": "りょうりを つくります。(Ryouri o tsukurimasu.) — Nấu (làm) món ăn.",
+"note": "Thể ます của つくる. Thứ được tạo ra + を."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "うたいます",
+"reading": "utaimasu",
+"meaning": "Hát / Sing",
+"example": "カラオケで うたを うたいます。(Karaoke de uta o utaimasu.) — Hát ở quán karaoke.",
+"note": "Thể ます của うたう. Đi thành cặp うたを うたいます (bài hát + hát)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "おどります",
+"reading": "odorimasu",
+"meaning": "Nhảy múa / Dance",
+"example": "おまつりで おどります。(Omatsuri de odorimasu.) — Nhảy múa ở lễ hội.",
+"note": "Thể ます của おどる. Nơi diễn ra + で."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "ひきます",
+"reading": "hikimasu",
+"meaning": "Chơi (đàn) / Play (instrument)",
+"example": "ギターを ひきます。(Gitaa o hikimasu.) — Chơi ghi-ta.",
+"note": "Thể ます của ひく. Chỉ cho nhạc cụ dây/phím (ギター, ピアノ) — thể thao thì dùng します. Đồng âm với ひきます = kéo."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "とります",
+"reading": "torimasu",
+"meaning": "Chụp (ảnh) / lấy / Take",
+"example": "しゃしんを とります。(Shashin o torimasu.) — Chụp ảnh.",
+"note": "Thể ます của とる. Hai nghĩa cùng âm: chụp ảnh (撮る) và lấy, cầm lấy (取る)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "りょうりします",
+"reading": "ryouri shimasu",
+"meaning": "Nấu ăn / Cook",
+"example": "にちようびに りょうりします。(Nichiyoubi ni ryouri shimasu.) — Chủ nhật thì nấu ăn.",
+"note": "Danh từ りょうり + します. Nói りょうりを つくります cũng được."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "れんしゅうします",
+"reading": "renshuu shimasu",
+"meaning": "Luyện tập / Practice",
+"example": "まいにち かんじを れんしゅうします。(Mainichi kanji o renshuu shimasu.) — Ngày nào cũng luyện chữ Hán.",
+"note": "Danh từ れんしゅう + します. Thứ được luyện + を."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "あげます",
+"reading": "agemasu",
+"meaning": "Cho / tặng / Give",
+"example": "ともだちに プレゼントを あげます。(Tomodachi ni purezento o agemasu.) — Tặng quà cho bạn.",
+"note": "Thể ます của あげる. Người nhận + に. Chiều ngược lại là もらいます."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "もらいます",
+"reading": "moraimasu",
+"meaning": "Nhận / được cho / Receive",
+"example": "ちちに とけいを もらいました。(Chichi ni tokei o moraimashita.) — Tôi được bố cho cái đồng hồ.",
+"note": "Thể ます của もらう. Người cho + に (hoặc から). Chiều ngược lại là あげます."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "かします",
+"reading": "kashimasu",
+"meaning": "Cho mượn / Lend",
+"example": "ともだちに ペンを かします。(Tomodachi ni pen o kashimasu.) — Cho bạn mượn bút.",
+"note": "Thể ます của かす. Đồ đi RA khỏi tay mình. Rất dễ lẫn với かります."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "かります",
+"reading": "karimasu",
+"meaning": "Mượn / Borrow",
+"example": "ともだちに ほんを かります。(Tomodachi ni hon o karimasu.) — Mượn sách của bạn.",
+"note": "Thể ます của かりる. Đồ đi VÀO tay mình. Nhớ cặp: かします cho mượn ⇄ かります mượn về."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "おくります",
+"reading": "okurimasu",
+"meaning": "Gửi / tiễn / Send",
+"example": "メールを おくります。(Meeru o okurimasu.) — Gửi email.",
+"note": "Thể ます của おくる. Còn nghĩa tiễn ai đó: えきまで おくります."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "でんわします",
+"reading": "denwa shimasu",
+"meaning": "Gọi điện / Call",
+"example": "あとで でんわします。(Ato de denwa shimasu.) — Lát nữa tôi gọi điện.",
+"note": "Danh từ でんわ + します. Người được gọi + に: ははに でんわします."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "はじめます",
+"reading": "hajimemasu",
+"meaning": "Bắt đầu / Begin",
+"example": "くじに しごとを はじめます。(Kuji ni shigoto o hajimemasu.) — Bắt đầu làm việc lúc 9 giờ.",
+"note": "Thể ます của はじめる. Đừng lẫn với はじめまして (chào khi mới gặp)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "おわります",
+"reading": "owarimasu",
+"meaning": "Kết thúc / Finish",
+"example": "じゅぎょうは ごじに おわります。(Jugyou wa goji ni owarimasu.) — Lớp học kết thúc lúc 5 giờ.",
+"note": "Thể ます của おわる. Ngược với はじめます."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "しらべます",
+"reading": "shirabemasu",
+"meaning": "Tra cứu / kiểm tra / Look up",
+"example": "ことばを しらべます。(Kotoba o shirabemasu.) — Tra từ.",
+"note": "Thể ます của しらべる. Tra từ điển, tra giờ tàu, kiểm tra thông tin."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "さがします",
+"reading": "sagashimasu",
+"meaning": "Tìm kiếm / Look for",
+"example": "かぎを さがします。(Kagi o sagashimasu.) — Tìm chìa khoá.",
+"note": "Thể ます của さがす. Đây là QUÁ TRÌNH tìm; tìm ra được rồi thì dùng みつけます."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "みつけます",
+"reading": "mitsukemasu",
+"meaning": "Tìm thấy / Find",
+"example": "さいふを みつけました。(Saifu o mitsukemashita.) — Tôi đã tìm thấy ví.",
+"note": "Thể ます của みつける. Là KẾT QUẢ của さがします."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "えらびます",
+"reading": "erabimasu",
+"meaning": "Chọn / Choose",
+"example": "すきな いろを えらびます。(Suki na iro o erabimasu.) — Chọn màu mình thích.",
+"note": "Thể ます của えらぶ. Chọn ra từ nhiều lựa chọn."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "きめます",
+"reading": "kimemasu",
+"meaning": "Quyết định / Decide",
+"example": "りょこうの ひを きめます。(Ryokou no hi o kimemasu.) — Quyết định ngày đi du lịch.",
+"note": "Thể ます của きめる. Dứt khoát hơn えらびます — chốt hẳn."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "せつめいします",
+"reading": "setsumei shimasu",
+"meaning": "Giải thích / Explain",
+"example": "せんせいが ぶんぽうを せつめいします。(Sensei ga bunpou o setsumei shimasu.) — Cô giáo giải thích ngữ pháp.",
+"note": "Danh từ せつめい + します."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "のりかえます",
+"reading": "norikaemasu",
+"meaning": "Đổi tàu / chuyển xe / Transfer",
+"example": "しんじゅくで ちかてつに のりかえます。(Shinjuku de chikatetsu ni norikaemasu.) — Đổi sang tàu điện ngầm ở Shinjuku.",
+"note": "Thể ます của のりかえる. Tuyến đổi SANG + に, nơi đổi + で. Ghép từ のります + かえます."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "つきます",
+"reading": "tsukimasu",
+"meaning": "Đến nơi / Arrive",
+"example": "くうこうに つきました。(Kuukou ni tsukimashita.) — Đã đến sân bay.",
+"note": "Thể ます của つく. Nơi đến + に. Ngược với でます (rời đi)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "とまります",
+"reading": "tomarimasu",
+"meaning": "Dừng lại / nghỉ trọ / Stop · stay",
+"example": "でんしゃが えきに とまります。(Densha ga eki ni tomarimasu.) — Tàu dừng ở ga.",
+"note": "HAI từ khác hẳn nhau cùng đọc とまります: dừng lại (止まる) và trọ lại qua đêm (泊まる) — ホテルに とまります."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "でかけます",
+"reading": "dekakemasu",
+"meaning": "Ra ngoài / đi chơi / Go out",
+"example": "かぞくと でかけます。(Kazoku to dekakemasu.) — Đi chơi cùng gia đình.",
+"note": "Thể ます của でかける. Ra ngoài rồi sẽ về, khác với いきます (đi tới đâu đó)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "まがります",
+"reading": "magarimasu",
+"meaning": "Rẽ / quẹo / Turn",
+"example": "つぎの かどを みぎへ まがります。(Tsugi no kado o migi e magarimasu.) — Rẽ phải ở góc tới.",
+"note": "Thể ます của まがる. Hướng rẽ + へ, chỗ rẽ + を. Chỉ đường hay nói みぎへ まがって ください."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "わたります",
+"reading": "watarimasu",
+"meaning": "Băng qua / Cross",
+"example": "はしを わたります。(Hashi o watarimasu.) — Qua cầu.",
+"note": "Thể ます của わたる. Chỗ băng qua dùng を (không phải に): みちを わたります."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "いそぎます",
+"reading": "isogimasu",
+"meaning": "Vội / gấp / Hurry",
+"example": "じかんが ありません。いそぎます。(Jikan ga arimasen. Isogimasu.) — Không còn thời gian, phải nhanh lên.",
+"note": "Thể ます của いそぐ. Hay gặp ở dạng いそいで ください (nhanh lên nhé)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "よやくします",
+"reading": "yoyaku shimasu",
+"meaning": "Đặt chỗ / đặt trước / Reserve",
+"example": "ホテルを よやくします。(Hoteru o yoyaku shimasu.) — Đặt phòng khách sạn.",
+"note": "Danh từ よやく + します. Đặt bàn, đặt phòng, đặt vé đều dùng được."
+},
+{
+"type": "katakana",
+"topic": "Truyền thông & Thiết bị",
+"char": "ニュース",
+"reading": "nyuusu",
+"meaning": "Tin tức / News",
+"example": "まいあさ ニュースを みます。(Maiasa nyuusu o mimasu.) — Sáng nào cũng xem tin tức.",
+"note": "Từ mượn \"news\". ー là dấu kéo dài âm."
+},
+{
+"type": "hiragana",
+"topic": "Truyền thông & Thiết bị",
+"char": "しんぶん",
+"reading": "shinbun",
+"meaning": "Báo / Newspaper",
+"example": "ちちは しんぶんを よみます。(Chichi wa shinbun o yomimasu.) — Bố tôi đọc báo.",
+"note": "ん đứng trước ぶ nghe gần như \"m\" — shimbun."
+},
+{
+"type": "hiragana",
+"topic": "Truyền thông & Thiết bị",
+"char": "ざっし",
+"reading": "zasshi",
+"meaning": "Tạp chí / Magazine",
+"example": "ざっしを かいました。(Zasshi o kaimashita.) — Tôi đã mua tạp chí.",
+"note": "Có っ nhỏ nên phải ngắt: za-sshi, khác hẳn ざし."
+},
+{
+"type": "katakana",
+"topic": "Truyền thông & Thiết bị",
+"char": "メール",
+"reading": "meeru",
+"meaning": "Email / tin nhắn / Email",
+"example": "ともだちに メールを おくります。(Tomodachi ni meeru o okurimasu.) — Gửi mail cho bạn.",
+"note": "Từ mượn \"mail\". Nhắn tin qua điện thoại cũng gọi là メール."
+},
+{
+"type": "hiragana",
+"topic": "Truyền thông & Thiết bị",
+"char": "けいたい",
+"reading": "keitai",
+"meaning": "Điện thoại di động / Mobile phone",
+"example": "けいたいを わすれました。(Keitai o wasuremashita.) — Tôi quên điện thoại rồi.",
+"note": "Nói đủ là けいたいでんわ. Giới trẻ nay hay dùng スマホ (smartphone)."
+},
+{
+"type": "katakana",
+"topic": "Truyền thông & Thiết bị",
+"char": "パソコン",
+"reading": "pasokon",
+"meaning": "Máy tính / PC",
+"example": "パソコンで しごとを します。(Pasokon de shigoto o shimasu.) — Làm việc bằng máy tính.",
+"note": "Rút gọn kiểu Nhật từ \"personal computer\". Công cụ dùng + で."
+},
+{
+"type": "hiragana",
+"topic": "Mùa & Lễ hội",
+"char": "はる",
+"reading": "haru",
+"meaning": "Mùa xuân / Spring",
+"example": "はるは あたたかいです。(Haru wa atatakai desu.) — Mùa xuân thì ấm áp.",
+"note": "Mùa hoa anh đào (さくら)."
+},
+{
+"type": "hiragana",
+"topic": "Mùa & Lễ hội",
+"char": "なつ",
+"reading": "natsu",
+"meaning": "Mùa hè / Summer",
+"example": "なつは あついです。(Natsu wa atsui desu.) — Mùa hè thì nóng.",
+"note": "Mùa của おまつり và はなび."
+},
+{
+"type": "hiragana",
+"topic": "Mùa & Lễ hội",
+"char": "あき",
+"reading": "aki",
+"meaning": "Mùa thu / Autumn",
+"example": "あきは すずしいです。(Aki wa suzushii desu.) — Mùa thu thì mát mẻ.",
+"note": "Lá đỏ mùa thu gọi là もみじ."
+},
+{
+"type": "hiragana",
+"topic": "Mùa & Lễ hội",
+"char": "ふゆ",
+"reading": "fuyu",
+"meaning": "Mùa đông / Winter",
+"example": "ふゆは さむいです。(Fuyu wa samui desu.) — Mùa đông thì lạnh.",
+"note": "Bốn mùa: はる・なつ・あき・ふゆ."
+},
+{
+"type": "hiragana",
+"topic": "Mùa & Lễ hội",
+"char": "なつやすみ",
+"reading": "natsuyasumi",
+"meaning": "Nghỉ hè / Summer vacation",
+"example": "なつやすみに うみへ いきます。(Natsuyasumi ni umi e ikimasu.) — Nghỉ hè tôi đi biển.",
+"note": "Ghép なつ + やすみ. Tương tự có ふゆやすみ (nghỉ đông)."
+},
+{
+"type": "hiragana",
+"topic": "Mùa & Lễ hội",
+"char": "おまつり",
+"reading": "omatsuri",
+"meaning": "Lễ hội / Festival",
+"example": "なつに おまつりが あります。(Natsu ni omatsuri ga arimasu.) — Mùa hè có lễ hội.",
+"note": "お là tiếp đầu ngữ lịch sự, nói まつり cũng được."
+},
+{
+"type": "hiragana",
+"topic": "Mùa & Lễ hội",
+"char": "はなび",
+"reading": "hanabi",
+"meaning": "Pháo hoa / Fireworks",
+"example": "はなびを みに いきます。(Hanabi o mi ni ikimasu.) — Đi xem pháo hoa.",
+"note": "Ghép はな (hoa) + び (lửa). Hội pháo hoa mùa hè gọi là はなびたいかい."
+},
+{
+"type": "hiragana",
+"topic": "Mùa & Lễ hội",
+"char": "たんじょうび",
+"reading": "tanjoubi",
+"meaning": "Sinh nhật / Birthday",
+"example": "たんじょうびは いつですか。(Tanjoubi wa itsu desu ka.) — Sinh nhật bạn là khi nào?",
+"note": "Chúc mừng: おたんじょうび おめでとう."
+},
+{
+"type": "katakana",
+"topic": "Mùa & Lễ hội",
+"char": "クリスマス",
+"reading": "kurisumasu",
+"meaning": "Giáng sinh / Christmas",
+"example": "クリスマスに ケーキを たべます。(Kurisumasu ni keeki o tabemasu.) — Giáng sinh thì ăn bánh kem.",
+"note": "Từ mượn \"Christmas\". Đêm Giáng sinh là クリスマスイブ."
+},
+{
+"type": "katakana",
+"topic": "Mùa & Lễ hội",
+"char": "プレゼント",
+"reading": "purezento",
+"meaning": "Quà / Present",
+"example": "たんじょうびに プレゼントを もらいました。(Tanjoubi ni purezento o moraimashita.) — Sinh nhật tôi được tặng quà.",
+"note": "Từ mượn \"present\". Tặng quà: プレゼントを あげます."
+},
+{
+"type": "hiragana",
+"topic": "Du lịch",
+"char": "かいさつ",
+"reading": "kaisatsu",
+"meaning": "Cửa soát vé / Ticket gate",
+"example": "かいさつで あいましょう。(Kaisatsu de aimashou.) — Gặp nhau ở cửa soát vé nhé.",
+"note": "Nói đủ là かいさつぐち. Chỗ quẹt thẻ / soát vé khi vào ga."
+},
+{
+"type": "katakana",
+"topic": "Du lịch",
+"char": "ホーム",
+"reading": "hoomu",
+"meaning": "Sân ga / ke ga / Platform",
+"example": "さんばんホームで でんしゃを まちます。(Sanban hoomu de densha o machimasu.) — Đợi tàu ở ke số 3.",
+"note": "Rút từ \"platform\" chứ KHÔNG phải \"home\" — đây là bẫy hay nhầm."
+},
+{
+"type": "hiragana",
+"topic": "Du lịch",
+"char": "のりば",
+"reading": "noriba",
+"meaning": "Điểm lên xe / bến / Boarding point",
+"example": "タクシーのりばは どこですか。(Takushii noriba wa doko desu ka.) — Bến taxi ở đâu ạ?",
+"note": "Ghép のる (lên xe) + ば (nơi chốn). Có バスのりば, タクシーのりば."
+},
+{
+"type": "hiragana",
+"topic": "Du lịch",
+"char": "じかんひょう",
+"reading": "jikanhyou",
+"meaning": "Bảng giờ tàu / Timetable",
+"example": "じかんひょうを しらべます。(Jikanhyou o shirabemasu.) — Tra bảng giờ tàu.",
+"note": "Ghép じかん (giờ) + ひょう (bảng biểu)."
+},
+{
+"type": "katakana",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
+"char": "デート",
+"reading": "deeto",
+"meaning": "Buổi hẹn hò / Date",
+"example": "どようびに デートします。(Doyoubi ni deeto shimasu.) — Thứ bảy tôi đi hẹn hò.",
+"note": "Từ mượn \"date\". Thêm します là thành động từ."
+},
+{
+"type": "hiragana",
+"topic": "Chào hỏi & Giao tiếp cơ bản",
+"char": "やくそく",
+"reading": "yakusoku",
+"meaning": "Lời hứa / cuộc hẹn / Promise · appointment",
+"example": "ともだちと やくそくが あります。(Tomodachi to yakusoku ga arimasu.) — Tôi có hẹn với bạn.",
+"note": "Hứa: やくそくします. Người hẹn cùng + と."
 }
 ];
 window.NIHONGO_KANA_INFO = {
