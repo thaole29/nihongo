@@ -110,4 +110,16 @@ GET  /models    → {models:[...], default:"..."}          (cache 1h)
 POST /chat      → body {level:"n5"|"n4", model?:"...", messages:[{role:"user"|"bot", text:"..."}]}
                   trả  {check:{has_error,corrected,error_type,explain_vi}, reply, romaji, vi, model}
                   lỗi  {error:"…"} kèm HTTP 4xx/5xx
+POST /ask       → body {level:"n5"|"n4", model?:"...", question:"…", deck?:"…"}   (tab ❓ Hỏi nhanh)
+                  trả  {subject, verdict, corrected, corrected_romaji, corrected_vi,
+                        answer_vi, points:[{point,detail}], examples:[{jp,romaji,vi}], caveat, model}
+                  lỗi  {error:"…"} kèm HTTP 4xx/5xx
 ```
+
+`/ask` là tra cứu chứ không phải tán gẫu nên đi tham số khác `/chat`: `temperature 0.2`,
+`reasoning_effort: 'medium'`, `max_tokens 6000` — chậm hơn vài giây nhưng đúng hơn.
+`question` cắt ở 400 ký tự, `deck` (vài thẻ liên quan client gửi kèm để ví dụ bám vốn từ
+người học) cắt ở 600 và được đánh dấu là dữ liệu, không phải mệnh lệnh.
+
+⚠️ Worker đang chạy bản cũ thì `/ask` trả 404 và app báo *"Server chưa có tính năng Hỏi
+nhanh"* — deploy lại là xong.

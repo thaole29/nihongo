@@ -17,6 +17,13 @@ Web app flashcard học tiếng Nhật — chạy hoàn toàn trong trình duy�
   - **Sửa lỗi chính tả / ngữ pháp** kèm giải thích tiếng Việt. App tự đối chiếu câu gốc với câu bot sửa: khác nhau mà bot bảo "đúng rồi" thì vẫn hiện thẻ sửa — không tin has_error của model.
   - Mỗi câu trả lời có romaji + nút 🔊 nghe. Bấm **🇻🇳 Xem nghĩa** ra một lượt cả nghĩa tiếng Việt lẫn **💡 giải thích ngắn gọn điểm ngữ pháp** trong câu (bỏ qua khi câu quá hiển nhiên).
   - Ô nhập có công tắc **gõ romaji → kana**.
+- **❓ Hỏi nhanh** — nút tròn ❓ nổi ở góc dưới bên phải, bấm được từ **mọi tab** (phím tắt `Ctrl/⌘ + K`, `Esc` để đóng). Trên máy tính là panel nhỏ neo góc phải, trên điện thoại là tấm trượt lên gần full màn — cùng một khung, chỉ khác cách hiện.
+  - Hỏi bằng tiếng Việt: *"「わたしがくせいです」 viết vậy đúng không?"*, *"は và が khác nhau thế nào?"*, *"tại sao lại viết như thế?"*. Trả lời gồm **phán quyết** (✓ đúng · ✗ có lỗi · △ không sai nhưng người Nhật ít nói vậy), **câu đúng** kèm romaji + nghĩa, tối đa 3 điểm ngữ pháp và 2 câu ví dụ có nút 🔊.
+  - **Bôi đen** bất kỳ chữ Nhật nào trong app (mặt thẻ, câu ví dụ, tin nhắn chat…) → hiện nút *❓ Hỏi về chỗ này*, khỏi gõ lại.
+  - Thẻ sửa lỗi ở tab Trò chuyện có thêm nút **❓ Tại sao?** — hỏi thẳng về đúng câu vừa bị sửa.
+  - **💾 Lưu thành thẻ** — biến câu trả lời thành flashcard mới (điền sẵn form Thêm thẻ, bạn xem lại rồi mới lưu).
+  - Ưu tiên **độ chính xác** hơn tốc độ: nhiệt độ thấp, không tắt "thinking", ví dụ ưu tiên dùng lại từ đã có trong bộ thẻ của bạn. App còn tự đối chiếu câu bạn hỏi với câu model sửa — lệch nhau mà model bảo "đúng rồi" thì vẫn báo có lỗi. Model không chắc thì hiện dòng cảnh báo ⚠ thay vì đoán bừa.
+  - Dùng chung nguồn AI và trình độ N5/N4 với tab Trò chuyện. Lịch sử hỏi đáp lưu trong máy (40 lượt gần nhất), bấm 🗑 để xoá.
 - **Nghe phát âm** — dùng giọng đọc tiếng Nhật của trình duyệt (Web Speech API).
 - **Thêm thẻ** — gõ romaji tự chuyển kana; chia theo topic. Có nút 📋 copy nhanh romaji / Hiragana / Katakana để dán sang ô khác.
 - **Viết tay (thử nghiệm)** — vẽ từng ký tự bằng chuột / ngón tay, app đoán ký tự (dùng dịch vụ nhận dạng Google Input Tools, cần mạng). Bấm kết quả gợi ý để **nối vào ô "câu đang soạn"** rồi vẽ chữ tiếp theo → soạn được **cả cụm từ / câu**. Có dấu cách, xoá ký tự cuối, sửa trực tiếp; xong bấm Copy câu / Tìm trong Quản lý / Điền vào Thêm thẻ.
@@ -24,7 +31,7 @@ Web app flashcard học tiếng Nhật — chạy hoàn toàn trong trình duy�
 
 Ưu tiên **Hiragana** mặc định (đổi ở dropdown Phân loại, có ghi nhớ).
 
-## Cài đặt tab Trò chuyện
+## Cài đặt nguồn AI (dùng cho cả Trò chuyện và ❓ Hỏi nhanh)
 
 Chọn nguồn AI trong **💬 Trò chuyện → ⚙️ Cài đặt AI**. Cả hai đều miễn phí:
 
@@ -65,7 +72,9 @@ Worker chỉ nhận request từ domain trong whitelist, tự dựng system prom
 
 Model mặc định `openai/gpt-oss-120b` — đo ngày 25/07/2026 trên 6 ca lỗi tiếng Nhật thật (thiếu kana, trường âm, trợ từ, chia động từ, + 1 câu đúng): bắt đúng **6/6**, giải thích tiếng Việt đủ 5/5, phản hồi **2,9–4,3s** qua worker. `qwen/qwen3-next-80b-a3b-instruct` cũng 6/6 nhưng thiếu 1 giải thích và chậm hơn; `meta/llama-3.3-70b-instruct` hay `ResourceExhausted`. Lưu ý: `/models` liệt kê ~91 model nhưng **không phải model nào cũng phục vụ được ở gói free** — gặp `qwen3.5-397b`, `glm-5.2`, `kimi-k2.6` trả 404; app báo lỗi rõ và bạn chọn model khác.
 
-⚠️ System prompt nằm ở **hai nơi** — `chatSystemPrompt()` trong `index.html` (đường Gemini) và `systemPrompt()` trong `worker/nihongo-worker.js` (đường NVIDIA). Sửa một bên nhớ sửa bên kia.
+⚠️ Đang dùng NVIDIA mà **Hỏi nhanh** báo *"Server chưa có tính năng Hỏi nhanh"* → worker đang chạy bản cũ, chưa có route `POST /ask`. Deploy lại (`npx wrangler deploy` trong `worker/`) là xong. Đường Gemini không cần làm gì.
+
+⚠️ System prompt nằm ở **hai nơi** cho mỗi tính năng — `chatSystemPrompt()` / `askSystemPrompt()` trong `index.html` (đường Gemini) và `systemPrompt()` / `askSystemPrompt()` trong `worker/nihongo-worker.js` (đường NVIDIA). Sửa một bên nhớ sửa bên kia.
 
 ## Dữ liệu
 - Lưu trong `localStorage` của trình duyệt (theo từng thiết bị).
