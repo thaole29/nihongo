@@ -5,6 +5,8 @@ Web app flashcard học tiếng Nhật — chạy hoàn toàn trong trình duy�
 **🌐 Dùng ngay:** https://thaole29.github.io/nihongo/
 
 ## Tính năng
+- **🌐 Song ngữ Việt / English** — ô chọn ngôn ngữ ở **góc phải trên cùng**. Đổi sang *English* thì toàn bộ giao diện sang tiếng Anh, **và** phần AI (Trò chuyện + ❓ Hỏi nhanh) cũng giải thích / dịch nghĩa bằng tiếng Anh. Nội dung thẻ (nghĩa, ví dụ, tên topic) là dữ liệu của bạn nên giữ nguyên, không bị dịch. Lựa chọn được nhớ trong máy; mặc định là tiếng Việt.
+- **Đăng nhập** — nút ở **góc phải trên cùng**, cạnh ô ngôn ngữ. Đăng nhập Google để bật đồng bộ Google Sheet đa thiết bị; đăng nhập rồi thì nút hiện email, bấm vào ra menu *Đồng bộ ngay · Mở Sheet · Đăng xuất*.
 - **Học** — một tab, hai chế độ dùng chung bộ lọc Phân loại / Topic:
   - *Lướt thẻ* — thẻ lật, mặt trước là ký tự (Hiragana / Katakana / Kanji), mặt sau có cách đọc, nghĩa (Anh + Việt), câu ví dụ kèm phiên âm, và note.
   - *Ôn tập (SRS)* — lặp lại ngắt quãng, ưu tiên thẻ hay quên; đảo chiều Ký tự ⇄ Nghĩa. Số thẻ đến hạn hiện ngay trên nút.
@@ -26,6 +28,7 @@ Web app flashcard học tiếng Nhật — chạy hoàn toàn trong trình duy�
   - Dùng chung nguồn AI và trình độ N5/N4 với tab Trò chuyện. Lịch sử hỏi đáp lưu trong máy (40 lượt gần nhất), bấm 🗑 để xoá.
 - **Nghe phát âm** — dùng giọng đọc tiếng Nhật của trình duyệt (Web Speech API).
 - **Thêm thẻ** — gõ romaji tự chuyển kana; chia theo topic. Có nút 📋 copy nhanh romaji / Hiragana / Katakana để dán sang ô khác.
+  - **Báo trùng ngay lúc gõ** — vừa điền xong ô *Ký tự (mặt trước)* là app soi bộ thẻ luôn: đã có thẻ cùng ký tự thì hiện cảnh báo ⚠ ngay dưới ô, kèm cách đọc / nghĩa / topic của thẻ cũ và nút **Sửa thẻ này** để nhảy thẳng sang sửa. Không phải điền hết cả form rồi bấm Lưu mới biết. Thấy cảnh báo rồi mà vẫn muốn thêm thì cứ bấm Lưu, app không hỏi lại.
 - **Viết tay (thử nghiệm)** — vẽ từng ký tự bằng chuột / ngón tay, app đoán ký tự (dùng dịch vụ nhận dạng Google Input Tools, cần mạng). Bấm kết quả gợi ý để **nối vào ô "câu đang soạn"** rồi vẽ chữ tiếp theo → soạn được **cả cụm từ / câu**. Có dấu cách, xoá ký tự cuối, sửa trực tiếp; xong bấm Copy câu / Tìm trong Quản lý / Điền vào Thêm thẻ.
 - **Quản lý** — sửa/xoá, chia trang (50 thẻ/trang) cho gọn & nhanh, thanh tìm kiếm lọc trên toàn bộ thẻ; Export/Import JSON để sao lưu và chuyển máy.
 
@@ -79,7 +82,7 @@ Model mặc định `openai/gpt-oss-120b` — đo ngày 25/07/2026 trên 6 ca l�
 ## Dữ liệu
 - Lưu trong `localStorage` của trình duyệt (theo từng thiết bị).
 - Mở lần đầu trên một máy sẽ tự nạp bộ mặc định trong `deck.js` (46 chữ Hiragana gốc + 60 từ vựng vỡ lòng).
-- **Đồng bộ giữa các máy:** dùng **Quản lý → Export JSON** rồi **Import JSON** ở máy kia (giữ nguyên tiến độ học).
+- **Đồng bộ giữa các máy:** bấm **Đăng nhập** ở góc phải trên (Google Sheet), hoặc thủ công bằng **Quản lý → Export JSON** rồi **Import JSON** ở máy kia (giữ nguyên tiến độ học).
 
 ## Bộ thẻ
 - `deck.js` — bộ mặc định nhúng sẵn (nạp tự động).

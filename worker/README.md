@@ -107,10 +107,10 @@ Sửa một bên thì phải sửa bên kia, rồi `wrangler deploy` lại worke
 ```
 GET  /          → {ok:true}
 GET  /models    → {models:[...], default:"..."}          (cache 1h)
-POST /chat      → body {level:"n5"|"n4", model?:"...", messages:[{role:"user"|"bot", text:"..."}]}
+POST /chat      → body {level:"n5"|"n4", lang?:"vi"|"en", model?:"...", messages:[{role:"user"|"bot", text:"..."}]}
                   trả  {check:{has_error,corrected,error_type,explain_vi}, reply, romaji, vi, model}
                   lỗi  {error:"…"} kèm HTTP 4xx/5xx
-POST /ask       → body {level:"n5"|"n4", model?:"...", question:"…", deck?:"…"}   (tab ❓ Hỏi nhanh)
+POST /ask       → body {level:"n5"|"n4", lang?:"vi"|"en", model?:"...", question:"…", deck?:"…"}   (tab ❓ Hỏi nhanh)
                   trả  {subject, verdict, corrected, corrected_romaji, corrected_vi,
                         answer_vi, points:[{point,detail}], examples:[{jp,romaji,vi}], caveat, model}
                   lỗi  {error:"…"} kèm HTTP 4xx/5xx
@@ -120,6 +120,12 @@ POST /ask       → body {level:"n5"|"n4", model?:"...", question:"…", deck?:"
 `reasoning_effort: 'medium'`, `max_tokens 6000` — chậm hơn vài giây nhưng đúng hơn.
 `question` cắt ở 400 ký tự, `deck` (vài thẻ liên quan client gửi kèm để ví dụ bám vốn từ
 người học) cắt ở 600 và được đánh dấu là dữ liệu, không phải mệnh lệnh.
+
+`lang` quyết định NGÔN NGỮ ĐẦU RA của các trường giải thích / dịch nghĩa (`explain_vi`,
+`vi`, `why`, `answer_vi`, `corrected_vi`, `points[].detail`, `examples[].vi`) — tên trường
+giữ nguyên `…_vi` để client cũ không phải đổi. Thiếu `lang` thì mặc định `vi`, nên worker
+bản mới vẫn phục vụ được client bản cũ và ngược lại (client English + worker cũ → câu trả
+lời vẫn ra tiếng Việt cho tới khi deploy lại).
 
 ⚠️ Worker đang chạy bản cũ thì `/ask` trả 404 và app báo *"Server chưa có tính năng Hỏi
 nhanh"* — deploy lại là xong.
