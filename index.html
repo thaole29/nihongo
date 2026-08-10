@@ -21,7 +21,9 @@
   }
   *{box-sizing:border-box}
   body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Hiragino Kaku Gothic Pro","Noto Sans JP",sans-serif;
-    background:var(--bg);color:var(--ink);line-height:1.5}
+    background:var(--bg);color:var(--ink);line-height:1.5;
+    /* Chặn Safari tự "thổi" cỡ chữ khi xoay ngang — cỡ chữ đã tính theo thiết kế rồi */
+    -webkit-text-size-adjust:100%;text-size-adjust:100%}
   .wrap{max-width:880px;margin:0 auto;padding:20px 16px 60px}
   header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap}
   /* Hàng trên cùng của header ôm trọn bề ngang để tài khoản + ngôn ngữ luôn nằm
@@ -94,6 +96,8 @@
   .controls{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
   .empty{text-align:center;color:var(--muted);padding:50px 10px}
   .center{text-align:center}
+  .mode-row{margin:0 0 14px}
+  .bk-txt{margin-left:5px}
 
   .helper{background:var(--accent-soft);border:1px dashed var(--accent);border-radius:12px;padding:12px;margin-bottom:16px}
   /* Cài đặt AI nằm cuối tab Trò chuyện: chỉnh một lần rồi thôi, nên thu nhỏ và
@@ -240,6 +244,89 @@
   .hide{display:none!important}
   small.muted{color:var(--muted)}
   .stat{font-size:40px;font-weight:800}
+
+  /* ================= ĐIỆN THOẠI =================
+     Mục tiêu: mở app lên là dùng được ngay, không phải pinch-zoom lần nào.
+     Đo trên 320×568 thì có BA nguyên nhân khác nhau, sửa một cái không đủ:
+
+     1. iOS Safari TỰ phóng to cả trang khi chạm vào ô nhập có font < 16px — và
+        không tự thu lại, nên sau đó phải zoom bằng tay cho vừa. App có 25 ô
+        như vậy (13-15px). Đây mới là thủ phạm hay gặp nhất, không phải bề ngang.
+     2. Khung app ăn hết màn hình đầu: thẻ bắt đầu tận y=529 trên màn cao 568,
+        tức mở lên KHÔNG nhìn thấy thẻ nào. Thủ phạm: tabs rơi xuống 3 hàng và
+        bộ lọc xếp mỗi ô một hàng.
+     3. Vài hàng trong Quản lý tràn ngang ~4px → cả trang trượt ngang được, cảm
+        giác đúng kiểu "trang chưa vừa màn hình". */
+
+  /* Thiết bị cảm ứng (mọi bề ngang, kể cả điện thoại xoay ngang) */
+  @media (pointer:coarse){
+    /* 16px là NGƯỠNG CỨNG của iOS — 15.9px vẫn bị phóng. Đừng hạ xuống cho "gọn". */
+    input,select,textarea,
+    .lvl-sel,.lang-sel,.helper.tiny select,.helper.tiny input,
+    .ask-foot textarea{font-size:16px}   /* .ask-foot textarea thắng về độ ưu tiên, phải kể tên */
+    /* Ngón tay không bấm trúng nút cao 28px */
+    .btn.sm,.seg-btn,.tab,.chip{min-height:38px}
+    .list-item .btn.sm{min-height:34px}
+  }
+
+  @media (max-width:560px){
+    .wrap{padding:12px 12px 84px}
+    header{gap:8px;margin-bottom:12px}
+    h1{font-size:18px}
+    .hdr-acct{gap:6px}
+    /* Tabs: một hàng trượt ngang thay vì rơi xuống 3 hàng (tiết kiệm ~55px).
+       Cuộn ngang nằm TRONG thanh tab, không phải cả trang. */
+    .tabs{flex:1 1 100%;flex-wrap:nowrap;overflow-x:auto;max-width:100%;scrollbar-width:none}
+    .tabs::-webkit-scrollbar{display:none}
+    .tab{flex:none;padding:8px 11px}
+    /* Bộ lọc: hai ô nằm cạnh nhau thay vì mỗi ô chiếm trọn một hàng */
+    .filters{gap:8px;margin-bottom:10px}
+    .filters>div{flex:1 1 calc(50% - 4px);min-width:0}
+    .filters select{width:100%;min-width:0}
+    #dir-wrap,#shuffle-wrap{flex:1 1 100%}
+    #shuffle-wrap .btn{width:100%}
+    .card{min-height:250px}
+    .card-stage{margin-bottom:12px}
+    .face{padding:16px}
+    .panel{padding:14px}
+    /* Hàng thẻ trong Quản lý: thu gap + ô ký tự để 3 nút cuối không đẩy ra rìa */
+    .list-item{gap:8px}
+    .list-item .lc{min-width:40px}
+    .toolbar{gap:8px}
+    /* dvh: thanh địa chỉ của Safari/Chrome mobile trượt ra vào làm 100vh sai */
+    .ask-panel{height:88dvh}
+    .chat-log{max-height:56dvh}
+  }
+
+  /* Máy hẹp (iPhone SE ~320px): bỏ chữ "Flashcards" để tiêu đề và cụm
+     ngôn ngữ/đăng nhập nằm chung MỘT hàng thay vì hai. 日本語 vẫn đủ nhận diện. */
+  /* Mọi cỡ điện thoại (kể cả Pro Max 430px): rút gọn hàng đầu để tiêu đề và
+     cụm ngôn ngữ/đăng nhập nằm chung MỘT dòng, tiết kiệm ~38px cho phần học.
+     · bỏ chữ "Flashcards" — 日本語 vẫn đủ nhận diện
+     · nút Quay lại chỉ còn mũi tên; chữ nằm ở title nên vẫn đọc được bằng
+       trình đọc màn hình và khi giữ lâu. */
+  @media (max-width:430px){
+    h1 span{display:none}
+    .bk-txt{display:none}
+    #back-btn{padding:6px 10px}
+  }
+  @media (max-width:380px){
+    .tab{padding:8px 9px;font-size:13.5px}
+    /* Vài px này quyết định máy ~360px giữ được hàng đầu MỘT dòng hay tràn
+       xuống hai dòng. Dưới ~340px thì đành hai dòng — không hy sinh nhãn
+       ngôn ngữ chỉ để nhét vừa, vẫn dùng tốt. */
+    #auth-btn{padding:6px 9px}
+    .lang-sel{padding:6px 4px}
+  }
+
+  /* Màn THẤP (SE dựng đứng, hoặc điện thoại xoay ngang): thu thẻ lại cho lọt
+     một màn — điều kiện là chiều cao, nên phải hỏi theo chiều cao. */
+  @media (max-height:680px){
+    .card{min-height:200px}
+    .card-stage{margin-bottom:8px}
+    .mode-row{margin-bottom:6px}
+    .counter{margin-bottom:4px}
+  }
 </style>
 </head>
 <body>
@@ -247,7 +334,8 @@
   <header>
     <div class="hdr-top">
       <div style="display:flex;align-items:center;gap:10px">
-        <button id="back-btn" class="btn ghost sm hide" onclick="goBack()" data-i18n-title="back.title" data-i18n="back">← Quay lại</button>
+        <!-- Nhãn tách riêng để màn hẹp giấu chữ, chỉ chừa mũi tên (xem @media 380px) -->
+        <button id="back-btn" class="btn ghost sm hide" onclick="goBack()" data-i18n-title="back.title"><span aria-hidden="true">←</span><span class="bk-txt" data-i18n="back">Quay lại</span></button>
         <h1>日本語 <span>Flashcards</span></h1>
       </div>
       <!-- Góc phải trên cùng: ngôn ngữ + tài khoản. Đăng nhập Google ở đây chứ
@@ -278,7 +366,7 @@
 
   <!-- ================= STUDY (Lướt thẻ + Ôn tập SRS) ================= -->
   <section id="view-study">
-    <div class="center" style="margin:0 0 14px">
+    <div class="center mode-row">
       <div class="seg" id="study-mode-toggle">
         <button class="seg-btn active" data-mode="flip" data-i18n="mode.flip">🃏 Lướt thẻ</button>
         <button class="seg-btn" data-mode="review" id="mode-review-btn">🔁 Ôn tập</button>
@@ -642,7 +730,7 @@ const LANGS=['vi','en'];
 let lang = LANGS.includes(prefs.lang) ? prefs.lang : 'vi';
 const I18N={
 vi:{
-  'back':'← Quay lại','back.title':'Quay lại trang trước',
+  'back':'Quay lại','back.title':'Quay lại trang trước',
   'lang.title':'Ngôn ngữ giao diện','auth.signin':'Đăng nhập','auth.signout':'Đăng xuất',
   'auth.signedin':'Đã đăng nhập','auth.connecting':'Đang đăng nhập…',
   'tab.study':'Học','tab.chart':'Bảng chữ','tab.chat':'💬 Trò chuyện','tab.add':'Thêm thẻ',
@@ -800,7 +888,7 @@ vi:{
   'err.asknofeature':'Server chưa có tính năng Hỏi nhanh — deploy lại worker (xem worker/README.md), hoặc đổi sang Google Gemini.'
 },
 en:{
-  'back':'← Back','back.title':'Back to previous screen',
+  'back':'Back','back.title':'Back to previous screen',
   'lang.title':'Interface language','auth.signin':'Sign in','auth.signout':'Sign out',
   'auth.signedin':'Signed in','auth.connecting':'Signing in…',
   'tab.study':'Study','tab.chart':'Kana chart','tab.chat':'💬 Chat','tab.add':'Add card',
@@ -1083,6 +1171,11 @@ function switchView(v, isBack){
   if(!isBack && curView!==v) viewHistory.push(curView);
   curView=v;
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.view===v));
+  /* Trên điện thoại thanh tab trượt ngang (xem @media 560px) nên tab đang chọn
+     có thể nằm ngoài tầm nhìn — kéo nó vào. block:'nearest' để trang không bị
+     giật dọc khi thanh tab vốn đã hiện sẵn. */
+  const at=document.querySelector('.tab.active');
+  if(at) at.scrollIntoView({inline:'nearest',block:'nearest'});
   ['study','chart','chat','add','manage','hand'].forEach(x=>$('view-'+x).classList.toggle('hide',x!==v));
   if(v==='chart'){ renderChart(); }
   if(v==='study'){ $('f-type').value=prefs.focusType; fillTopicSelect('f-topic'); applyStudyMode(); }
