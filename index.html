@@ -2895,9 +2895,13 @@ function ensureGsi(cb){ if(window.google&&google.accounts&&google.accounts.oauth
 function gInit(){ if(gTokenClient) return;
   gTokenClient=google.accounts.oauth2.initTokenClient({ client_id:GOOGLE_CLIENT_ID, scope:SYNC_SCOPES, callback:()=>{}, error_callback:()=>{} });
 }
-// Lấy access token. interactive=false -> im lặng, không popup (nếu phiên Google còn sống + đã đồng ý trước đó).
-// hint=email giúp làm mới đúng tài khoản đã dùng, không hiện bảng chọn account -> im lặng bền hơn qua nhiều phiên.
-function requestToken(interactive){
+/* Lấy access token. prompt:'' = Google chỉ hỏi đồng ý ĐÚNG LẦN ĐẦU; các lần sau, nếu
+   phiên Google còn sống và quyền đã cấp thì popup tự đóng ngay, không phải bấm gì.
+   Đừng dùng 'consent' cho lần bấm Đăng nhập thủ công: nó ÉP hiện lại màn hình đồng ý
+   mỗi lần, hoàn toàn thừa. Thêm scope mới hoặc sau signOut (đã revoke) thì Google vẫn
+   tự hỏi lại, nên bỏ 'consent' không làm mất bước xin quyền nào.
+   hint=email giúp làm mới đúng tài khoản đã dùng, không hiện bảng chọn account -> im lặng bền hơn qua nhiều phiên. */
+function requestToken(){
   return new Promise((resolve,reject)=>{
     ensureGsi(()=>{ gInit();
       gTokenClient.callback=(resp)=>{
@@ -2912,7 +2916,7 @@ function requestToken(interactive){
       };
       gTokenClient.error_callback=(err)=>reject(err||new Error('auth_error'));
       try{
-        const opts={prompt: interactive?'consent':''};
+        const opts={prompt:''};
         if(prefs.syncEmail) opts.hint=prefs.syncEmail; // giữ đúng account -> im lặng, không phải đăng nhập lại
         gTokenClient.requestAccessToken(opts);
       }
@@ -2925,7 +2929,7 @@ let gRefreshTimer=null;
 function scheduleTokenRefresh(){
   clearTimeout(gRefreshTimer);
   const ms=gTokenExp-Date.now()-60000; // làm mới 1 phút trước hạn nội bộ
-  if(ms>0 && ms<24*3600*1000) gRefreshTimer=setTimeout(()=>{ requestToken(false).catch(()=>{}); }, ms);
+  if(ms>0 && ms<24*3600*1000) gRefreshTimer=setTimeout(()=>{ requestToken().catch(()=>{}); }, ms);
 }
 // Lấy email tài khoản 1 lần để dùng làm hint + hiển thị "đã kết nối".
 async function fetchSyncEmail(){
@@ -2970,10 +2974,10 @@ function signOut(){
   setSyncStatus('sync.idle'); reflectAuthUI(); toast(t('t.signedout'));
 }
 // Token còn hạn thì tái sử dụng; hết hạn thì tự làm mới im lặng.
-async function ensureToken(){ if(gToken && Date.now()<gTokenExp) return gToken; return await requestToken(false); }
+async function ensureToken(){ if(gToken && Date.now()<gTokenExp) return gToken; return await requestToken(); }
 function connect(interactive){
   setSyncStatus(interactive?'sync.signingin':'sync.reconnecting');
-  requestToken(interactive).then(()=>onConnected())
+  requestToken().then(()=>onConnected())
     .catch(()=>{ prefs.syncToken=null; prefs.syncTokenExp=0; savePrefs();
       setSyncStatus(interactive?'sync.failed':'sync.idle'); reflectAuthUI(); });
 }
@@ -2983,7 +2987,7 @@ async function gFetch(url,opts){ opts=opts||{};
   let r=await fetch(url,opts);
   if(r.status===401){ // token bị từ chối -> làm mới im lặng 1 lần rồi thử lại
     gToken=null; gTokenExp=0;
-    tok=await requestToken(false);
+    tok=await requestToken();
     opts.headers.Authorization='Bearer '+tok;
     r=await fetch(url,opts);
   }
