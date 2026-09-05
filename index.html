@@ -863,6 +863,7 @@ vi:{
   't.updated':'Đã cập nhật thẻ','t.added':'Đã thêm thẻ ✓','t.added.dup':'Đã thêm thẻ ✓ (trùng ký tự với {n} thẻ cũ)',
   't.deleted':'Đã xoá','t.keysaved':'Đã lưu API key ✓','t.keyremoved':'Đã xoá API key',
   't.workersaved':'Đã lưu địa chỉ server ✓','t.workerremoved':'Đã xoá địa chỉ server',
+  't.modelswap':'Model cũ ngừng phục vụ — đã tự chuyển sang {m}',
   't.topicexists':'Topic đã tồn tại','t.topicadded':'Đã thêm topic','t.topicrenamed':'Đã đổi tên topic',
   't.topicmerged':'Đã đổi tên / gộp topic','t.topicdeleted':'Đã xoá topic',
   't.imported':'Đã thêm {a} · cập nhật {u} thẻ','t.badjson':'File JSON không hợp lệ',
@@ -1021,6 +1022,7 @@ en:{
   't.updated':'Card updated','t.added':'Card added ✓','t.added.dup':'Card added ✓ (duplicates {n} existing card(s))',
   't.deleted':'Deleted','t.keysaved':'API key saved ✓','t.keyremoved':'API key removed',
   't.workersaved':'Server address saved ✓','t.workerremoved':'Server address removed',
+  't.modelswap':'The old model is no longer served — switched to {m}',
   't.topicexists':'That topic already exists','t.topicadded':'Topic added','t.topicrenamed':'Topic renamed',
   't.topicmerged':'Topic renamed / merged','t.topicdeleted':'Topic deleted',
   't.imported':'Added {a} · updated {u} cards','t.badjson':'That JSON file is not valid',
@@ -1585,8 +1587,15 @@ async function loadNvModels(force){
     const list=Array.isArray(d.models)?d.models:[];
     if(!list.length) throw new Error('rỗng');
     sel.innerHTML=list.map(id=>`<option value="${esc(id)}">${esc(id)}</option>`).join('');
-    sel.value = list.includes(prefs.chatNvModel) ? prefs.chatNvModel
-              : (list.includes(d.default) ? d.default : list[0]);
+    /* Thứ tự ưu tiên: model đã chọn → model worker khuyên → hàng dự phòng của
+       worker → đành lấy cái đầu danh sách.
+       Vì sao không nhảy thẳng sang list[0]: danh sách xếp theo abc nên list[0]
+       là '01-ai/yi-large', model chưa hề được đo cho việc bắt lỗi tiếng Nhật.
+       Ca này xảy ra thật mỗi khi NVIDIA gỡ model cũ (gpt-oss-120b, 03/09/2026):
+       model đã lưu trong máy biến mất khỏi danh sách và app im lặng tụt xuống
+       một model tệ hơn hẳn. */
+    const wanted=[prefs.chatNvModel, d.default, ...(Array.isArray(d.fallbacks)?d.fallbacks:[])];
+    sel.value = wanted.find(id=>id && list.includes(id)) || list[0];
     prefs.chatNvModel=sel.value; savePrefs();
     nvModelsLoaded=base;
     hint.textContent=t('ai.model.count',{n:list.length});
@@ -2052,7 +2061,26 @@ async function askWorker(){
     throw new Error(d.error || t('err.server',{n:r.status}));
   }
   if(!d.reply) throw new Error(t('err.emptyreply'));
+  noteModelSwap(d, body.model);
   return d;
+}
+
+/* Worker có quyền tự đổi model khi model đang chọn chết hoặc quá tải. Lúc đó nó
+   trả về model THẬT SỰ đã trả lời — ghi lại ngay, kẻo lượt sau client lại xin
+   đúng cái model đã chết và lại tốn một vòng dự phòng nữa.
+   Báo cho người dùng biết một lần, vì câu trả lời có thể khác giọng model cũ. */
+function noteModelSwap(d, asked){
+  const used=d && d.model;
+  if(!used || used===asked) return;
+  if(prefs.chatNvModel!==used){
+    prefs.chatNvModel=used; savePrefs();
+    const sel=$('chat-nv-model');
+    if(sel && !Array.from(sel.options).some(o=>o.value===used)){
+      sel.insertAdjacentHTML('afterbegin',`<option value="${esc(used)}">${esc(used)}</option>`);
+    }
+    if(sel) sel.value=used;
+  }
+  if(d.swapped) toast(t('t.modelswap',{m:used}));
 }
 
 async function askGemini(){
@@ -2458,6 +2486,7 @@ async function askViaWorker(q){
     if(r.status===403) throw new Error(t('err.forbidden'));
     throw new Error(d.error || t('err.server',{n:r.status}));
   }
+  noteModelSwap(d, body.model);
   return d;
 }
 

@@ -14,8 +14,14 @@ preview_urls = false
 ALLOWED_ORIGINS = "https://thaole29.github.io,http://localhost:8000,http://127.0.0.1:8000,null"
 
 # Model dùng khi client không chỉ định. Xem danh sách thật ở https://build.nvidia.com/models
-# Đo thực tế: gpt-oss-120b bắt lỗi 6/6, qwen3-next bỏ sót. Chi tiết trong README.
-DEFAULT_MODEL = "openai/gpt-oss-120b"
+# Đo thực tế: gpt-oss bắt lỗi 6/6, qwen3-next bỏ sót. Chi tiết trong README.
+# 05/09/2026: gpt-oss-120b bị NVIDIA cho EOL (03/09/2026) và gỡ khỏi NIM → đổi sang 20b.
+DEFAULT_MODEL = "openai/gpt-oss-20b"
+
+# Hàng dự phòng khi model mặc định chết (EOL / bị gỡ / quá tải): worker tự nhảy
+# sang model kế trong danh sách này, người dùng không phải chọn tay.
+# Để trống thì worker dùng FALLBACK_MODELS hardcode trong nihongo-worker.js.
+FALLBACK_MODELS = "openai/gpt-oss-20b,nvidia/nemotron-3-super-120b-a12b"
 
 # API key KHÔNG đặt ở đây (file này lên git). Nạp bằng:
 #   wrangler secret put NVIDIA_API_KEY

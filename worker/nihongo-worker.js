@@ -8,10 +8,16 @@
 
    Routes:
      GET  /            → health check
-     GET  /models      → danh sách model NVIDIA đang phục vụ (để đổ vào dropdown)
+     GET  /models      → { models[], default, fallbacks[] } — model NVIDIA đang
+                         phục vụ (để đổ vào dropdown); default luôn là một model
+                         CÒN SỐNG, không phải hằng số DEFAULT_MODEL mù quáng.
      POST /chat        → { level, model, messages:[{role,text}] }
                          ⇢ { check:{has_error,corrected,error_type,explain_vi},
-                             reply, romaji, vi }
+                             reply, romaji, vi, model, swapped? }
+                         model = model THẬT SỰ đã trả lời. Model chết hoặc quá
+                         tải thì worker tự đổi sang model kế (xem FALLBACK_MODELS)
+                         và đặt swapped:true, thay vì ném lỗi bắt người dùng
+                         tự vào Cài đặt AI chọn model khác.
      POST /ask         → { level, model, question, deck }
                          ⇢ { subject, verdict, corrected, corrected_romaji,
                              corrected_vi, answer_vi, points[], examples[], caveat }
@@ -43,8 +49,44 @@ const DEFAULT_ORIGINS = [
 /* Đo 25/07/2026 trên 6 ca lỗi tiếng Nhật thật (thiếu kana, trường âm, trợ từ,
    chia động từ, + 1 câu đúng): gpt-oss-120b bắt đúng 6/6, qwen3-next bỏ sót
    ありがとうござます. Chọn độ chính xác vì đây là app dạy học — báo "đúng rồi"
-   cho câu sai là lỗi tai hại nhất. */
-const DEFAULT_MODEL = 'openai/gpt-oss-120b';
+   cho câu sai là lỗi tai hại nhất.
+
+   05/09/2026: gpt-oss-120b bị NVIDIA cho hết vòng đời (EOL 03/09/2026) và gỡ
+   khỏi NIM → mọi request trả 400 "has reached its end of life", cả tab Trò
+   chuyện lẫn Hỏi nhanh chết cứng. Đổi sang gpt-oss-20b (cùng dòng nên giữ
+   nguyên được reasoning_effort + guided_json đã tinh chỉnh); đo lại trên câu
+   sai thì quá khứ thì vẫn bắt đúng và trả JSON sạch. */
+const DEFAULT_MODEL = 'openai/gpt-oss-20b';
+
+/* Hàng dự phòng — vì sao cần: model NIM có VÒNG ĐỜI, NVIDIA gỡ hẳn sau ngày
+   EOL và không báo trước cho app. Chỉ đổi DEFAULT_MODEL là "vá cho lần này";
+   lần sau model mới EOL thì app lại chết y hệt. Nên khi model chết (hoặc quá
+   tải) worker tự nhảy sang model kế trong hàng này rồi trả lời như thường,
+   người học không thấy gì cả — thay vì bắt họ tự vào ⚙️ Cài đặt AI chọn tay.
+   Đo 05/09/2026 trên cùng câu test: gpt-oss-20b và nemotron-3-super đều bắt
+   đúng lỗi chia thì; kimi-k2.6 / nemotron-nano-3 trả 404, mistral-nemotron 500,
+   gemma-4 lỗi kết nối inference.
+   Ghi đè bằng biến FALLBACK_MODELS trong wrangler.toml (cách nhau bằng dấu phẩy). */
+const FALLBACK_MODELS = ['openai/gpt-oss-20b', 'nvidia/nemotron-3-super-120b-a12b'];
+
+/* Danh sách model sẽ thử, theo thứ tự: model người dùng chọn → model mặc định
+   → hàng dự phòng. Cắt còn 4 để một request hỏng không kéo dài vô tận. */
+function modelChain(env, requested) {
+  const envList = String(env.FALLBACK_MODELS || '').split(',').map(s => s.trim()).filter(Boolean);
+  const chain = [requested, env.DEFAULT_MODEL || DEFAULT_MODEL, ...(envList.length ? envList : FALLBACK_MODELS)];
+  return [...new Set(chain.filter(Boolean))].slice(0, 4);
+}
+
+/* Nhận diện "model này chết rồi" từ câu lỗi của NVIDIA. Đây là lỗi DUY NHẤT mà
+   thử lại cùng model chắc chắn vô ích còn đổi model thì chắc chắn cứu được.
+   Các câu đã gặp thật: "has reached its end of life ... no longer available",
+   404 khi model bị gỡ, "model is suspended" khi NVIDIA tạm ngưng phục vụ. */
+const DEAD_MODEL_RE = /end of life|no longer available|is suspended|been suspended|retired|decommission|unknown model|model_not_found|does not exist|invalid model|not a valid model/i;
+
+/* Model đông khách: NVIDIA trả 400/422 kèm "ResourceExhausted". Không phải lỗi
+   tham số nên hạ cấp kiểu ép JSON là vô ích — nhưng đổi model thì thoát được,
+   vì hạn mức tính riêng cho từng model. */
+const BUSY_MODEL_RE = /resourceexhausted|request limit reached|overload|capacity|too many requests/i;
 
 /* Giới hạn đầu vào — chặn người ta nhồi cả cuốn sách vào để đốt token. */
 const LIMITS = {
@@ -437,6 +479,101 @@ function parseChatJson(txt) {
 
 /* ------------------------------------------------------------------ /chat --- */
 
+/* ------------------------------------------------------- gọi NVIDIA --- */
+
+/* Vì sao gộp thành một hàm: /chat và /ask có prompt khác nhau nhưng cách nói
+   chuyện với NVIDIA thì giống hệt — thử lần lượt các kiểu ép JSON, đọc lỗi,
+   phân loại lỗi. Trước đây đoạn này bị chép hai bản; sửa cách xử lý lỗi ở một
+   bản mà quên bản kia là cách chắc chắn để một đường đi im lặng hỏng.
+
+   Thang tự hạ cấp — mỗi model NIM hỗ trợ một kiểu ép JSON khác nhau:
+     1. nvext.guided_json  (NVIDIA khuyến nghị, ép đúng schema)
+     2. response_format json_object (JSON hợp lệ nhưng cấu trúc tự do)
+     3. không ép gì, chỉ dựa vào prompt + parse bằng regex
+   Gặp 400/422 thì tụt một nấc thay vì để hỏng cả lượt.
+
+   Trả về một trong:
+     { ok: true, out }                  — đã parse được JSON dùng được
+     { hard: true, status, msg }        — hỏng ở mức tài khoản (key, credit,
+                                          mạng): đổi model cũng vô ích, dừng
+     { swap: true, status, msg }        — model chết / quá tải: nên thử model kế
+     { status, msg }                    — hỏng kiểu khác, dừng */
+async function runAttempts(env, attempts, isGood, retryMsg) {
+  let lastStatus = 0, lastMsg = '';
+
+  for (const payload of attempts) {
+    let r;
+    try {
+      r = await fetch(NVIDIA_BASE + '/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ' + env.NVIDIA_API_KEY
+        },
+        body: JSON.stringify(payload)
+      });
+    } catch (_) {
+      return { hard: true, status: 502, msg: 'Không gọi được NVIDIA — thử lại sau.' };
+    }
+
+    if (r.ok) {
+      const d = await r.json();
+      const msg = ((d.choices || [])[0] || {}).message || {};
+      const out = parseChatJson(msg.content);
+      if (out && isGood(out)) return { ok: true, out };
+      lastStatus = 502;
+      /* Content rỗng nhưng có reasoning dài = model tiêu hết max_tokens vào suy
+         nghĩ. Báo khác hẳn "dữ liệu lạ" để lần sau khỏi phải chẩn đoán lại. */
+      lastMsg = (!msg.content && (msg.reasoning_content || '').length > 200)
+        ? 'Model nghĩ quá dài nên không kịp trả lời — thử lại hoặc chọn model khác trong ⚙️ Cài đặt AI.'
+        : retryMsg;
+      continue;            // JSON hỏng → tụt nấc, thử kiểu ép khác
+    }
+
+    lastStatus = r.status;
+    lastMsg = 'Lỗi NVIDIA ' + r.status;
+    try {
+      const e = await r.json();
+      lastMsg = (e.detail && (e.detail.message || e.detail)) || (e.error && (e.error.message || e.error)) || e.message || lastMsg;
+      if (typeof lastMsg !== 'string') lastMsg = JSON.stringify(lastMsg);
+    } catch (_) {}
+
+    /* Hai ca đáng đổi model. Cả hai đều hỏng NGAY (không tốn lượt inference)
+       nên nhảy sang model kế chỉ tốn thêm vài trăm ms, người dùng không thấy. */
+    if (BUSY_MODEL_RE.test(lastMsg)) {
+      return { swap: true, status: 503, msg: 'Model đang quá tải bên NVIDIA — thử lại sau ít phút, hoặc chọn model khác trong ⚙️ Cài đặt AI.' };
+    }
+    if (r.status === 404 || DEAD_MODEL_RE.test(lastMsg)) {
+      return { swap: true, status: 502, msg: 'Model này không còn phục vụ — chọn model khác trong ⚙️ Cài đặt AI.' };
+    }
+
+    if (r.status === 401 || r.status === 403) {
+      return { hard: true, status: 502, msg: 'API key NVIDIA của worker không hợp lệ hoặc hết hạn.' };
+    }
+    if (r.status === 429) {
+      return { hard: true, status: 429, msg: 'NVIDIA đang giới hạn tốc độ (hoặc hết credit) — thử lại sau ít phút.' };
+    }
+    if (r.status !== 400 && r.status !== 422) break;   // lỗi khác thì hạ cấp cũng vô ích
+  }
+
+  return { status: lastStatus >= 500 ? 502 : 400, msg: lastMsg || 'Gọi NVIDIA thất bại.' };
+}
+
+/* Chạy hết hàng model: model nào chết / quá tải thì lặng lẽ sang model kế.
+   buildAttempts(model) dựng lại payload cho đúng model đang thử.
+   Trả { ok, out, model } hoặc { status, msg } của model cuối cùng đã thử. */
+async function runWithFallback(env, chain, buildAttempts, isGood, retryMsg) {
+  let last = { status: 502, msg: 'Gọi NVIDIA thất bại.' };
+  for (const model of chain) {
+    const res = await runAttempts(env, buildAttempts(model), isGood, retryMsg);
+    if (res.ok) return { ok: true, out: res.out, model };
+    last = res;
+    if (res.hard || !res.swap) break;   // chỉ model chết / quá tải mới đáng đổi
+  }
+  return last;
+}
+
 async function handleChat(request, env, origin) {
   if (!env.NVIDIA_API_KEY) {
     return json({ error: 'Worker chưa có NVIDIA_API_KEY — chạy: wrangler secret put NVIDIA_API_KEY' }, 500, origin);
@@ -478,106 +615,53 @@ async function handleChat(request, env, origin) {
   }
   if (!messages.length) return json({ error: 'Chưa có nội dung để gửi.' }, 400, origin);
 
-  const base = {
-    model,
-    messages: [{ role: 'system', content: systemPrompt(level, topic, body.memo, lastMove, mode, lang) }, ...messages],
-    temperature: 0.8,
-    top_p: 0.9,
-    /* gpt-oss-120b là model reasoning và max_tokens tính CẢ phần suy nghĩ. Đo
-       thực tế: reasoning ~3000 token cho một lượt hội thoại dài. Với 1200-2000
-       nó đốt sạch hạn mức vào suy nghĩ rồi trả content RỖNG — hội thoại càng
-       dài càng chết sớm (lượt 8, rồi lượt 3). Cần cả hai: nới trần, và bảo nó
-       đừng nghĩ nhiều (việc này là tán gẫu N5, không cần suy luận sâu). */
-    max_tokens: 4000
+  const buildAttempts = (m) => {
+    const base = {
+      model: m,
+      messages: [{ role: 'system', content: systemPrompt(level, topic, body.memo, lastMove, mode, lang) }, ...messages],
+      temperature: 0.8,
+      top_p: 0.9,
+      /* gpt-oss là dòng model reasoning và max_tokens tính CẢ phần suy nghĩ. Đo
+         thực tế: reasoning ~3000 token cho một lượt hội thoại dài. Với 1200-2000
+         nó đốt sạch hạn mức vào suy nghĩ rồi trả content RỖNG — hội thoại càng
+         dài càng chết sớm (lượt 8, rồi lượt 3). Cần cả hai: nới trần, và bảo nó
+         đừng nghĩ nhiều (việc này là tán gẫu N5, không cần suy luận sâu). */
+      max_tokens: 4000
+    };
+    return [
+      { ...base, reasoning_effort: 'low', nvext: { guided_json: CHAT_JSON_SCHEMA } },
+      { ...base, nvext: { guided_json: CHAT_JSON_SCHEMA } },   // model không nhận reasoning_effort
+      { ...base, response_format: { type: 'json_object' } },
+      base
+    ];
   };
 
-  /* Thang tự hạ cấp — mỗi model NIM hỗ trợ một kiểu ép JSON khác nhau:
-     1. nvext.guided_json  (NVIDIA khuyến nghị, ép đúng schema)
-     2. response_format json_object (JSON hợp lệ nhưng cấu trúc tự do)
-     3. không ép gì, chỉ dựa vào prompt + parse bằng regex
-     Gặp 400/422 thì tụt một nấc thay vì để hỏng cả lượt chat. */
-  const attempts = [
-    { ...base, reasoning_effort: 'low', nvext: { guided_json: CHAT_JSON_SCHEMA } },
-    { ...base, nvext: { guided_json: CHAT_JSON_SCHEMA } },   // model không nhận reasoning_effort
-    { ...base, response_format: { type: 'json_object' } },
-    base
-  ];
+  const res = await runWithFallback(
+    env, modelChain(env, model), buildAttempts,
+    out => !!out.reply, 'Bot trả về dữ liệu lạ, thử gửi lại.'
+  );
+  if (!res.ok) return json({ error: res.msg }, res.status, origin);
 
-  let lastStatus = 0, lastMsg = '';
-  for (const payload of attempts) {
-    let r;
-    try {
-      r = await fetch(NVIDIA_BASE + '/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer ' + env.NVIDIA_API_KEY
-        },
-        body: JSON.stringify(payload)
-      });
-    } catch (_) {
-      return json({ error: 'Không gọi được NVIDIA — thử lại sau.' }, 502, origin);
-    }
-
-    if (r.ok) {
-      const d = await r.json();
-      const msg = ((d.choices || [])[0] || {}).message || {};
-      const out = parseChatJson(msg.content);
-      if (out && out.reply) {
-        const ck = out.check || {};
-        return json({
-          check: {
-            has_error: !!ck.has_error,
-            corrected: String(ck.corrected || ''),
-            error_type: String(ck.error_type || ''),
-            explain_vi: viOnly(ck.explain_vi)
-          },
-          reply: String(out.reply || ''),
-          romaji: String(out.romaji || ''),
-          vi: viOnly(out.vi),
-          why: viOnly(out.why),
-          memo: String(out.memo || '').slice(0, MEMO_MAX),
-          move: (CHAT_MOVES.includes(out.move) || ROLE_MOVES.includes(out.move)) ? out.move : '',
-          model
-        }, 200, origin);
-      }
-      lastStatus = 502;
-      /* Content rỗng nhưng có reasoning dài = model tiêu hết max_tokens vào suy
-         nghĩ. Báo khác hẳn "dữ liệu lạ" để lần sau khỏi phải chẩn đoán lại. */
-      lastMsg = (!msg.content && (msg.reasoning_content || '').length > 200)
-        ? 'Model nghĩ quá dài nên không kịp trả lời — thử lại hoặc chọn model khác trong ⚙️ Cài đặt AI.'
-        : 'Bot trả về dữ liệu lạ, thử gửi lại.';
-      continue;            // JSON hỏng → tụt nấc, thử kiểu ép khác
-    }
-
-    lastStatus = r.status;
-    lastMsg = 'Lỗi NVIDIA ' + r.status;
-    try {
-      const e = await r.json();
-      lastMsg = (e.detail && (e.detail.message || e.detail)) || (e.error && (e.error.message || e.error)) || e.message || lastMsg;
-      if (typeof lastMsg !== 'string') lastMsg = JSON.stringify(lastMsg);
-    } catch (_) {}
-
-    /* Model đông khách thì NVIDIA trả 400/422 kèm "ResourceExhausted: Worker local
-       total request limit reached". Đây KHÔNG phải lỗi tham số → hạ cấp rồi thử
-       lại chỉ tốn thêm ~15s mỗi nấc rồi cũng hỏng. Thoát ngay. */
-    if (/resourceexhausted|request limit reached|overload|capacity|too many requests/i.test(lastMsg)) {
-      return json({ error: 'Model đang quá tải bên NVIDIA — thử lại sau ít phút, hoặc chọn model khác trong ⚙️ Cài đặt AI.' }, 503, origin);
-    }
-    if (r.status === 401 || r.status === 403) {
-      return json({ error: 'API key NVIDIA của worker không hợp lệ hoặc hết hạn.' }, 502, origin);
-    }
-    if (r.status === 404) {
-      return json({ error: 'Model này không còn phục vụ — chọn model khác trong ⚙️ Cài đặt AI.' }, 502, origin);
-    }
-    if (r.status === 429) {
-      return json({ error: 'NVIDIA đang giới hạn tốc độ (hoặc hết credit) — thử lại sau ít phút.' }, 429, origin);
-    }
-    if (r.status !== 400 && r.status !== 422) break;   // lỗi khác thì hạ cấp cũng vô ích
-  }
-
-  return json({ error: lastMsg || 'Gọi NVIDIA thất bại.' }, lastStatus >= 500 ? 502 : 400, origin);
+  const out = res.out, ck = out.check || {};
+  return json({
+    check: {
+      has_error: !!ck.has_error,
+      corrected: String(ck.corrected || ''),
+      error_type: String(ck.error_type || ''),
+      explain_vi: viOnly(ck.explain_vi)
+    },
+    reply: String(out.reply || ''),
+    romaji: String(out.romaji || ''),
+    vi: viOnly(out.vi),
+    why: viOnly(out.why),
+    memo: String(out.memo || '').slice(0, MEMO_MAX),
+    move: (CHAT_MOVES.includes(out.move) || ROLE_MOVES.includes(out.move)) ? out.move : '',
+    /* model = model THẬT SỰ đã trả lời, có thể khác model client xin nếu model
+       đó vừa chết. Client đọc trường này để cập nhật dropdown ⚙️ Cài đặt AI,
+       khỏi lần sau lại xin đúng cái model đã chết. */
+    model: res.model,
+    swapped: res.model !== model || undefined
+  }, 200, origin);
 }
 
 /* ------------------------------------------------------------------- /ask --- */
@@ -781,102 +865,58 @@ async function handleAsk(request, env, origin) {
   // Ngoài phạm vi -> trả lời sẵn, KHÔNG gọi NVIDIA. Đây là chỗ tiết kiệm thật sự.
   if (askOffTopic(question)) return askRefusal(origin, model, lang);
 
-  const base = {
-    model,
-    messages: [
-      { role: 'system', content: askSystemPrompt(level, deck, lang) },
-      { role: 'user', content: question }
-    ],
-    temperature: 0.2,          // tra cứu, không phải sáng tác
-    top_p: 0.9,
-    /* Rộng hơn /chat: ở đây CỐ Ý để model suy nghĩ (reasoning_effort medium) và
-       max_tokens tính cả phần suy nghĩ. Chật quá thì nó đốt hết vào reasoning
-       rồi trả content rỗng. */
-    max_tokens: 6000
+  const buildAttempts = (m) => {
+    const base = {
+      model: m,
+      messages: [
+        { role: 'system', content: askSystemPrompt(level, deck, lang) },
+        { role: 'user', content: question }
+      ],
+      temperature: 0.2,          // tra cứu, không phải sáng tác
+      top_p: 0.9,
+      /* Rộng hơn /chat: ở đây CỐ Ý để model suy nghĩ (reasoning_effort medium) và
+         max_tokens tính cả phần suy nghĩ. Chật quá thì nó đốt hết vào reasoning
+         rồi trả content rỗng. */
+      max_tokens: 6000
+    };
+    return [
+      { ...base, reasoning_effort: 'medium', nvext: { guided_json: ASK_JSON_SCHEMA } },
+      { ...base, nvext: { guided_json: ASK_JSON_SCHEMA } },
+      { ...base, response_format: { type: 'json_object' } },
+      base
+    ];
   };
 
-  const attempts = [
-    { ...base, reasoning_effort: 'medium', nvext: { guided_json: ASK_JSON_SCHEMA } },
-    { ...base, nvext: { guided_json: ASK_JSON_SCHEMA } },
-    { ...base, response_format: { type: 'json_object' } },
-    base
-  ];
+  const res = await runWithFallback(
+    env, modelChain(env, model), buildAttempts,
+    out => !!(out.answer_vi || out.corrected), 'Bot trả về dữ liệu lạ, thử hỏi lại.'
+  );
+  if (!res.ok) return json({ error: res.msg }, res.status, origin);
 
-  let lastStatus = 0, lastMsg = '';
-  for (const payload of attempts) {
-    let r;
-    try {
-      r = await fetch(NVIDIA_BASE + '/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer ' + env.NVIDIA_API_KEY
-        },
-        body: JSON.stringify(payload)
-      });
-    } catch (_) {
-      return json({ error: 'Không gọi được NVIDIA — thử lại sau.' }, 502, origin);
-    }
+  const out = res.out;
+  /* viKeys = những khoá bắt buộc phải là tiếng Việt (detail, vi) → lọc qua
+     viOnly; các khoá còn lại (jp, romaji, point) giữ nguyên. */
+  const arr = (v, keys, max, viKeys) => (Array.isArray(v) ? v : []).slice(0, max).map(o => {
+    const row = {};
+    for (const k of keys) row[k] = (viKeys || []).includes(k) ? viOnly(o && o[k]) : String((o && o[k]) || '');
+    return row;
+  }).filter(row => keys.some(k => row[k]));
 
-    if (r.ok) {
-      const d = await r.json();
-      const msg = ((d.choices || [])[0] || {}).message || {};
-      const out = parseChatJson(msg.content);
-      if (out && (out.answer_vi || out.corrected)) {
-        /* viKeys = những khoá bắt buộc phải là tiếng Việt (detail, vi) → lọc qua
-           viOnly; các khoá còn lại (jp, romaji, point) giữ nguyên. */
-        const arr = (v, keys, max, viKeys) => (Array.isArray(v) ? v : []).slice(0, max).map(o => {
-          const row = {};
-          for (const k of keys) row[k] = (viKeys || []).includes(k) ? viOnly(o && o[k]) : String((o && o[k]) || '');
-          return row;
-        }).filter(row => keys.some(k => row[k]));
-        return json({
-          subject: String(out.subject || ''),
-          verdict: ASK_VERDICTS.includes(out.verdict) ? out.verdict : 'không xét',
-          corrected: String(out.corrected || ''),
-          corrected_romaji: String(out.corrected_romaji || ''),
-          /* Cùng lưới lọc ngôn ngữ với /chat: mọi trường đáng lẽ là tiếng Việt
-             đều phải qua viOnly(), kẻo model trả tiếng Trung ra thẳng màn hình. */
-          corrected_vi: viOnly(out.corrected_vi),
-          answer_vi: viOnly(out.answer_vi),
-          points: arr(out.points, ['point', 'detail'], 3, ['detail']),
-          examples: arr(out.examples, ['jp', 'romaji', 'vi'], 2, ['vi']),
-          caveat: viOnly(out.caveat),
-          model
-        }, 200, origin);
-      }
-      lastStatus = 502;
-      lastMsg = (!msg.content && (msg.reasoning_content || '').length > 200)
-        ? 'Model nghĩ quá dài nên không kịp trả lời — thử lại hoặc chọn model khác trong ⚙️ Cài đặt AI.'
-        : 'Bot trả về dữ liệu lạ, thử hỏi lại.';
-      continue;
-    }
-
-    lastStatus = r.status;
-    lastMsg = 'Lỗi NVIDIA ' + r.status;
-    try {
-      const e = await r.json();
-      lastMsg = (e.detail && (e.detail.message || e.detail)) || (e.error && (e.error.message || e.error)) || e.message || lastMsg;
-      if (typeof lastMsg !== 'string') lastMsg = JSON.stringify(lastMsg);
-    } catch (_) {}
-
-    if (/resourceexhausted|request limit reached|overload|capacity|too many requests/i.test(lastMsg)) {
-      return json({ error: 'Model đang quá tải bên NVIDIA — thử lại sau ít phút, hoặc chọn model khác trong ⚙️ Cài đặt AI.' }, 503, origin);
-    }
-    if (r.status === 401 || r.status === 403) {
-      return json({ error: 'API key NVIDIA của worker không hợp lệ hoặc hết hạn.' }, 502, origin);
-    }
-    if (r.status === 404) {
-      return json({ error: 'Model này không còn phục vụ — chọn model khác trong ⚙️ Cài đặt AI.' }, 502, origin);
-    }
-    if (r.status === 429) {
-      return json({ error: 'NVIDIA đang giới hạn tốc độ (hoặc hết credit) — thử lại sau ít phút.' }, 429, origin);
-    }
-    if (r.status !== 400 && r.status !== 422) break;
-  }
-
-  return json({ error: lastMsg || 'Gọi NVIDIA thất bại.' }, lastStatus >= 500 ? 502 : 400, origin);
+  return json({
+    subject: String(out.subject || ''),
+    verdict: ASK_VERDICTS.includes(out.verdict) ? out.verdict : 'không xét',
+    corrected: String(out.corrected || ''),
+    corrected_romaji: String(out.corrected_romaji || ''),
+    /* Cùng lưới lọc ngôn ngữ với /chat: mọi trường đáng lẽ là tiếng Việt
+       đều phải qua viOnly(), kẻo model trả tiếng Trung ra thẳng màn hình. */
+    corrected_vi: viOnly(out.corrected_vi),
+    answer_vi: viOnly(out.answer_vi),
+    points: arr(out.points, ['point', 'detail'], 3, ['detail']),
+    examples: arr(out.examples, ['jp', 'romaji', 'vi'], 2, ['vi']),
+    caveat: viOnly(out.caveat),
+    model: res.model,
+    swapped: res.model !== model || undefined
+  }, 200, origin);
 }
 
 /* ---------------------------------------------------------------- /models --- */
@@ -894,7 +934,7 @@ async function handleModels(request, env, origin, ctx) {
   const hit = await cache.match(cacheKey);
   if (hit) {
     const data = await hit.json();
-    return json({ models: data.models, default: env.DEFAULT_MODEL || DEFAULT_MODEL }, 200, origin);
+    return json(withDefaults(env, data.models), 200, origin);
   }
 
   let r;
@@ -919,7 +959,19 @@ async function handleModels(request, env, origin, ctx) {
     headers: { 'Content-Type': 'application/json', 'Cache-Control': 'max-age=3600' }
   });
   if (ctx && ctx.waitUntil) ctx.waitUntil(cache.put(cacheKey, cached));
-  return json({ models: ids, default: env.DEFAULT_MODEL || DEFAULT_MODEL }, 200, origin);
+  return json(withDefaults(env, ids), 200, origin);
+}
+
+/* Vì sao không trả thẳng DEFAULT_MODEL: model mặc định cũng chết như mọi model
+   khác. Trả về một cái tên không còn trong danh sách thì client sẽ chọn đại
+   list[0] — mà list[0] xếp theo abc là '01-ai/yi-large', một model không hề
+   được đo cho việc bắt lỗi tiếng Nhật. Ở đây trả cái mặc định ĐẦU TIÊN còn
+   sống, kèm cả hàng dự phòng để client tự chọn tiếp nếu cần. */
+function withDefaults(env, ids) {
+  const list = Array.isArray(ids) ? ids : [];
+  const chain = modelChain(env, '');
+  const alive = chain.filter(m => list.includes(m));
+  return { models: list, default: alive[0] || env.DEFAULT_MODEL || DEFAULT_MODEL, fallbacks: alive };
 }
 
 /* ------------------------------------------------------------------ entry --- */

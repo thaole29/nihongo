@@ -82,6 +82,33 @@ Nếu thấy credit tụt bất thường: `wrangler tail` để xem log realtim
 App tự hỏi worker `GET /models` để đổ dropdown, nên **không cần sửa code khi NVIDIA thêm/bỏ model**.
 Muốn đổi model mặc định thì sửa `DEFAULT_MODEL` trong `wrangler.toml` rồi `wrangler deploy`.
 
+### Model chết thì worker tự đổi (không bắt người dùng chọn tay)
+
+Model NIM có **vòng đời**: NVIDIA công bố ngày EOL rồi gỡ hẳn, không báo trước cho app.
+Chuyện đã xảy ra thật: `openai/gpt-oss-120b` EOL ngày **03/09/2026**, và từ hôm đó mọi
+request trả `400 … has reached its end of life` — cả tab Trò chuyện lẫn ❓ Hỏi nhanh chết
+cứng, dù danh sách `/models` vẫn còn cả chục model dùng được.
+
+Chỉ đổi `DEFAULT_MODEL` là vá cho lần này thôi; lần sau model mới EOL thì lại chết y hệt.
+Nên worker có **hàng dự phòng** (`FALLBACK_MODELS` trong `wrangler.toml`):
+
+- Model chết (404, `end of life`, `suspended`, `retired`…) hoặc **quá tải**
+  (`ResourceExhausted`) → worker lặng lẽ gọi lại bằng model kế trong hàng rồi trả lời
+  như thường, kèm `swapped:true` để client cập nhật dropdown.
+- Cả hai ca này NVIDIA đều trả lỗi **ngay** (không tốn lượt inference), nên đổi model chỉ
+  tốn thêm vài trăm ms — người học không thấy gì.
+- Lỗi **không** đổi model: sai API key, hết credit (429), model trả JSON hỏng. Ba ca này
+  đổi model cũng vô ích, dừng luôn cho nhanh.
+- `GET /models` cũng trả `default` là model **còn sống** đầu tiên (+ `fallbacks[]`).
+  Trước đây nó trả thẳng `DEFAULT_MODEL`; khi hằng số đó chết thì client tụt xuống
+  `list[0]` — mà danh sách xếp theo abc nên `list[0]` là `01-ai/yi-large`, model chưa hề
+  được đo cho việc bắt lỗi tiếng Nhật.
+
+Đo ngày 05/09/2026, thử cả hàng: `openai/gpt-oss-20b` và `nvidia/nemotron-3-super-120b-a12b`
+đều bắt đúng lỗi chia thì quá khứ và trả JSON sạch; `moonshotai/kimi-k2.6` và
+`nvidia/nemotron-nano-3-30b-a3b` trả 404, `mistralai/mistral-nemotron` lỗi 500,
+`google/gemma-4-31b-it` lỗi kết nối inference.
+
 Đo thử ngày 25/07/2026 (1 lượt chat, từ lúc gửi tới lúc có JSON hoàn chỉnh):
 
 | Model | Thời gian | Kết quả |
