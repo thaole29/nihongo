@@ -3635,6 +3635,2175 @@ window.NIHONGO_DEFAULT_DECK = [
 "meaning": "Lời hứa / cuộc hẹn / Promise · appointment",
 "example": "ともだちと やくそくが あります。(Tomodachi to yakusoku ga arimasu.) — Tôi có hẹn với bạn.",
 "note": "Hứa: やくそくします. Người hẹn cùng + と."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "ミルク",
+"reading": "miruku",
+"meaning": "Sữa / Milk",
+"example": "ミルクを のみます。(Miruku o nomimasu.) — Tôi uống sữa.",
+"note": "Từ mượn \"milk\". Sữa bò nói kiểu thuần Nhật là ぎゅうにゅう (牛乳)."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "ワイン",
+"reading": "wain",
+"meaning": "Rượu vang / Wine",
+"example": "ワインを いっぱい ください。(Wain o ippai kudasai.) — Cho tôi một ly rượu vang.",
+"note": "Đếm ly dùng はい: いっぱい (1 ly), にはい (2 ly)."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "アイスクリーム",
+"reading": "aisukuriimu",
+"meaning": "Kem / Ice cream",
+"example": "なつは アイスクリームが おいしいです。(Natsu wa aisukuriimu ga oishii desu.) — Mùa hè ăn kem ngon.",
+"note": "Nói hằng ngày hay rút gọn thành アイス."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "チョコレート",
+"reading": "chokoreeto",
+"meaning": "Sô-cô-la / Chocolate",
+"example": "ともだちに チョコレートを あげます。(Tomodachi ni chokoreeto o agemasu.) — Tôi tặng sô-cô-la cho bạn.",
+"note": "Nói tắt là チョコ. Chú ý レー kéo dài, không phải レト."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "サラダ",
+"reading": "sarada",
+"meaning": "Salad / Salad",
+"example": "まいあさ サラダを たべます。(Maiasa sarada o tabemasu.) — Sáng nào tôi cũng ăn salad.",
+"note": "Kết thúc bằng ダ (không phải ド) — サラダ."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "ハンバーガー",
+"reading": "hanbaagaa",
+"meaning": "Hamburger / Hamburger",
+"example": "ハンバーガーと コーヒーを ください。(Hanbaagaa to koohii o kudasai.) — Cho tôi hamburger và cà phê.",
+"note": "Khác ハンバーグ (không có ー cuối) = miếng chả thịt băm ăn với cơm."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "ピザ",
+"reading": "piza",
+"meaning": "Pizza / Pizza",
+"example": "ともだちと ピザを たべました。(Tomodachi to piza o tabemashita.) — Tôi đã ăn pizza với bạn.",
+"note": "Mượn từ tiếng Ý nên đọc \"piza\", không đọc kiểu tiếng Anh."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "カレー",
+"reading": "karee",
+"meaning": "Cà ri / Curry",
+"example": "カレーは にほんじんも だいすきです。(Karee wa nihonjin mo daisuki desu.) — Người Nhật cũng rất thích cà ri.",
+"note": "Ăn kèm cơm gọi là カレーライス."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "ステーキ",
+"reading": "suteeki",
+"meaning": "Bít tết / Steak",
+"example": "たんじょうびに ステーキを たべます。(Tanjoubi ni suteeki o tabemasu.) — Sinh nhật tôi sẽ ăn bít tết.",
+"note": "Đừng nhầm với すてき (viết hiragana) nghĩa là \"tuyệt vời\"."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "デザート",
+"reading": "dezaato",
+"meaning": "Món tráng miệng / Dessert",
+"example": "デザートは なにが ありますか。(Dezaato wa nani ga arimasu ka?) — Có món tráng miệng gì vậy?",
+"note": "Chỉ khác デパート (trung tâm thương mại) một chữ — đọc kỹ ザ vs パ."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "メニュー",
+"reading": "menyuu",
+"meaning": "Thực đơn / Menu",
+"example": "メニューを みせて ください。(Menyuu o misete kudasai.) — Cho tôi xem thực đơn.",
+"note": "ュ nhỏ nên đọc liền \"nyu\", không phải \"ni-yu\"."
+},
+{
+"type": "katakana",
+"topic": "Truyền thông & Thiết bị",
+"char": "スマホ",
+"reading": "sumaho",
+"meaning": "Điện thoại thông minh / Smartphone",
+"example": "スマホで しゃしんを とります。(Sumaho de shashin o torimasu.) — Tôi chụp ảnh bằng điện thoại.",
+"note": "Nói tắt của スマートフォン. Điện thoại nói chung là でんわ."
+},
+{
+"type": "katakana",
+"topic": "Truyền thông & Thiết bị",
+"char": "アプリ",
+"reading": "apuri",
+"meaning": "Ứng dụng / App",
+"example": "この アプリは べんりです。(Kono apuri wa benri desu.) — Ứng dụng này tiện lợi.",
+"note": "Nói tắt của アプリケーション (application)."
+},
+{
+"type": "katakana",
+"topic": "Truyền thông & Thiết bị",
+"char": "インターネット",
+"reading": "intaanetto",
+"meaning": "Internet / Internet",
+"example": "インターネットで しらべます。(Intaanetto de shirabemasu.) — Tôi tra trên internet.",
+"note": "Nói tắt là ネット. Phương tiện dùng で."
+},
+{
+"type": "katakana",
+"topic": "Truyền thông & Thiết bị",
+"char": "カメラ",
+"reading": "kamera",
+"meaning": "Máy ảnh / Camera",
+"example": "あたらしい カメラを かいました。(Atarashii kamera o kaimashita.) — Tôi đã mua máy ảnh mới.",
+"note": "Đọc \"kamera\" chứ không phải \"kyamera\"."
+},
+{
+"type": "katakana",
+"topic": "Truyền thông & Thiết bị",
+"char": "メッセージ",
+"reading": "messeeji",
+"meaning": "Tin nhắn / Message",
+"example": "ともだちに メッセージを おくります。(Tomodachi ni messeeji o okurimasu.) — Tôi gửi tin nhắn cho bạn.",
+"note": "ッ nhỏ = ngắt một nhịp trước セ. Người nhận + に."
+},
+{
+"type": "katakana",
+"topic": "Đồ trong nhà",
+"char": "リモコン",
+"reading": "rimokon",
+"meaning": "Điều khiển từ xa / Remote control",
+"example": "テレビの リモコンは どこですか。(Terebi no rimokon wa doko desu ka?) — Điều khiển TV ở đâu?",
+"note": "Nói tắt của リモートコントロール."
+},
+{
+"type": "katakana",
+"topic": "Đồ trong nhà",
+"char": "エアコン",
+"reading": "eakon",
+"meaning": "Máy lạnh / Air conditioner",
+"example": "あついですね。エアコンを つけましょう。(Atsui desu ne. Eakon o tsukemashou.) — Nóng nhỉ, bật máy lạnh đi.",
+"note": "Nói tắt của エアコンディショナー. Bật つけます / tắt けします."
+},
+{
+"type": "katakana",
+"topic": "Địa điểm trong phố",
+"char": "コンビニ",
+"reading": "konbini",
+"meaning": "Cửa hàng tiện lợi / Convenience store",
+"example": "コンビニで おべんとうを かいます。(Konbini de obentou o kaimasu.) — Tôi mua cơm hộp ở cửa hàng tiện lợi.",
+"note": "Nói tắt của コンビニエンスストア. Mở 24h, ở Nhật đâu cũng có."
+},
+{
+"type": "katakana",
+"topic": "Địa điểm trong phố",
+"char": "デパート",
+"reading": "depaato",
+"meaning": "Trung tâm thương mại / Department store",
+"example": "デパートで ふくを かいました。(Depaato de fuku o kaimashita.) — Tôi đã mua quần áo ở trung tâm thương mại.",
+"note": "Nói tắt của デパートメントストア. Đắt hơn スーパー."
+},
+{
+"type": "katakana",
+"topic": "Địa điểm trong phố",
+"char": "マンション",
+"reading": "manshon",
+"meaning": "Chung cư / Condominium",
+"example": "わたしは マンションに すんで います。(Watashi wa manshon ni sunde imasu.) — Tôi sống ở chung cư.",
+"note": "Tiếng Anh \"mansion\" là biệt thự, nhưng マンション tiếng Nhật = căn hộ chung cư bê tông."
+},
+{
+"type": "katakana",
+"topic": "Địa điểm trong phố",
+"char": "アパート",
+"reading": "apaato",
+"meaning": "Nhà trọ / căn hộ nhỏ / Apartment",
+"example": "えきの ちかくの アパートを かります。(Eki no chikaku no apaato o karimasu.) — Tôi thuê căn hộ gần ga.",
+"note": "Nhỏ và rẻ hơn マンション. Thuê: かります, cho thuê: かします."
+},
+{
+"type": "katakana",
+"topic": "Địa điểm trong phố",
+"char": "エレベーター",
+"reading": "erebeetaa",
+"meaning": "Thang máy / Elevator",
+"example": "エレベーターで ごかいへ いきます。(Erebeetaa de gokai e ikimasu.) — Tôi lên tầng 5 bằng thang máy.",
+"note": "Phương tiện di chuyển + で. Đừng lẫn với エスカレーター."
+},
+{
+"type": "katakana",
+"topic": "Địa điểm trong phố",
+"char": "エスカレーター",
+"reading": "esukareetaa",
+"meaning": "Thang cuốn / Escalator",
+"example": "エスカレーターで にかいへ あがります。(Esukareetaa de nikai e agarimasu.) — Tôi lên tầng 2 bằng thang cuốn.",
+"note": "エス… là thang cuốn, エレ… là thang máy — nhớ theo chữ thứ hai."
+},
+{
+"type": "katakana",
+"topic": "Địa điểm trong phố",
+"char": "レジ",
+"reading": "reji",
+"meaning": "Quầy tính tiền / Cash register",
+"example": "レジで おかねを はらいます。(Reji de okane o haraimasu.) — Tôi trả tiền ở quầy tính tiền.",
+"note": "Nói tắt của レジスター (register). Xếp hàng: レジに ならびます."
+},
+{
+"type": "katakana",
+"topic": "Địa điểm trong phố",
+"char": "カード",
+"reading": "kaado",
+"meaning": "Thẻ / Card",
+"example": "カードで はらいます。(Kaado de haraimasu.) — Tôi trả bằng thẻ.",
+"note": "Thẻ tín dụng là クレジットカード. Cách thanh toán + で."
+},
+{
+"type": "katakana",
+"topic": "Sở thích",
+"char": "テニス",
+"reading": "tenisu",
+"meaning": "Quần vợt / Tennis",
+"example": "にちようびに テニスを します。(Nichiyoubi ni tenisu o shimasu.) — Chủ nhật tôi chơi quần vợt.",
+"note": "Chơi thể thao dùng します, không dùng あそびます."
+},
+{
+"type": "katakana",
+"topic": "Sở thích",
+"char": "バスケットボール",
+"reading": "basukettobooru",
+"meaning": "Bóng rổ / Basketball",
+"example": "バスケットボールが すきです。(Basukettobooru ga suki desu.) — Tôi thích bóng rổ.",
+"note": "Nói tắt là バスケ. Đối tượng của すき dùng が."
+},
+{
+"type": "katakana",
+"topic": "Sở thích",
+"char": "ゲーム",
+"reading": "geemu",
+"meaning": "Trò chơi / Game",
+"example": "まいばん ゲームを します。(Maiban geemu o shimasu.) — Tối nào tôi cũng chơi game.",
+"note": "Máy chơi game: ゲームき (ゲーム機)."
+},
+{
+"type": "katakana",
+"topic": "Sở thích",
+"char": "アニメ",
+"reading": "anime",
+"meaning": "Anime / Anime",
+"example": "アニメで にほんごを べんきょうします。(Anime de nihongo o benkyou shimasu.) — Tôi học tiếng Nhật bằng anime.",
+"note": "Nói tắt của アニメーション (animation)."
+},
+{
+"type": "katakana",
+"topic": "Sở thích",
+"char": "コンサート",
+"reading": "konsaato",
+"meaning": "Buổi hòa nhạc / Concert",
+"example": "あした コンサートへ いきます。(Ashita konsaato e ikimasu.) — Mai tôi đi xem hòa nhạc.",
+"note": "Đích đến dùng へ (đọc là \"e\") hoặc に."
+},
+{
+"type": "katakana",
+"topic": "Sở thích",
+"char": "パーティー",
+"reading": "paatii",
+"meaning": "Tiệc / Party",
+"example": "きんようびに パーティーが あります。(Kin'youbi ni paatii ga arimasu.) — Thứ sáu có tiệc.",
+"note": "ティ (テ + ィ nhỏ) là tổ hợp chỉ dùng cho từ mượn."
+},
+{
+"type": "katakana",
+"topic": "Sở thích",
+"char": "プール",
+"reading": "puuru",
+"meaning": "Hồ bơi / Swimming pool",
+"example": "なつやすみに プールで およぎます。(Natsuyasumi ni puuru de oyogimasu.) — Nghỉ hè tôi bơi ở hồ bơi.",
+"note": "Nơi diễn ra hành động dùng で."
+},
+{
+"type": "katakana",
+"topic": "Quần áo",
+"char": "Tシャツ",
+"reading": "tii shatsu",
+"meaning": "Áo phông / T-shirt",
+"example": "あついから Tシャツを きます。(Atsui kara tii shatsu o kimasu.) — Vì nóng nên tôi mặc áo phông.",
+"note": "Viết lai chữ T (Latin) + katakana. Áo phần trên mặc bằng きます."
+},
+{
+"type": "katakana",
+"topic": "Quần áo",
+"char": "コート",
+"reading": "kooto",
+"meaning": "Áo khoác / Coat",
+"example": "ふゆは コートが いります。(Fuyu wa kooto ga irimasu.) — Mùa đông cần áo khoác.",
+"note": "Cũng viết y hệt \"court\": sân tennis là テニスコート."
+},
+{
+"type": "katakana",
+"topic": "Quần áo",
+"char": "バッグ",
+"reading": "baggu",
+"meaning": "Túi xách / Bag",
+"example": "バッグの なかに さいふが あります。(Baggu no naka ni saifu ga arimasu.) — Trong túi có ví.",
+"note": "バッグ (bag) khác バック (back, lùi lại) — chỉ khác dấu ゛."
+},
+{
+"type": "katakana",
+"topic": "Động vật",
+"char": "ペット",
+"reading": "petto",
+"meaning": "Thú cưng / Pet",
+"example": "ペットを かって います。(Petto o katte imasu.) — Tôi đang nuôi thú cưng.",
+"note": "Nuôi động vật là かいます (飼います), khác かいます (買います) là mua."
+},
+{
+"type": "katakana",
+"topic": "Du lịch",
+"char": "チケット",
+"reading": "chiketto",
+"meaning": "Vé / Ticket",
+"example": "コンサートの チケットを かいました。(Konsaato no chiketto o kaimashita.) — Tôi đã mua vé buổi hòa nhạc.",
+"note": "Vé tàu xe thường gọi きっぷ (切符); チケット hay dùng cho sự kiện, máy bay."
+},
+{
+"type": "katakana",
+"topic": "Trường học",
+"char": "クラス",
+"reading": "kurasu",
+"meaning": "Lớp học / Class",
+"example": "わたしの クラスは にじゅうにんです。(Watashi no kurasu wa nijuu-nin desu.) — Lớp tôi có 20 người.",
+"note": "クラス là tập thể lớp; phòng học là きょうしつ (教室)."
+},
+{
+"type": "katakana",
+"topic": "Trường học",
+"char": "グループ",
+"reading": "guruupu",
+"meaning": "Nhóm / Group",
+"example": "グループで はなしましょう。(Guruupu de hanashimashou.) — Cùng thảo luận theo nhóm nào.",
+"note": "Làm theo hình thức nào đó dùng で: グループで, ひとりで."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "コーラ",
+"reading": "koora",
+"meaning": "Cô-ca / Cola",
+"example": "コーラを ひとつ ください。(Koora o hitotsu kudasai.) — Cho tôi một lon cô-ca.",
+"note": "Nói đầy đủ là コカコーラ. Đếm lon/chai: ひとつ, ふたつ."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "ソーダ",
+"reading": "sooda",
+"meaning": "Nước ngọt có ga / Soda",
+"example": "ソーダは つめたい ほうが おいしいです。(Sooda wa tsumetai hou ga oishii desu.) — Nước ngọt uống lạnh thì ngon hơn.",
+"note": "Nước có ga nói chung còn gọi là たんさんすい (炭酸水)."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "ウイスキー",
+"reading": "uisukii",
+"meaning": "Rượu whisky / Whisky",
+"example": "ちちは ウイスキーが すきです。(Chichi wa uisukii ga suki desu.) — Bố tôi thích whisky.",
+"note": "Viết ウイ (イ cỡ thường), không phải ウィ — đây là lối viết đã thành chuẩn."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "カクテル",
+"reading": "kakuteru",
+"meaning": "Cocktail / Cocktail",
+"example": "バーで カクテルを のみました。(Baa de kakuteru o nomimashita.) — Tôi đã uống cocktail ở quán bar.",
+"note": "Kết thúc bằng テル, không kéo dài thành テール."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "スープ",
+"reading": "suupu",
+"meaning": "Súp / Soup",
+"example": "あさごはんに スープを のみます。(Asagohan ni suupu o nomimasu.) — Bữa sáng tôi ăn súp.",
+"note": "Súp trong tiếng Nhật dùng のみます (uống), KHÔNG dùng たべます."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "サンドイッチ",
+"reading": "sandoicchi",
+"meaning": "Bánh mì kẹp / Sandwich",
+"example": "コンビニで サンドイッチを かいます。(Konbini de sandoicchi o kaimasu.) — Tôi mua bánh mì kẹp ở cửa hàng tiện lợi.",
+"note": "Có ッ nhỏ trước チ — đọc ngắt \"san-do-i-cchi\"."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "トースト",
+"reading": "toosuto",
+"meaning": "Bánh mì nướng / Toast",
+"example": "トーストに バターを ぬります。(Toosuto ni bataa o nurimasu.) — Tôi phết bơ lên bánh mì nướng.",
+"note": "Phết / bôi lên là ぬります, chỗ được phết + に."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "パスタ",
+"reading": "pasuta",
+"meaning": "Mì Ý / Pasta",
+"example": "ひるごはんは パスタに します。(Hirugohan wa pasuta ni shimasu.) — Bữa trưa tôi chọn mì Ý.",
+"note": "〜に します = \"chọn / quyết định lấy 〜\", câu cửa miệng khi gọi món."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "スパゲッティ",
+"reading": "supagetti",
+"meaning": "Mì spaghetti / Spaghetti",
+"example": "スパゲッティを つくりました。(Supagetti o tsukurimashita.) — Tôi đã nấu mì spaghetti.",
+"note": "スパゲッティ là MỘT loại パスタ chứ không đồng nghĩa. Có ッ nhỏ ở ゲッ."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "トマト",
+"reading": "tomato",
+"meaning": "Cà chua / Tomato",
+"example": "サラダに トマトを いれます。(Sarada ni tomato o iremasu.) — Tôi cho cà chua vào salad.",
+"note": "Đọc đều ba nhịp \"to-ma-to\", không nhấn trọng âm như tiếng Anh."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "ポテト",
+"reading": "poteto",
+"meaning": "Khoai tây chiên / Potato · fries",
+"example": "ハンバーガーと ポテトを ください。(Hanbaagaa to poteto o kudasai.) — Cho tôi hamburger và khoai tây chiên.",
+"note": "Ở quán ăn nhanh ポテト mặc định là khoai chiên (フライドポテト). Củ khoai tây là じゃがいも."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "バター",
+"reading": "bataa",
+"meaning": "Bơ / Butter",
+"example": "パンに バターを つけます。(Pan ni bataa o tsukemasu.) — Tôi phết bơ lên bánh mì.",
+"note": "Kéo dài ở cuối (ター). Bộ ba từ sữa: ミルク・バター・チーズ."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "ジャム",
+"reading": "jamu",
+"meaning": "Mứt / Jam",
+"example": "パンに ジャムを ぬります。(Pan ni jamu o nurimasu.) — Tôi phết mứt lên bánh mì.",
+"note": "ジャ là âm ghép, đọc liền một nhịp. Mứt dâu: イチゴジャム."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "ヨーグルト",
+"reading": "yooguruto",
+"meaning": "Sữa chua / Yogurt",
+"example": "まいあさ ヨーグルトを たべます。(Maiasa yooguruto o tabemasu.) — Sáng nào tôi cũng ăn sữa chua.",
+"note": "Sữa chua dùng たべます, khác ミルク là のみます."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "ソース",
+"reading": "soosu",
+"meaning": "Nước sốt / Sauce",
+"example": "ソースを かけて ください。(Soosu o kakete kudasai.) — Cho xin nước sốt lên trên.",
+"note": "Rưới / rắc lên là かけます."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "ケチャップ",
+"reading": "kechappu",
+"meaning": "Tương cà / Ketchup",
+"example": "ポテトに ケチャップを つけます。(Poteto ni kechappu o tsukemasu.) — Tôi chấm khoai tây với tương cà.",
+"note": "Chấm vào là つけます (khác ぬります là phết đều lên bề mặt)."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "レモン",
+"reading": "remon",
+"meaning": "Chanh vàng / Lemon",
+"example": "こうちゃに レモンを いれます。(Koucha ni remon o iremasu.) — Tôi cho chanh vào trà.",
+"note": "Chanh xanh Việt Nam gần với ライム hơn là レモン."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "オレンジ",
+"reading": "orenji",
+"meaning": "Cam / Orange",
+"example": "オレンジジュースを のみます。(Orenji juusu o nomimasu.) — Tôi uống nước cam.",
+"note": "Vừa là quả cam vừa là màu cam."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "メロン",
+"reading": "meron",
+"meaning": "Dưa lưới / Melon",
+"example": "にほんの メロンは とても たかいです。(Nihon no meron wa totemo takai desu.) — Dưa lưới Nhật rất đắt.",
+"note": "Dưa hấu là すいか — từ thuần Nhật, không viết katakana."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "クッキー",
+"reading": "kukkii",
+"meaning": "Bánh quy / Cookie",
+"example": "いもうとと クッキーを つくりました。(Imouto to kukkii o tsukurimashita.) — Tôi đã làm bánh quy với em gái.",
+"note": "Có ッ nhỏ rồi mới kéo dài キー: đọc \"kuk-kii\"."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "ドーナツ",
+"reading": "doonatsu",
+"meaning": "Bánh donut / Doughnut",
+"example": "ドーナツを みっつ かいました。(Doonatsu o mittsu kaimashita.) — Tôi đã mua ba cái bánh donut.",
+"note": "Kết thúc bằng ツ chứ không phải ト."
+},
+{
+"type": "katakana",
+"topic": "Đồ ăn",
+"char": "プリン",
+"reading": "purin",
+"meaning": "Bánh flan / Custard pudding",
+"example": "デザートは プリンが いいです。(Dezaato wa purin ga ii desu.) — Món tráng miệng thì bánh flan là được.",
+"note": "Từ \"pudding\" mà ra, gọi đầy đủ là カスタードプリン."
+},
+{
+"type": "katakana",
+"topic": "Địa điểm trong phố",
+"char": "カフェ",
+"reading": "kafe",
+"meaning": "Quán cà phê / Café",
+"example": "カフェで ともだちを まちます。(Kafe de tomodachi o machimasu.) — Tôi đợi bạn ở quán cà phê.",
+"note": "フェ = フ + ェ nhỏ, tổ hợp riêng cho từ mượn. Kiểu cũ gọi là きっさてん (喫茶店)."
+},
+{
+"type": "katakana",
+"topic": "Truyền thông & Thiết bị",
+"char": "ラジオ",
+"reading": "rajio",
+"meaning": "Radio / Radio",
+"example": "あさ ラジオを ききます。(Asa rajio o kikimasu.) — Buổi sáng tôi nghe radio.",
+"note": "Đọc đúng ba nhịp \"ra-ji-o\", không đọc kiểu tiếng Anh."
+},
+{
+"type": "katakana",
+"topic": "Truyền thông & Thiết bị",
+"char": "パスワード",
+"reading": "pasuwaado",
+"meaning": "Mật khẩu / Password",
+"example": "パスワードを わすれました。(Pasuwaado o wasuremashita.) — Tôi quên mật khẩu rồi.",
+"note": "Nhập mật khẩu: パスワードを いれます. Dễ lẫn với パスポート (hộ chiếu)."
+},
+{
+"type": "katakana",
+"topic": "Truyền thông & Thiết bị",
+"char": "ウェブサイト",
+"reading": "webusaito",
+"meaning": "Trang web / Website",
+"example": "この ウェブサイトは べんりです。(Kono webusaito wa benri desu.) — Trang web này tiện lợi.",
+"note": "ウェ = ウ + ェ nhỏ. Nói tắt hằng ngày là サイト."
+},
+{
+"type": "katakana",
+"topic": "Truyền thông & Thiết bị",
+"char": "ファイル",
+"reading": "fairu",
+"meaning": "Tập tin / File",
+"example": "ファイルを おくって ください。(Fairu o okutte kudasai.) — Gửi file cho tôi với.",
+"note": "ファ = フ + ァ nhỏ, đọc \"fa\" một nhịp."
+},
+{
+"type": "katakana",
+"topic": "Truyền thông & Thiết bị",
+"char": "データ",
+"reading": "deeta",
+"meaning": "Dữ liệu / Data",
+"example": "データを ほぞんします。(Deeta o hozon shimasu.) — Tôi lưu dữ liệu.",
+"note": "デー kéo dài: đọc \"dee-ta\", không phải \"day-ta\"."
+},
+{
+"type": "katakana",
+"topic": "Truyền thông & Thiết bị",
+"char": "ソフト",
+"reading": "sofuto",
+"meaning": "Phần mềm / Software",
+"example": "あたらしい ソフトを いれました。(Atarashii sofuto o iremashita.) — Tôi đã cài phần mềm mới.",
+"note": "Nói tắt của ソフトウェア. ソフト còn nghĩa \"mềm\" — trái nghĩa là ハード."
+},
+{
+"type": "katakana",
+"topic": "Truyền thông & Thiết bị",
+"char": "ダウンロード",
+"reading": "daunroodo",
+"meaning": "Tải xuống / Download",
+"example": "アプリを ダウンロードします。(Apuri o daunroodo shimasu.) — Tôi tải ứng dụng xuống.",
+"note": "Thêm します thành động từ. Tải lên là アップロード."
+},
+{
+"type": "katakana",
+"topic": "Truyền thông & Thiết bị",
+"char": "ロボット",
+"reading": "robotto",
+"meaning": "Robot / Robot",
+"example": "この こうじょうには ロボットが あります。(Kono koujou ni wa robotto ga arimasu.) — Nhà máy này có robot.",
+"note": "Có ッ nhỏ — đọc bốn nhịp \"ro-bot-to\"."
+},
+{
+"type": "katakana",
+"topic": "Truyền thông & Thiết bị",
+"char": "ボタン",
+"reading": "botan",
+"meaning": "Nút bấm / Button",
+"example": "この ボタンを おして ください。(Kono botan o oshite kudasai.) — Hãy bấm nút này.",
+"note": "Bấm / ấn là おします. Cũng dùng cho cúc áo."
+},
+{
+"type": "katakana",
+"topic": "Truyền thông & Thiết bị",
+"char": "バッテリー",
+"reading": "batterii",
+"meaning": "Pin / Battery",
+"example": "バッテリーが ありません。(Batterii ga arimasen.) — Hết pin rồi.",
+"note": "Pin tiểu rời hay gọi là でんち (電池)."
+},
+{
+"type": "katakana",
+"topic": "Truyền thông & Thiết bị",
+"char": "プリンター",
+"reading": "purintaa",
+"meaning": "Máy in / Printer",
+"example": "プリンターは どこに ありますか。(Purintaa wa doko ni arimasu ka?) — Máy in ở đâu vậy?",
+"note": "Động từ \"in\" là いんさつします (印刷します) hoặc プリントします."
+},
+{
+"type": "katakana",
+"topic": "Truyền thông & Thiết bị",
+"char": "キーボード",
+"reading": "kiiboodo",
+"meaning": "Bàn phím / Keyboard",
+"example": "キーボードで にほんごを うちます。(Kiiboodo de nihongo o uchimasu.) — Tôi gõ tiếng Nhật bằng bàn phím.",
+"note": "Gõ phím là うちます (打ちます). Hai chỗ kéo dài: キー・ボー."
+},
+{
+"type": "katakana",
+"topic": "Truyền thông & Thiết bị",
+"char": "マウス",
+"reading": "mausu",
+"meaning": "Chuột máy tính / Mouse",
+"example": "マウスが うごきません。(Mausu ga ugokimasen.) — Chuột không chạy.",
+"note": "Con chuột thật là ねずみ; マウス chỉ dùng cho máy tính."
+},
+{
+"type": "katakana",
+"topic": "Truyền thông & Thiết bị",
+"char": "スクリーン",
+"reading": "sukuriin",
+"meaning": "Màn hình / Screen",
+"example": "スクリーンが おおきいですね。(Sukuriin ga ookii desu ne.) — Màn hình to nhỉ.",
+"note": "Màn hình máy tính thường gọi がめん (画面) hoặc モニター; スクリーン thiên về màn chiếu."
+},
+{
+"type": "katakana",
+"topic": "Truyền thông & Thiết bị",
+"char": "ケーブル",
+"reading": "keeburu",
+"meaning": "Dây cáp / Cable",
+"example": "ケーブルを つないで ください。(Keeburu o tsunaide kudasai.) — Hãy cắm dây cáp vào.",
+"note": "Nối / cắm vào là つなぎます."
+},
+{
+"type": "katakana",
+"topic": "Truyền thông & Thiết bị",
+"char": "クリック",
+"reading": "kurikku",
+"meaning": "Nhấp chuột / Click",
+"example": "ここを クリックして ください。(Koko o kurikku shite kudasai.) — Hãy nhấp vào đây.",
+"note": "Thêm します thành động từ. Nhấp đúp: ダブルクリック."
+},
+{
+"type": "katakana",
+"topic": "Truyền thông & Thiết bị",
+"char": "コンピューター",
+"reading": "konpyuutaa",
+"meaning": "Máy vi tính / Computer",
+"example": "コンピューターの べんきょうを して います。(Konpyuutaa no benkyou o shite imasu.) — Tôi đang học về máy tính.",
+"note": "Đời thường nói パソコン nhiều hơn. ピュ là âm ghép, đọc liền."
+},
+{
+"type": "katakana",
+"topic": "Truyền thông & Thiết bị",
+"char": "メモリー",
+"reading": "memorii",
+"meaning": "Bộ nhớ / Memory",
+"example": "この パソコンは メモリーが おおきいです。(Kono pasokon wa memorii ga ookii desu.) — Máy tính này bộ nhớ lớn.",
+"note": "Khác メモ (mẩu ghi chú) — thêm リー là đổi nghĩa hẳn."
+},
+{
+"type": "katakana",
+"topic": "Địa điểm trong phố",
+"char": "ビル",
+"reading": "biru",
+"meaning": "Tòa nhà cao tầng / Building",
+"example": "えきの まえに たかい ビルが あります。(Eki no mae ni takai biru ga arimasu.) — Trước ga có tòa nhà cao.",
+"note": "ビル (tòa nhà) khác ビール (bia) — chỉ khác dấu kéo dài. Nói sai là thành \"bia\"!"
+},
+{
+"type": "katakana",
+"topic": "Công việc",
+"char": "オフィス",
+"reading": "ofisu",
+"meaning": "Văn phòng / Office",
+"example": "オフィスは はっかいに あります。(Ofisu wa hakkai ni arimasu.) — Văn phòng ở tầng 8.",
+"note": "Từ thuần Nhật là じむしょ (事務所). Nơi tồn tại + に."
+},
+{
+"type": "katakana",
+"topic": "Địa điểm trong phố",
+"char": "ジム",
+"reading": "jimu",
+"meaning": "Phòng gym / Gym",
+"example": "まいしゅう ジムへ いきます。(Maishuu jimu e ikimasu.) — Tuần nào tôi cũng đi phòng gym.",
+"note": "Nói đầy đủ là スポーツジム."
+},
+{
+"type": "katakana",
+"topic": "Địa điểm trong phố",
+"char": "バー",
+"reading": "baa",
+"meaning": "Quán bar / Bar",
+"example": "よる ともだちと バーへ いきました。(Yoru tomodachi to baa e ikimashita.) — Tối tôi đã đi quán bar với bạn.",
+"note": "Phải kéo dài ー: バ một nhịp là chữ khác hẳn."
+},
+{
+"type": "katakana",
+"topic": "Du lịch",
+"char": "ツアー",
+"reading": "tsuaa",
+"meaning": "Chuyến tham quan / Tour",
+"example": "きょうとの ツアーに さんかします。(Kyouto no tsuaa ni sanka shimasu.) — Tôi tham gia tour Kyoto.",
+"note": "ツ đọc là \"tsu\", không phải \"tu\". Tham gia vào + に."
+},
+{
+"type": "katakana",
+"topic": "Du lịch",
+"char": "スーツケース",
+"reading": "suutsukeesu",
+"meaning": "Vali / Suitcase",
+"example": "スーツケースに ふくを いれます。(Suutsukeesu ni fuku o iremasu.) — Tôi bỏ quần áo vào vali.",
+"note": "Ghép スーツ (bộ vest) + ケース (hộp) — vốn là hộp đựng vest."
+},
+{
+"type": "katakana",
+"topic": "Du lịch",
+"char": "パスポート",
+"reading": "pasupooto",
+"meaning": "Hộ chiếu / Passport",
+"example": "パスポートを みせて ください。(Pasupooto o misete kudasai.) — Cho xem hộ chiếu.",
+"note": "Rất dễ lẫn với パスワード (mật khẩu) — nhớ ポート là \"cảng\", đi ra nước ngoài."
+},
+{
+"type": "katakana",
+"topic": "Du lịch",
+"char": "チェックイン",
+"reading": "chekkuin",
+"meaning": "Làm thủ tục nhận phòng / Check-in",
+"example": "ホテルで チェックインします。(Hoteru de chekkuin shimasu.) — Tôi làm thủ tục nhận phòng ở khách sạn.",
+"note": "Thêm します thành động từ. Trả phòng là チェックアウト."
+},
+{
+"type": "katakana",
+"topic": "Địa điểm trong phố",
+"char": "ガソリンスタンド",
+"reading": "gasorin sutando",
+"meaning": "Trạm xăng / Gas station",
+"example": "ガソリンスタンドで ガソリンを いれます。(Gasorin sutando de gasorin o iremasu.) — Tôi đổ xăng ở trạm xăng.",
+"note": "Từ chế kiểu Nhật (和製英語) — người Anh Mỹ không nói \"gasoline stand\"."
+},
+{
+"type": "katakana",
+"topic": "Địa điểm trong phố",
+"char": "センター",
+"reading": "sentaa",
+"meaning": "Trung tâm / Center",
+"example": "この ちかくに ショッピングセンターが あります。(Kono chikaku ni shoppingu sentaa ga arimasu.) — Gần đây có trung tâm mua sắm.",
+"note": "Hay ghép: ショッピングセンター. Trung tâm theo nghĩa vị trí giữa là まんなか."
+},
+{
+"type": "katakana",
+"topic": "Địa điểm trong phố",
+"char": "カウンター",
+"reading": "kauntaa",
+"meaning": "Quầy / Counter",
+"example": "カウンターで きいて ください。(Kauntaa de kiite kudasai.) — Hãy hỏi ở quầy.",
+"note": "Quầy tính tiền cụ thể là レジ; カウンター là quầy tiếp khách nói chung."
+},
+{
+"type": "katakana",
+"topic": "Địa điểm trong phố",
+"char": "コーナー",
+"reading": "koonaa",
+"meaning": "Khu hàng / góc / Corner · section",
+"example": "くだものコーナーは あちらです。(Kudamono koonaa wa achira desu.) — Khu trái cây ở đằng kia.",
+"note": "Trong cửa hàng nghĩa là \"khu / gian hàng\". Góc đường, góc phòng là かど hoặc すみ."
+},
+{
+"type": "katakana",
+"topic": "Quần áo",
+"char": "ジーンズ",
+"reading": "jiinzu",
+"meaning": "Quần jeans / Jeans",
+"example": "きょうは ジーンズを はいて います。(Kyou wa jiinzu o haite imasu.) — Hôm nay tôi mặc quần jeans.",
+"note": "Đồ mặc từ hông trở xuống dùng はきます, khác きます cho áo."
+},
+{
+"type": "katakana",
+"topic": "Quần áo",
+"char": "セーター",
+"reading": "seetaa",
+"meaning": "Áo len / Sweater",
+"example": "さむいから セーターを きます。(Samui kara seetaa o kimasu.) — Vì lạnh nên tôi mặc áo len.",
+"note": "Kéo dài ở CẢ HAI chỗ: セー・ター."
+},
+{
+"type": "katakana",
+"topic": "Quần áo",
+"char": "ジャケット",
+"reading": "jaketto",
+"meaning": "Áo khoác / Jacket",
+"example": "ジャケットを ぬぎます。(Jaketto o nugimasu.) — Tôi cởi áo khoác.",
+"note": "Cởi ra là ぬぎます. Ngắn hơn コート (áo khoác dài)."
+},
+{
+"type": "katakana",
+"topic": "Quần áo",
+"char": "スーツ",
+"reading": "suutsu",
+"meaning": "Bộ vest / Suit",
+"example": "しごとの ときは スーツを きます。(Shigoto no toki wa suutsu o kimasu.) — Lúc đi làm tôi mặc vest.",
+"note": "Kết thúc bằng ツ. Ghép với ケース thành スーツケース (vali)."
+},
+{
+"type": "katakana",
+"topic": "Quần áo",
+"char": "ネクタイ",
+"reading": "nekutai",
+"meaning": "Cà vạt / Necktie",
+"example": "あかい ネクタイを して います。(Akai nekutai o shite imasu.) — Tôi đang đeo cà vạt đỏ.",
+"note": "Cà vạt dùng động từ します — không phải きます hay はきます."
+},
+{
+"type": "katakana",
+"topic": "Quần áo",
+"char": "ベルト",
+"reading": "beruto",
+"meaning": "Thắt lưng / Belt",
+"example": "ベルトを しめます。(Beruto o shimemasu.) — Tôi thắt dây lưng.",
+"note": "Thắt chặt là しめます. Dây an toàn: シートベルト."
+},
+{
+"type": "katakana",
+"topic": "Quần áo",
+"char": "サングラス",
+"reading": "sangurasu",
+"meaning": "Kính râm / Sunglasses",
+"example": "なつは サングラスを かけます。(Natsu wa sangurasu o kakemasu.) — Mùa hè tôi đeo kính râm.",
+"note": "Kính đeo mắt dùng かけます. Kính thường là めがね."
+},
+{
+"type": "katakana",
+"topic": "Quần áo",
+"char": "ブーツ",
+"reading": "buutsu",
+"meaning": "Bốt (giày cao cổ) / Boots",
+"example": "ふゆに ブーツを はきます。(Fuyu ni buutsu o hakimasu.) — Mùa đông tôi đi bốt.",
+"note": "Giày dép dùng はきます. Kết thúc bằng ツ."
+},
+{
+"type": "katakana",
+"topic": "Quần áo",
+"char": "サンダル",
+"reading": "sandaru",
+"meaning": "Dép xăng đan / Sandals",
+"example": "なつは サンダルが らくです。(Natsu wa sandaru ga raku desu.) — Mùa hè đi xăng đan thoải mái.",
+"note": "らく = thoải mái, dễ chịu."
+},
+{
+"type": "katakana",
+"topic": "Quần áo",
+"char": "スリッパ",
+"reading": "surippa",
+"meaning": "Dép trong nhà / Slippers",
+"example": "いえに はいる とき スリッパを はきます。(Ie ni hairu toki surippa o hakimasu.) — Khi vào nhà thì đi dép trong nhà.",
+"note": "Có ッ nhỏ. Ở Nhật vào nhà là bỏ giày rồi đi スリッパ."
+},
+{
+"type": "katakana",
+"topic": "Đồ trong nhà",
+"char": "タオル",
+"reading": "taoru",
+"meaning": "Khăn tắm / Towel",
+"example": "タオルで てを ふきます。(Taoru de te o fukimasu.) — Tôi lau tay bằng khăn.",
+"note": "Lau chùi là ふきます. Dụng cụ dùng で."
+},
+{
+"type": "katakana",
+"topic": "Đồ trong nhà",
+"char": "ハンカチ",
+"reading": "hankachi",
+"meaning": "Khăn tay / Handkerchief",
+"example": "ハンカチを もって います。(Hankachi o motte imasu.) — Tôi có mang theo khăn tay.",
+"note": "Nói tắt của ハンカチーフ. Nhà vệ sinh ở Nhật thường không có máy sấy tay nên ai cũng mang."
+},
+{
+"type": "katakana",
+"topic": "Đồ trong nhà",
+"char": "カレンダー",
+"reading": "karendaa",
+"meaning": "Lịch / Calendar",
+"example": "かべに カレンダーが あります。(Kabe ni karendaa ga arimasu.) — Trên tường có tờ lịch.",
+"note": "Có ン trước ダー: カ-レ-ン-ダー."
+},
+{
+"type": "katakana",
+"topic": "Trường học",
+"char": "ペン",
+"reading": "pen",
+"meaning": "Bút / Pen",
+"example": "ペンで なまえを かいて ください。(Pen de namae o kaite kudasai.) — Hãy viết tên bằng bút.",
+"note": "Dụng cụ dùng で. Bút bi là ボールペン, bút chì là えんぴつ."
+},
+{
+"type": "katakana",
+"topic": "Sở thích",
+"char": "ピアノ",
+"reading": "piano",
+"meaning": "Đàn piano / Piano",
+"example": "いもうとは ピアノを ひきます。(Imouto wa piano o hikimasu.) — Em gái tôi chơi piano.",
+"note": "Nhạc cụ dây / phím dùng ひきます (弾きます), không dùng します."
+},
+{
+"type": "katakana",
+"topic": "Sở thích",
+"char": "バイオリン",
+"reading": "baiorin",
+"meaning": "Vĩ cầm / Violin",
+"example": "バイオリンを ならって います。(Baiorin o naratte imasu.) — Tôi đang học vĩ cầm.",
+"note": "Cũng dùng ひきます như piano. Học từ thầy là ならいます."
+},
+{
+"type": "katakana",
+"topic": "Sở thích",
+"char": "ダンス",
+"reading": "dansu",
+"meaning": "Khiêu vũ / Dance",
+"example": "ともだちと ダンスを します。(Tomodachi to dansu o shimasu.) — Tôi nhảy với bạn.",
+"note": "Thêm します. Động từ thuần Nhật là おどります (踊ります)."
+},
+{
+"type": "katakana",
+"topic": "Sở thích",
+"char": "カラオケ",
+"reading": "karaoke",
+"meaning": "Karaoke / Karaoke",
+"example": "しゅうまつ カラオケへ いきます。(Shuumatsu karaoke e ikimasu.) — Cuối tuần tôi đi karaoke.",
+"note": "Ghép から (trống) + オケ (dàn nhạc) — từ Nhật đã đi ra thế giới. Đọc \"ka-ra-o-ke\"."
+},
+{
+"type": "katakana",
+"topic": "Sở thích",
+"char": "マラソン",
+"reading": "marason",
+"meaning": "Chạy marathon / Marathon",
+"example": "にちようびに マラソンが あります。(Nichiyoubi ni marason ga arimasu.) — Chủ nhật có giải marathon.",
+"note": "Chạy marathon: マラソンを はしります."
+},
+{
+"type": "katakana",
+"topic": "Sở thích",
+"char": "スキー",
+"reading": "sukii",
+"meaning": "Trượt tuyết / Skiing",
+"example": "ふゆに スキーを します。(Fuyu ni sukii o shimasu.) — Mùa đông tôi đi trượt tuyết.",
+"note": "Đi trượt tuyết (có mục đích): スキーに いきます."
+},
+{
+"type": "katakana",
+"topic": "Sở thích",
+"char": "スケート",
+"reading": "sukeeto",
+"meaning": "Trượt băng / Skating",
+"example": "こどもと スケートを しました。(Kodomo to sukeeto o shimashita.) — Tôi đã trượt băng với con.",
+"note": "Đừng nhầm với スカート (váy) — ケー vs カー."
+},
+{
+"type": "katakana",
+"topic": "Sở thích",
+"char": "ゴルフ",
+"reading": "gorufu",
+"meaning": "Golf / Golf",
+"example": "ちちは ゴルフが じょうずです。(Chichi wa gorufu ga jouzu desu.) — Bố tôi chơi golf giỏi.",
+"note": "Giỏi / dở ở lĩnh vực nào thì lĩnh vực đó + が."
+},
+{
+"type": "katakana",
+"topic": "Sở thích",
+"char": "ボール",
+"reading": "booru",
+"meaning": "Quả bóng / Ball",
+"example": "ボールを なげます。(Booru o nagemasu.) — Tôi ném quả bóng.",
+"note": "ボール (bóng) khác ボウル (tô, bát). Ném là なげます."
+},
+{
+"type": "katakana",
+"topic": "Sở thích",
+"char": "チーム",
+"reading": "chiimu",
+"meaning": "Đội / Team",
+"example": "わたしの チームは つよいです。(Watashi no chiimu wa tsuyoi desu.) — Đội tôi mạnh.",
+"note": "チー kéo dài. Hay ghép: チームワーク."
+},
+{
+"type": "katakana",
+"topic": "Sở thích",
+"char": "ジョギング",
+"reading": "jogingu",
+"meaning": "Chạy bộ / Jogging",
+"example": "まいあさ こうえんで ジョギングを します。(Maiasa kouen de jogingu o shimasu.) — Sáng nào tôi cũng chạy bộ ở công viên.",
+"note": "Thêm します. Nơi diễn ra hành động + で."
+},
+{
+"type": "katakana",
+"topic": "Sở thích",
+"char": "ボクシング",
+"reading": "bokushingu",
+"meaning": "Quyền anh / Boxing",
+"example": "ボクシングを みるのが すきです。(Bokushingu o miru no ga suki desu.) — Tôi thích xem quyền anh.",
+"note": "〜のが すきです = thích LÀM việc gì (động từ thể từ điển + の)."
+},
+{
+"type": "katakana",
+"topic": "Sở thích",
+"char": "サーフィン",
+"reading": "saafin",
+"meaning": "Lướt sóng / Surfing",
+"example": "うみで サーフィンを します。(Umi de saafin o shimasu.) — Tôi lướt sóng ở biển.",
+"note": "フィ = フ + ィ nhỏ, đọc \"fi\"."
+},
+{
+"type": "katakana",
+"topic": "Sở thích",
+"char": "キャンプ",
+"reading": "kyanpu",
+"meaning": "Cắm trại / Camping",
+"example": "やまで キャンプを しました。(Yama de kyanpu o shimashita.) — Tôi đã cắm trại ở núi.",
+"note": "キャ là âm ghép (キ + ャ nhỏ), đọc liền một nhịp."
+},
+{
+"type": "katakana",
+"topic": "Đồ trong nhà",
+"char": "ソファ",
+"reading": "sofa",
+"meaning": "Ghế sofa / Sofa",
+"example": "ソファに すわって テレビを みます。(Sofa ni suwatte terebi o mimasu.) — Tôi ngồi sofa xem TV.",
+"note": "Ngồi lên chỗ nào + に. Cũng viết ソファー."
+},
+{
+"type": "katakana",
+"topic": "Đồ trong nhà",
+"char": "カーテン",
+"reading": "kaaten",
+"meaning": "Rèm cửa / Curtain",
+"example": "カーテンを あけます。(Kaaten o akemasu.) — Tôi mở rèm.",
+"note": "Mở あけます / đóng しめます."
+},
+{
+"type": "katakana",
+"topic": "Đồ trong nhà",
+"char": "シャワー",
+"reading": "shawaa",
+"meaning": "Vòi sen / Shower",
+"example": "まいばん シャワーを あびます。(Maiban shawaa o abimasu.) — Tối nào tôi cũng tắm vòi sen.",
+"note": "Tắm vòi sen dùng あびます; ngâm bồn là おふろに はいります."
+},
+{
+"type": "katakana",
+"topic": "Đồ trong nhà",
+"char": "ストーブ",
+"reading": "sutoobu",
+"meaning": "Lò sưởi / Heater",
+"example": "さむいから ストーブを つけます。(Samui kara sutoobu o tsukemasu.) — Vì lạnh nên tôi bật lò sưởi.",
+"note": "Tiếng Anh \"stove\" là bếp nấu, nhưng ストーブ tiếng Nhật là lò SƯỞI. Bếp nấu là コンロ."
+},
+{
+"type": "katakana",
+"topic": "Đồ trong nhà",
+"char": "スプーン",
+"reading": "supuun",
+"meaning": "Thìa / Spoon",
+"example": "スプーンで スープを のみます。(Supuun de suupu o nomimasu.) — Tôi húp súp bằng thìa.",
+"note": "プー kéo dài. Đũa là はし."
+},
+{
+"type": "katakana",
+"topic": "Đồ trong nhà",
+"char": "フォーク",
+"reading": "fooku",
+"meaning": "Nĩa / Fork",
+"example": "フォークと ナイフを つかいます。(Fooku to naifu o tsukaimasu.) — Tôi dùng nĩa và dao.",
+"note": "フォ = フ + ォ nhỏ, đọc \"fo\" một nhịp."
+},
+{
+"type": "katakana",
+"topic": "Đồ trong nhà",
+"char": "ナイフ",
+"reading": "naifu",
+"meaning": "Dao / Knife",
+"example": "ナイフで パンを きります。(Naifu de pan o kirimasu.) — Tôi cắt bánh mì bằng dao.",
+"note": "ナイフ là dao ăn; dao làm bếp là ほうちょう (包丁)."
+},
+{
+"type": "katakana",
+"topic": "Đồ trong nhà",
+"char": "カップ",
+"reading": "kappu",
+"meaning": "Tách (có quai) / Cup",
+"example": "カップに こうちゃを いれます。(Kappu ni koucha o iremasu.) — Tôi rót trà vào tách.",
+"note": "カップ là tách CÓ QUAI (trà, cà phê). Xem thêm コップ và グラス."
+},
+{
+"type": "katakana",
+"topic": "Đồ trong nhà",
+"char": "グラス",
+"reading": "gurasu",
+"meaning": "Ly thủy tinh / Glass",
+"example": "ワインを グラスに いれます。(Wain o gurasu ni iremasu.) — Tôi rót rượu vang ra ly.",
+"note": "グラス là ly thuỷ tinh (hay có chân, uống rượu). Đừng nhầm với クラス (lớp học) — chỉ khác dấu ゛."
+},
+{
+"type": "katakana",
+"topic": "Đồ trong nhà",
+"char": "コップ",
+"reading": "koppu",
+"meaning": "Cốc / Cup · glass",
+"example": "コップに みずを いれます。(Koppu ni mizu o iremasu.) — Tôi rót nước vào cốc.",
+"note": "BỘ BA dễ lẫn: コップ (cốc không quai, uống nước) · カップ (tách CÓ quai) · グラス (ly thuỷ tinh). コップ đến từ tiếng Hà Lan, không phải \"cup\"."
+},
+{
+"type": "katakana",
+"topic": "Đồ trong nhà",
+"char": "ゴミ",
+"reading": "gomi",
+"meaning": "Rác / Trash",
+"example": "ゴミを すてて ください。(Gomi o sutete kudasai.) — Hãy vứt rác đi.",
+"note": "Từ thuần Nhật nhưng quen viết katakana. Vứt là すてます; thùng rác là ゴミばこ."
+},
+{
+"type": "katakana",
+"topic": "Từ trừu tượng",
+"char": "アイデア",
+"reading": "aidea",
+"meaning": "Ý tưởng / Idea",
+"example": "いい アイデアですね。(Ii aidea desu ne.) — Ý tưởng hay đấy.",
+"note": "Cũng viết アイディア. Đọc bốn nhịp \"a-i-de-a\"."
+},
+{
+"type": "katakana",
+"topic": "Từ trừu tượng",
+"char": "チャンス",
+"reading": "chansu",
+"meaning": "Cơ hội / Chance",
+"example": "いい チャンスですよ。(Ii chansu desu yo.) — Là cơ hội tốt đấy.",
+"note": "チャ là âm ghép. Từ thuần Nhật là きかい (機会)."
+},
+{
+"type": "katakana",
+"topic": "Từ trừu tượng",
+"char": "スケジュール",
+"reading": "sukejuuru",
+"meaning": "Lịch trình / Schedule",
+"example": "あしたの スケジュールを おしえて ください。(Ashita no sukejuuru o oshiete kudasai.) — Cho tôi biết lịch trình ngày mai.",
+"note": "ジュー — ュ nhỏ rồi mới kéo dài. Từ thuần Nhật: よてい (予定)."
+},
+{
+"type": "katakana",
+"topic": "Từ trừu tượng",
+"char": "サイズ",
+"reading": "saizu",
+"meaning": "Kích cỡ / Size",
+"example": "この シャツは サイズが ちいさいです。(Kono shatsu wa saizu ga chiisai desu.) — Áo này cỡ nhỏ quá.",
+"note": "Kết thúc bằng ズ (có dấu ゛), không phải ス."
+},
+{
+"type": "katakana",
+"topic": "Từ trừu tượng",
+"char": "タイプ",
+"reading": "taipu",
+"meaning": "Kiểu / loại / Type",
+"example": "どんな タイプが すきですか。(Donna taipu ga suki desu ka?) — Bạn thích kiểu nào?",
+"note": "Còn nghĩa \"gõ máy\": タイプします."
+},
+{
+"type": "katakana",
+"topic": "Từ trừu tượng",
+"char": "レベル",
+"reading": "reberu",
+"meaning": "Cấp độ / Level",
+"example": "にほんごの レベルが あがりました。(Nihongo no reberu ga agarimashita.) — Trình độ tiếng Nhật của tôi đã lên.",
+"note": "Lên / tăng là あがります, xuống là さがります."
+},
+{
+"type": "katakana",
+"topic": "Từ trừu tượng",
+"char": "ポイント",
+"reading": "pointo",
+"meaning": "Điểm mấu chốt / Point",
+"example": "ここが いちばん たいせつな ポイントです。(Koko ga ichiban taisetsuna pointo desu.) — Đây là điểm quan trọng nhất.",
+"note": "Vừa nghĩa \"điểm mấu chốt\", vừa là \"điểm tích luỹ\" khi mua hàng."
+},
+{
+"type": "katakana",
+"topic": "Từ trừu tượng",
+"char": "ルール",
+"reading": "ruuru",
+"meaning": "Quy tắc / Rule",
+"example": "ゲームの ルールを おぼえます。(Geemu no ruuru o oboemasu.) — Tôi nhớ luật chơi.",
+"note": "Kéo dài ở cả hai chỗ: ルー・ル. Từ thuần Nhật: きそく (規則)."
+},
+{
+"type": "katakana",
+"topic": "Từ trừu tượng",
+"char": "スタート",
+"reading": "sutaato",
+"meaning": "Bắt đầu / Start",
+"example": "くじに スタートします。(Kuji ni sutaato shimasu.) — 9 giờ bắt đầu.",
+"note": "Thêm します thành động từ. Từ thuần Nhật: はじまります."
+},
+{
+"type": "katakana",
+"topic": "Từ trừu tượng",
+"char": "ゴール",
+"reading": "gooru",
+"meaning": "Đích / mục tiêu / Goal",
+"example": "やっと ゴールに つきました。(Yatto gooru ni tsukimashita.) — Cuối cùng cũng đến đích.",
+"note": "Vừa là \"đích đến\" vừa là \"mục tiêu\". Đừng nhầm với ゴルフ (golf) — ゴー kéo dài."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "みつかります",
+"reading": "mitsukarimasu",
+"meaning": "Được tìm thấy / Be found",
+"example": "さいふが みつかりました。(Saifu ga mitsukarimashita.) — Cái ví đã được tìm thấy.",
+"note": "Tự động từ — dùng が. Cặp với みつけます (tha động từ, dùng を)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "なくします",
+"reading": "nakushimasu",
+"meaning": "Làm mất / Lose",
+"example": "かぎを なくしました。(Kagi o nakushimashita.) — Tôi làm mất chìa khoá.",
+"note": "Mất mà không biết ở đâu. Khác おとします (rơi ra ngoài)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "おとします",
+"reading": "otoshimasu",
+"meaning": "Đánh rơi / Drop",
+"example": "でんしゃで さいふを おとしました。(Densha de saifu o otoshimashita.) — Tôi đánh rơi ví trên tàu.",
+"note": "Tha động từ (を). Tự động từ tương ứng: おちます (tự rơi)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "ひろいます",
+"reading": "hiroimasu",
+"meaning": "Nhặt lên / Pick up",
+"example": "こうえんで かぎを ひろいました。(Kouen de kagi o hiroimashita.) — Tôi nhặt được chìa khoá ở công viên.",
+"note": "Trái với おとします. Đừng nhầm với ひろい (rộng)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "あけます",
+"reading": "akemasu",
+"meaning": "Mở / Open",
+"example": "まどを あけます。(Mado o akemasu.) — Tôi mở cửa sổ.",
+"note": "Tha động từ (を). Tự động từ: あきます (cửa tự mở)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "しめます",
+"reading": "shimemasu",
+"meaning": "Đóng / Close",
+"example": "ドアを しめて ください。(Doa o shimete kudasai.) — Làm ơn đóng cửa.",
+"note": "Cặp với あけます. Tự động từ: しまります."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "つけます",
+"reading": "tsukemasu",
+"meaning": "Bật (điện, TV) / Turn on",
+"example": "テレビを つけます。(Terebi o tsukemasu.) — Tôi bật TV.",
+"note": "Cặp với けします. Còn nghĩa \"gắn, đính vào\"."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "けします",
+"reading": "keshimasu",
+"meaning": "Tắt · xoá / Turn off · erase",
+"example": "でんきを けします。(Denki o keshimasu.) — Tôi tắt điện.",
+"note": "Vừa \"tắt\" (điện, lửa) vừa \"xoá\" (chữ, file)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "はじまります",
+"reading": "hajimarimasu",
+"meaning": "(Tự) bắt đầu / Begin",
+"example": "かいぎは くじに はじまります。(Kaigi wa kuji ni hajimarimasu.) — Cuộc họp bắt đầu lúc 9 giờ.",
+"note": "Tự động từ (が). Tha động từ: はじめます (を) — mình bắt đầu cái gì."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "とめます",
+"reading": "tomemasu",
+"meaning": "Dừng · đỗ xe / Stop · park",
+"example": "ここに くるまを とめます。(Koko ni kuruma o tomemasu.) — Tôi đỗ xe ở đây.",
+"note": "Tha động từ (を). Tự động từ: とまります (xe tự dừng)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "つづけます",
+"reading": "tsuzukemasu",
+"meaning": "Tiếp tục / Continue",
+"example": "べんきょうを つづけます。(Benkyou o tsuzukemasu.) — Tôi tiếp tục học.",
+"note": "Viết づ (không phải ず). Tự động từ: つづきます."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "やめます",
+"reading": "yamemasu",
+"meaning": "Ngừng · bỏ / Quit",
+"example": "たばこを やめました。(Tabako o yamemashita.) — Tôi đã bỏ thuốc lá.",
+"note": "Trái với つづけます. Đừng nhầm với やすみます (nghỉ)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "あがります",
+"reading": "agarimasu",
+"meaning": "Lên · tăng / Go up",
+"example": "ねだんが あがりました。(Nedan ga agarimashita.) — Giá đã tăng.",
+"note": "Tự động từ (が). Trái nghĩa: さがります."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "さがります",
+"reading": "sagarimasu",
+"meaning": "Xuống · giảm / Go down",
+"example": "ねつが さがりました。(Netsu ga sagarimashita.) — Cơn sốt đã hạ.",
+"note": "Đừng nhầm với さがします (tìm kiếm) — chỉ khác が/か."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "ふえます",
+"reading": "fuemasu",
+"meaning": "Tăng (số lượng) / Increase",
+"example": "がくせいが ふえました。(Gakusei ga fuemashita.) — Số học sinh đã tăng.",
+"note": "Dùng cho số lượng, đi với が. Trái nghĩa: へります."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "へります",
+"reading": "herimasu",
+"meaning": "Giảm (số lượng) / Decrease",
+"example": "おかねが へりました。(Okane ga herimashita.) — Tiền đã vơi đi.",
+"note": "Tự động từ (が). Tha động từ: へらします."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "かわります",
+"reading": "kawarimasu",
+"meaning": "Thay đổi / Change",
+"example": "よていが かわりました。(Yotei ga kawarimashita.) — Lịch đã thay đổi.",
+"note": "Tự động từ (が). Tha động từ: かえます (を)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "あらいます",
+"reading": "araimasu",
+"meaning": "Rửa · giặt / Wash",
+"example": "てを あらいます。(Te o araimasu.) — Tôi rửa tay.",
+"note": "Rửa bằng nước. Giặt quần áo là せんたくします."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "そうじします",
+"reading": "souji shimasu",
+"meaning": "Dọn dẹp / Clean",
+"example": "へやを そうじします。(Heya o souji shimasu.) — Tôi dọn phòng.",
+"note": "そうじ (掃除) + します: quét, lau, hút bụi."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "せんたくします",
+"reading": "sentaku shimasu",
+"meaning": "Giặt đồ / Do the laundry",
+"example": "にちようびに せんたくします。(Nichiyoubi ni sentaku shimasu.) — Chủ nhật tôi giặt đồ.",
+"note": "Chỉ dùng cho quần áo. Rửa tay/mặt là あらいます."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "かたづけます",
+"reading": "katazukemasu",
+"meaning": "Dọn gọn · cất / Tidy up",
+"example": "つくえの うえを かたづけます。(Tsukue no ue o katazukemasu.) — Tôi dọn gọn mặt bàn.",
+"note": "Cất đồ về đúng chỗ; そうじします là làm cho sạch."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "ならべます",
+"reading": "narabemasu",
+"meaning": "Bày · xếp thành hàng / Line up",
+"example": "いすを ならべます。(Isu o narabemasu.) — Tôi xếp ghế thành hàng.",
+"note": "Tha động từ (を). Tự động từ: ならびます (người xếp hàng)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "なおします",
+"reading": "naoshimasu",
+"meaning": "Sửa / Fix",
+"example": "じてんしゃを なおします。(Jitensha o naoshimasu.) — Tôi sửa xe đạp.",
+"note": "Sửa đồ hỏng và sửa lỗi sai. Tự động từ: なおります (khỏi bệnh)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "こわします",
+"reading": "kowashimasu",
+"meaning": "Làm hỏng / Break",
+"example": "スマホを こわしました。(Sumaho o kowashimashita.) — Tôi làm hỏng điện thoại.",
+"note": "Tha động từ (を). Tự động từ: こわれます (tự hỏng)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "はらいます",
+"reading": "haraimasu",
+"meaning": "Trả (tiền) / Pay",
+"example": "カードで はらいます。(Kaado de haraimasu.) — Tôi trả bằng thẻ.",
+"note": "おかねを はらいます. Trả lại đồ mượn là かえします."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "うります",
+"reading": "urimasu",
+"meaning": "Bán / Sell",
+"example": "この みせは やさいを うって います。(Kono mise wa yasai o utte imasu.) — Cửa hàng này bán rau.",
+"note": "Trái nghĩa: かいます (mua)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "かえします",
+"reading": "kaeshimasu",
+"meaning": "Trả lại / Return something",
+"example": "ほんを としょかんに かえします。(Hon o toshokan ni kaeshimasu.) — Tôi trả sách cho thư viện.",
+"note": "Đừng nhầm với かえります (về nhà)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "わたします",
+"reading": "watashimasu",
+"meaning": "Đưa · trao / Hand over",
+"example": "これを せんせいに わたして ください。(Kore o sensei ni watashite kudasai.) — Làm ơn đưa cái này cho thầy.",
+"note": "Người nhận + に."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "みせます",
+"reading": "misemasu",
+"meaning": "Cho xem / Show",
+"example": "パスポートを みせて ください。(Pasupooto o misete kudasai.) — Làm ơn cho xem hộ chiếu.",
+"note": "みます là tự mình xem; みせます là cho người khác xem."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "はこびます",
+"reading": "hakobimasu",
+"meaning": "Khiêng · vận chuyển / Carry",
+"example": "にもつを はこびます。(Nimotsu o hakobimasu.) — Tôi khiêng hành lý.",
+"note": "Chuyển vật từ chỗ này sang chỗ khác."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "とどきます",
+"reading": "todokimasu",
+"meaning": "(Đồ) được giao tới / Arrive",
+"example": "にもつが とどきました。(Nimotsu ga todokimashita.) — Hàng đã tới rồi.",
+"note": "Tự động từ (が). Tha động từ: とどけます (đem giao)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "じゅんびします",
+"reading": "junbi shimasu",
+"meaning": "Chuẩn bị / Prepare",
+"example": "りょこうの じゅんびを します。(Ryokou no junbi o shimasu.) — Tôi chuẩn bị cho chuyến đi.",
+"note": "じゅ là âm ghép. Gần nghĩa: ようい します."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "はきます",
+"reading": "hakimasu",
+"meaning": "Mang (giày · quần) / Put on lower body",
+"example": "くつを はきます。(Kutsu o hakimasu.) — Tôi mang giày.",
+"note": "Đồ mặc nửa dưới + giày. Áo là きます, mũ là かぶります."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "ぬぎます",
+"reading": "nugimasu",
+"meaning": "Cởi (quần áo, giày) / Take off",
+"example": "げんかんで くつを ぬぎます。(Genkan de kutsu o nugimasu.) — Cởi giày ở cửa ra vào.",
+"note": "Dùng chung cho mọi thứ đang mặc / mang."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "いいます",
+"reading": "iimasu",
+"meaning": "Nói / Say",
+"example": "なまえを いって ください。(Namae o itte kudasai.) — Làm ơn nói tên bạn.",
+"note": "Thể て bất quy tắc: いって. はなします là \"nói chuyện\"."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "こたえます",
+"reading": "kotaemasu",
+"meaning": "Trả lời / Answer",
+"example": "しつもんに こたえます。(Shitsumon ni kotaemasu.) — Tôi trả lời câu hỏi.",
+"note": "Dùng trợ từ に, không phải を."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "よびます",
+"reading": "yobimasu",
+"meaning": "Gọi (ai đó) / Call",
+"example": "タクシーを よびます。(Takushii o yobimasu.) — Tôi gọi taxi.",
+"note": "Gọi điện thoại là でんわを かけます."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "おもいます",
+"reading": "omoimasu",
+"meaning": "Nghĩ (rằng…) / Think",
+"example": "あしたは あめだと おもいます。(Ashita wa ame da to omoimasu.) — Tôi nghĩ mai trời mưa.",
+"note": "Mẫu: [câu thể thường] + と おもいます."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "かんがえます",
+"reading": "kangaemasu",
+"meaning": "Suy nghĩ · cân nhắc / Consider",
+"example": "もういちど かんがえます。(Mou ichido kangaemasu.) — Tôi sẽ suy nghĩ lại.",
+"note": "おもいます là cảm nhận / ý kiến; かんがえます là nghĩ có chủ đích."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "しんじます",
+"reading": "shinjimasu",
+"meaning": "Tin / Believe",
+"example": "かれの はなしを しんじます。(Kare no hanashi o shinjimasu.) — Tôi tin lời anh ấy.",
+"note": "じ có dấu ゛. Danh từ: しんよう (sự tin tưởng)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "ならいます",
+"reading": "naraimasu",
+"meaning": "Học (từ ai đó) / Learn from",
+"example": "せんせいに にほんごを ならいます。(Sensei ni nihongo o naraimasu.) — Tôi học tiếng Nhật từ thầy.",
+"note": "Có người dạy → người dạy + に. Tự học là べんきょうします."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "しょうかいします",
+"reading": "shoukai shimasu",
+"meaning": "Giới thiệu / Introduce",
+"example": "ともだちを しょうかいします。(Tomodachi o shoukai shimasu.) — Tôi giới thiệu bạn tôi.",
+"note": "しょう kéo dài. じこしょうかい = tự giới thiệu."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "あんないします",
+"reading": "annai shimasu",
+"meaning": "Dẫn đường · hướng dẫn / Guide",
+"example": "まちを あんないします。(Machi o annai shimasu.) — Tôi dẫn bạn đi thăm phố.",
+"note": "あんない (案内) cũng là \"bảng chỉ dẫn\"."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "まちがえます",
+"reading": "machigaemasu",
+"meaning": "Nhầm · làm sai / Make a mistake",
+"example": "でんしゃを まちがえました。(Densha o machigaemashita.) — Tôi lên nhầm tàu.",
+"note": "Danh từ: まちがい (lỗi sai)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "うんてんします",
+"reading": "unten shimasu",
+"meaning": "Lái xe / Drive",
+"example": "くるまを うんてんします。(Kuruma o unten shimasu.) — Tôi lái ô tô.",
+"note": "うんてんしゅ = tài xế."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "さんぽします",
+"reading": "sanpo shimasu",
+"meaning": "Đi dạo / Take a walk",
+"example": "こうえんを さんぽします。(Kouen o sanpo shimasu.) — Tôi đi dạo trong công viên.",
+"note": "Nơi đi qua dùng を, không dùng で."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "のぼります",
+"reading": "noborimasu",
+"meaning": "Leo · trèo lên / Climb",
+"example": "やまに のぼります。(Yama ni noborimasu.) — Tôi leo núi.",
+"note": "Đích đến + に. Trái nghĩa: おります (đi xuống)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "とびます",
+"reading": "tobimasu",
+"meaning": "Bay · nhảy / Fly · jump",
+"example": "とりが そらを とびます。(Tori ga sora o tobimasu.) — Chim bay trên trời.",
+"note": "Không gian bay qua dùng を."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "まにあいます",
+"reading": "maniaimasu",
+"meaning": "Kịp giờ / Be in time",
+"example": "でんしゃに まにあいました。(Densha ni maniaimashita.) — Tôi kịp chuyến tàu.",
+"note": "Cái phải kịp + に. Trái nghĩa: おくれます (trễ)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "なれます",
+"reading": "naremasu",
+"meaning": "Quen (với) / Get used to",
+"example": "にほんの せいかつに なれました。(Nihon no seikatsu ni naremashita.) — Tôi đã quen với cuộc sống ở Nhật.",
+"note": "Dùng に. Thường ở dạng なれました / なれて います."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "みえます",
+"reading": "miemasu",
+"meaning": "Nhìn thấy được / Be visible",
+"example": "まどから うみが みえます。(Mado kara umi ga miemasu.) — Từ cửa sổ nhìn thấy biển.",
+"note": "Tự lọt vào mắt → が. みます là chủ động xem."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "きこえます",
+"reading": "kikoemasu",
+"meaning": "Nghe thấy được / Be audible",
+"example": "おんがくが きこえます。(Ongaku ga kikoemasu.) — Nghe thấy tiếng nhạc.",
+"note": "Tự lọt vào tai → が. ききます là chủ động nghe."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "わらいます",
+"reading": "waraimasu",
+"meaning": "Cười / Laugh",
+"example": "みんなが わらいました。(Minna ga waraimashita.) — Mọi người đã cười.",
+"note": "Cười mỉm: にこにこ わらいます."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "なきます",
+"reading": "nakimasu",
+"meaning": "Khóc / Cry",
+"example": "あかちゃんが ないて います。(Akachan ga naite imasu.) — Em bé đang khóc.",
+"note": "Cùng âm với 鳴きます (tiếng kêu của con vật)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "おこります",
+"reading": "okorimasu",
+"meaning": "Tức giận / Get angry",
+"example": "ちちが おこりました。(Chichi ga okorimashita.) — Bố tôi đã nổi giận.",
+"note": "Người bị giận + に. Trạng thái: おこって います."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "つかれます",
+"reading": "tsukaremasu",
+"meaning": "Mệt / Get tired",
+"example": "きょうは とても つかれました。(Kyou wa totemo tsukaremashita.) — Hôm nay tôi rất mệt.",
+"note": "Đang mệt thì nói つかれました (quá khứ), không nói つかれます."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "びっくりします",
+"reading": "bikkuri shimasu",
+"meaning": "Giật mình · ngạc nhiên / Be surprised",
+"example": "おおきい おとに びっくりしました。(Ookii oto ni bikkuri shimashita.) — Tôi giật mình vì tiếng động lớn.",
+"note": "っ là âm ngắt. Nguyên nhân + に."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "しんぱいします",
+"reading": "shinpai shimasu",
+"meaning": "Lo lắng / Worry",
+"example": "むすこの ことを しんぱいして います。(Musuko no koto o shinpai shite imasu.) — Tôi đang lo cho con trai.",
+"note": "Trái nghĩa: あんしんします (yên tâm)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "なります",
+"reading": "narimasu",
+"meaning": "Trở thành / Become",
+"example": "いしゃに なりたいです。(Isha ni naritai desu.) — Tôi muốn trở thành bác sĩ.",
+"note": "Danh từ / な-tính từ + に なります; い-tính từ bỏ い + く なります."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "すみます",
+"reading": "sumimasu",
+"meaning": "Sống · cư trú / Live",
+"example": "とうきょうに すんで います。(Toukyou ni sunde imasu.) — Tôi đang sống ở Tokyo.",
+"note": "Luôn dùng dạng すんで います; nơi ở + に."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "うまれます",
+"reading": "umaremasu",
+"meaning": "Được sinh ra / Be born",
+"example": "ハノイで うまれました。(Hanoi de umaremashita.) — Tôi sinh ra ở Hà Nội.",
+"note": "Hầu như luôn ở quá khứ うまれました. Nơi sinh + で."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "けっこんします",
+"reading": "kekkon shimasu",
+"meaning": "Kết hôn / Get married",
+"example": "らいねん けっこんします。(Rainen kekkon shimasu.) — Năm sau tôi kết hôn.",
+"note": "Người cưới + と. Đã có gia đình: けっこんして います."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "ひっこします",
+"reading": "hikkoshimasu",
+"meaning": "Chuyển nhà / Move house",
+"example": "らいげつ おおさかへ ひっこします。(Raigetsu Oosaka e hikkoshimasu.) — Tháng sau tôi chuyển nhà tới Osaka.",
+"note": "Cũng nói ひっこしします. っ là âm ngắt."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "りょこうします",
+"reading": "ryokou shimasu",
+"meaning": "Đi du lịch / Travel",
+"example": "なつやすみに りょこうします。(Natsuyasumi ni ryokou shimasu.) — Nghỉ hè tôi đi du lịch.",
+"note": "りょ là âm ghép, こう kéo dài."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "つよい",
+"reading": "tsuyoi",
+"meaning": "Mạnh / Strong",
+"example": "かれは とても つよいです。(Kare wa totemo tsuyoi desu.) — Anh ấy rất mạnh.",
+"note": "い-tính từ. Trái nghĩa: よわい."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "よわい",
+"reading": "yowai",
+"meaning": "Yếu / Weak",
+"example": "わたしは おさけが よわいです。(Watashi wa osake ga yowai desu.) — Tôi tửu lượng kém.",
+"note": "い-tính từ. Trái nghĩa: つよい."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "ひろい",
+"reading": "hiroi",
+"meaning": "Rộng / Spacious",
+"example": "この へやは ひろいです。(Kono heya wa hiroi desu.) — Phòng này rộng.",
+"note": "い-tính từ. Trái nghĩa: せまい. Đừng nhầm với ひろいます (nhặt)."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "せまい",
+"reading": "semai",
+"meaning": "Chật · hẹp / Narrow",
+"example": "みちが せまいです。(Michi ga semai desu.) — Con đường hẹp.",
+"note": "い-tính từ. Dùng cho cả phòng, đường, chỗ ngồi."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "とおい",
+"reading": "tooi",
+"meaning": "Xa / Far",
+"example": "えきは とおいですか。(Eki wa tooi desu ka?) — Ga có xa không?",
+"note": "Viết おお (hai chữ お). Trái nghĩa: ちかい."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "ちかい",
+"reading": "chikai",
+"meaning": "Gần / Near",
+"example": "うちは えきに ちかいです。(Uchi wa eki ni chikai desu.) — Nhà tôi gần ga.",
+"note": "Đối tượng so sánh dùng に."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "きたない",
+"reading": "kitanai",
+"meaning": "Bẩn / Dirty",
+"example": "へやが きたないです。(Heya ga kitanai desu.) — Phòng bẩn quá.",
+"note": "Trái nghĩa: きれい (là な-tính từ dù kết thúc bằng い)."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "あぶない",
+"reading": "abunai",
+"meaning": "Nguy hiểm / Dangerous",
+"example": "あぶない！くるまが きます。(Abunai! Kuruma ga kimasu.) — Nguy hiểm! Có xe tới.",
+"note": "Kêu một mình cũng có nghĩa \"coi chừng!\"."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "うれしい",
+"reading": "ureshii",
+"meaning": "Vui mừng / Glad",
+"example": "あえて うれしいです。(Aete ureshii desu.) — Gặp được bạn, tôi rất vui.",
+"note": "Cảm xúc nhất thời của chính mình. たのしい là vui khi đang làm gì đó."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "かなしい",
+"reading": "kanashii",
+"meaning": "Buồn / Sad",
+"example": "その ニュースは かなしいです。(Sono nyuusu wa kanashii desu.) — Tin đó thật buồn.",
+"note": "Trái nghĩa: うれしい."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "さびしい",
+"reading": "sabishii",
+"meaning": "Cô đơn / Lonely",
+"example": "ひとりで さびしいです。(Hitori de sabishii desu.) — Ở một mình buồn quá.",
+"note": "Cũng đọc / viết là さみしい."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "こわい",
+"reading": "kowai",
+"meaning": "Đáng sợ / Scary",
+"example": "この えいがは こわいです。(Kono eiga wa kowai desu.) — Phim này đáng sợ.",
+"note": "Đừng nhầm với こわします (làm hỏng)."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "ねむい",
+"reading": "nemui",
+"meaning": "Buồn ngủ / Sleepy",
+"example": "あさは いつも ねむいです。(Asa wa itsumo nemui desu.) — Buổi sáng lúc nào tôi cũng buồn ngủ.",
+"note": "ねます là \"ngủ\", ねむい là \"thấy buồn ngủ\"."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "しんせつ",
+"reading": "shinsetsu",
+"meaning": "Tử tế / Kind",
+"example": "てんいんが しんせつです。(Ten-in ga shinsetsu desu.) — Nhân viên rất tử tế.",
+"note": "な-tính từ: しんせつな ひと."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "たいせつ",
+"reading": "taisetsu",
+"meaning": "Quan trọng / Important",
+"example": "かぞくは たいせつです。(Kazoku wa taisetsu desu.) — Gia đình là quan trọng.",
+"note": "な-tính từ: たいせつな もの. Gần nghĩa: だいじ."
+},
+{
+"type": "hiragana",
+"topic": "Danh từ thường dùng",
+"char": "おかね",
+"reading": "okane",
+"meaning": "Tiền / Money",
+"example": "おかねが ありません。(Okane ga arimasen.) — Tôi không có tiền.",
+"note": "お là tiếp đầu ngữ lịch sự, hầu như luôn đi kèm."
+},
+{
+"type": "hiragana",
+"topic": "Danh từ thường dùng",
+"char": "せかい",
+"reading": "sekai",
+"meaning": "Thế giới / World",
+"example": "せかいじゅうを りょこうしたいです。(Sekaijuu o ryokou shitai desu.) — Tôi muốn đi khắp thế giới.",
+"note": "せかいじゅう = khắp thế giới."
+},
+{
+"type": "hiragana",
+"topic": "Danh từ thường dùng",
+"char": "しぜん",
+"reading": "shizen",
+"meaning": "Thiên nhiên / Nature",
+"example": "この まちは しぜんが おおいです。(Kono machi wa shizen ga ooi desu.) — Thành phố này nhiều thiên nhiên.",
+"note": "しぜんな = tự nhiên (な-tính từ)."
+},
+{
+"type": "hiragana",
+"topic": "Danh từ thường dùng",
+"char": "かわ",
+"reading": "kawa",
+"meaning": "Sông / River",
+"example": "かわで およぎます。(Kawa de oyogimasu.) — Tôi bơi ở sông.",
+"note": "Kanji: 川. Đừng nhầm với かわります (thay đổi)."
+},
+{
+"type": "hiragana",
+"topic": "Danh từ thường dùng",
+"char": "ゆめ",
+"reading": "yume",
+"meaning": "Giấc mơ · ước mơ / Dream",
+"example": "ゆめを みました。(Yume o mimashita.) — Tôi đã nằm mơ.",
+"note": "\"Nằm mơ\" nói là ゆめを みます (xem giấc mơ)."
+},
+{
+"type": "hiragana",
+"topic": "Danh từ thường dùng",
+"char": "こえ",
+"reading": "koe",
+"meaning": "Giọng nói / Voice",
+"example": "こえが おおきいですね。(Koe ga ookii desu ne.) — Giọng bạn to nhỉ.",
+"note": "Tiếng người và động vật. Tiếng đồ vật là おと."
+},
+{
+"type": "hiragana",
+"topic": "Danh từ thường dùng",
+"char": "おと",
+"reading": "oto",
+"meaning": "Âm thanh / Sound",
+"example": "へんな おとが きこえます。(Henna oto ga kikoemasu.) — Nghe thấy tiếng động lạ.",
+"note": "Tiếng đồ vật. Giọng người là こえ."
+},
+{
+"type": "hiragana",
+"topic": "Cơ thể & Sức khoẻ",
+"char": "びょうき",
+"reading": "byouki",
+"meaning": "Bệnh / Illness",
+"example": "びょうきで やすみます。(Byouki de yasumimasu.) — Tôi nghỉ vì bị bệnh.",
+"note": "びょ là âm ghép, う kéo dài. Bị bệnh: びょうきに なります."
+},
+{
+"type": "hiragana",
+"topic": "Cơ thể & Sức khoẻ",
+"char": "ねつ",
+"reading": "netsu",
+"meaning": "Sốt / Fever",
+"example": "ねつが あります。(Netsu ga arimasu.) — Tôi bị sốt.",
+"note": "Hạ sốt: ねつが さがります."
+},
+{
+"type": "hiragana",
+"topic": "Cơ thể & Sức khoẻ",
+"char": "けが",
+"reading": "kega",
+"meaning": "Chấn thương / Injury",
+"example": "あしに けがを しました。(Ashi ni kega o shimashita.) — Tôi bị thương ở chân.",
+"note": "Thêm します thành động từ: けがします."
+},
+{
+"type": "hiragana",
+"topic": "Danh từ thường dùng",
+"char": "ことば",
+"reading": "kotoba",
+"meaning": "Từ ngữ · lời nói / Word",
+"example": "この ことばの いみは なんですか。(Kono kotoba no imi wa nan desu ka?) — Từ này nghĩa là gì?",
+"note": "Vừa là \"từ vựng\" vừa là \"lời nói / ngôn ngữ\"."
+},
+{
+"type": "hiragana",
+"topic": "Danh từ thường dùng",
+"char": "はなし",
+"reading": "hanashi",
+"meaning": "Câu chuyện / Story · talk",
+"example": "おもしろい はなしですね。(Omoshiroi hanashi desu ne.) — Câu chuyện thú vị nhỉ.",
+"note": "Từ động từ はなします. \"Nói chuyện\": はなしを します."
+},
+{
+"type": "hiragana",
+"topic": "Số & Thời gian",
+"char": "じかん",
+"reading": "jikan",
+"meaning": "Thời gian · giờ / Time",
+"example": "じかんが ありません。(Jikan ga arimasen.) — Tôi không có thời gian.",
+"note": "Đếm số tiếng: いちじかん (1 tiếng). Xem giờ dùng じ: くじ (9 giờ)."
+},
+{
+"type": "hiragana",
+"topic": "Danh từ thường dùng",
+"char": "りゆう",
+"reading": "riyuu",
+"meaning": "Lý do / Reason",
+"example": "りゆうを おしえて ください。(Riyuu o oshiete kudasai.) — Cho tôi biết lý do.",
+"note": "Đọc ba nhịp り-ゆ-う, ゆ là chữ to."
+},
+{
+"type": "hiragana",
+"topic": "Danh từ thường dùng",
+"char": "きぶん",
+"reading": "kibun",
+"meaning": "Tâm trạng / Mood",
+"example": "きょうは きぶんが いいです。(Kyou wa kibun ga ii desu.) — Hôm nay tôi thấy dễ chịu.",
+"note": "Trạng thái cơ thể và tinh thần lúc đó."
+},
+{
+"type": "hiragana",
+"topic": "Danh từ thường dùng",
+"char": "きもち",
+"reading": "kimochi",
+"meaning": "Cảm giác · tấm lòng / Feeling",
+"example": "きもちが よく わかります。(Kimochi ga yoku wakarimasu.) — Tôi rất hiểu cảm giác đó.",
+"note": "きもち là tình cảm với ai / việc gì; きぶん là trạng thái của bản thân."
+},
+{
+"type": "hiragana",
+"topic": "Danh từ thường dùng",
+"char": "あじ",
+"reading": "aji",
+"meaning": "Vị · hương vị / Taste",
+"example": "この スープは あじが いいです。(Kono suupu wa aji ga ii desu.) — Món súp này ngon.",
+"note": "\"Nếm thử\" là あじみを します."
+},
+{
+"type": "hiragana",
+"topic": "Danh từ thường dùng",
+"char": "におい",
+"reading": "nioi",
+"meaning": "Mùi / Smell",
+"example": "いい においですね。(Ii nioi desu ne.) — Thơm quá nhỉ.",
+"note": "Dùng cho cả mùi thơm lẫn mùi khó chịu."
+},
+{
+"type": "hiragana",
+"topic": "Danh từ thường dùng",
+"char": "よてい",
+"reading": "yotei",
+"meaning": "Dự định · lịch trình / Plan",
+"example": "あしたの よていは なんですか。(Ashita no yotei wa nan desu ka?) — Lịch ngày mai của bạn là gì?",
+"note": "Từ thuần Nhật của スケジュール."
+},
+{
+"type": "hiragana",
+"topic": "Danh từ thường dùng",
+"char": "つもり",
+"reading": "tsumori",
+"meaning": "Ý định / Intention",
+"example": "にほんへ いく つもりです。(Nihon e iku tsumori desu.) — Tôi định đi Nhật.",
+"note": "Mẫu: [động từ thể từ điển] + つもりです."
 }
 ];
 window.NIHONGO_KANA_INFO = {
