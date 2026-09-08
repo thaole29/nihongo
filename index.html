@@ -864,6 +864,8 @@ vi:{
   't.deleted':'Đã xoá','t.keysaved':'Đã lưu API key ✓','t.keyremoved':'Đã xoá API key',
   't.workersaved':'Đã lưu địa chỉ server ✓','t.workerremoved':'Đã xoá địa chỉ server',
   't.modelswap':'Model cũ ngừng phục vụ — đã tự chuyển sang {m}',
+  't.fallgemini':'NVIDIA đang trục trặc — thử lại bằng Gemini…',
+  't.fallnvidia':'Gemini đang trục trặc — thử lại bằng NVIDIA…',
   't.topicexists':'Topic đã tồn tại','t.topicadded':'Đã thêm topic','t.topicrenamed':'Đã đổi tên topic',
   't.topicmerged':'Đã đổi tên / gộp topic','t.topicdeleted':'Đã xoá topic',
   't.imported':'Đã thêm {a} · cập nhật {u} thẻ','t.badjson':'File JSON không hợp lệ',
@@ -881,6 +883,7 @@ vi:{
   'err.badurl':'Sai địa chỉ server — kiểm tra lại trong ⚙️ Cài đặt AI.',
   'err.server':'Lỗi server {n}','err.emptyreply':'Bot trả lời rỗng, thử lại.',
   'err.net':'Không kết nối được — kiểm tra mạng.','err.api':'Lỗi API {n}',
+  'err.slow':'Server AI trả lời quá chậm — thử gửi lại, hoặc đổi model trong ⚙️ Cài đặt AI.',
   'err.badkey':'API key không hợp lệ — kiểm tra lại trong ⚙️ Cài đặt AI.',
   'err.modelgone':'Model này không còn dùng được — chọn model khác trong ⚙️ Cài đặt AI.',
   'err.quota':'Đã chạm hạn mức miễn phí, thử lại sau ít phút.',
@@ -1023,6 +1026,8 @@ en:{
   't.deleted':'Deleted','t.keysaved':'API key saved ✓','t.keyremoved':'API key removed',
   't.workersaved':'Server address saved ✓','t.workerremoved':'Server address removed',
   't.modelswap':'The old model is no longer served — switched to {m}',
+  't.fallgemini':'NVIDIA is having trouble — retrying with Gemini…',
+  't.fallnvidia':'Gemini is having trouble — retrying with NVIDIA…',
   't.topicexists':'That topic already exists','t.topicadded':'Topic added','t.topicrenamed':'Topic renamed',
   't.topicmerged':'Topic renamed / merged','t.topicdeleted':'Topic deleted',
   't.imported':'Added {a} · updated {u} cards','t.badjson':'That JSON file is not valid',
@@ -1040,6 +1045,7 @@ en:{
   'err.badurl':'Wrong server address — check it in ⚙️ AI settings.',
   'err.server':'Server error {n}','err.emptyreply':'The bot replied with nothing, try again.',
   'err.net':'Could not connect — check your network.','err.api':'API error {n}',
+  'err.slow':'The AI server is taking too long — send again, or pick another model in ⚙️ AI settings.',
   'err.badkey':'Invalid API key — check it in ⚙️ AI settings.',
   'err.modelgone':'This model is no longer available — pick another one in ⚙️ AI settings.',
   'err.quota':'Free quota reached, try again in a few minutes.',
@@ -1994,7 +2000,28 @@ async function sendChat(){
   }finally{ chatBusy=false; $('chat-send').disabled=false; }
 }
 
-function askBot(){ return chatProvider()==='nvidia' ? askWorker() : askGemini(); }
+/* Nguồn AI dự phòng chéo. Vì sao: NVIDIA free tier có ngày phục vụ rất chập
+   chờn (đo 08/09/2026: cùng câu こんにちは lúc 7s, lúc treo quá 100s) và Gemini
+   cũng có lúc hết hạn mức. Máy đã có sẵn cả hai đường thì hỏng đường này nên tự
+   đi đường kia, thay vì bắt người học tự mở ⚙️ Cài đặt AI đổi nguồn giữa chừng.
+   CHỈ nhảy MỘT lần, và chỉ khi nguồn kia thật sự dùng được (có key / có worker),
+   để không biến một lỗi cấu hình thành hai lần chờ. */
+function otherProviderReady(){
+  return chatProvider()==='nvidia' ? !!prefs.geminiKey : !!workerBase();
+}
+async function withProviderFallback(primary, secondary){
+  try{ return await primary(); }
+  catch(err){
+    if(!otherProviderReady()) throw err;
+    toast(t(chatProvider()==='nvidia' ? 't.fallgemini' : 't.fallnvidia'));
+    return await secondary();
+  }
+}
+function askBot(){
+  return chatProvider()==='nvidia'
+    ? withProviderFallback(askWorker, askGemini)
+    : withProviderFallback(askGemini, askWorker);
+}
 
 /* Lưới an toàn cho phần bắt lỗi — đừng tin has_error của model.
    Cả Gemini lẫn qwen đều có lúc lặng lẽ sửa câu nhưng vẫn báo has_error=false
@@ -2033,6 +2060,20 @@ function verifyCheck(ck, userText){
   return ck;
 }
 
+/* fetch có hạn giờ. Không có nó thì khi NVIDIA nghẽn, trình duyệt quay vòng
+   "..." tới vài phút rồi mới chết bằng một lỗi mạng khó hiểu — người học không
+   biết là nên chờ tiếp hay gửi lại. Trần đặt cao hơn trần của worker (100s chat
+   / 150s hỏi nhanh) để lỗi được worker mô tả rõ ràng thắng, chứ không bị client
+   cắt ngang trước rồi báo chung chung. */
+const FETCH_MS={chat:110000, ask:160000};
+async function fetchTimeout(url, opts, ms){
+  const ac=new AbortController();
+  const timer=setTimeout(()=>ac.abort(), ms);
+  try{ return await fetch(url, {...opts, signal:ac.signal}); }
+  finally{ clearTimeout(timer); }
+}
+function isAbort(e){ return e && (e.name==='AbortError' || e.name==='TimeoutError'); }
+
 /* Đường đi NVIDIA: worker lo hết phần nặng (API key, system prompt, ép JSON,
    hạ cấp khi model không nhận tham số) nên phía này chỉ gửi hội thoại thô. */
 async function askWorker(){
@@ -2050,8 +2091,8 @@ async function askWorker(){
   };
   let r;
   try{
-    r=await fetch(base+'/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-  }catch(e){ throw new Error(t('err.netserver')); }
+    r=await fetchTimeout(base+'/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)},FETCH_MS.chat);
+  }catch(e){ throw new Error(isAbort(e) ? t('err.slow') : t('err.netserver')); }
 
   let d={};
   try{ d=await r.json(); }catch(_){}
@@ -2478,8 +2519,8 @@ async function askViaWorker(q){
   const body={ level: prefs.chatLevel==='n4'?'n4':'n5', lang, question:q, deck:askDeckLines(q),
                model: prefs.chatNvModel||undefined };
   let r;
-  try{ r=await fetch(base+'/ask',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}); }
-  catch(e){ throw new Error(t('err.net')); }
+  try{ r=await fetchTimeout(base+'/ask',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)},FETCH_MS.ask); }
+  catch(e){ throw new Error(isAbort(e) ? t('err.slow') : t('err.net')); }
   let d={}; try{ d=await r.json(); }catch(_){}
   if(!r.ok){
     if(r.status===404) throw new Error(t('err.asknofeature'));
@@ -2626,7 +2667,9 @@ async function sendAsk(){
   if(askLog.length>ASK_MAX_ITEMS) askLog=askLog.slice(-ASK_MAX_ITEMS);
   saveAsk(); renderAsk();
   try{
-    const raw = chatProvider()==='nvidia' ? await askViaWorker(q) : await askViaGemini(q);
+    const raw = chatProvider()==='nvidia'
+      ? await withProviderFallback(()=>askViaWorker(q), ()=>askViaGemini(q))
+      : await withProviderFallback(()=>askViaGemini(q), ()=>askViaWorker(q));
     const a=verifyAsk(raw||{}, q);
     if(!a.answer_vi && !a.corrected) throw new Error(t('err.noanswer'));
     askLog[askLog.length-1].a=a;

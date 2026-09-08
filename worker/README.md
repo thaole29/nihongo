@@ -104,6 +104,34 @@ Nên worker có **hàng dự phòng** (`FALLBACK_MODELS` trong `wrangler.toml`):
   `list[0]` — mà danh sách xếp theo abc nên `list[0]` là `01-ai/yi-large`, model chưa hề
   được đo cho việc bắt lỗi tiếng Nhật.
 
+### Model treo cũng phải đổi (08/09/2026)
+
+Sáng 08/09 ❓ Hỏi nhanh báo lỗi NVIDIA. Lần này model không chết — nó **treo**.
+Đo cùng câu こんにちは qua gpt-oss-20b: 7s / 14s / 77s / quá 120s không trả lời.
+
+Ba lỗ hổng trong bản 05/09, cùng một gốc: model không trả lời được thì phải đổi
+model, nhưng mới áp cho model *chết* và *quá tải*:
+
+- `fetch` trong Workers **không có timeout mặc định** → NVIDIA treo thì worker
+  treo theo cho tới lúc trình duyệt bỏ cuộc. Nay mỗi lượt có `AbortController`.
+- fetch ném lỗi (đứt kết nối) bị coi là `hard` → dừng luôn, không đụng tới hàng
+  dự phòng. Nay là ca đáng đổi model nhất.
+- 5xx cũng dừng luôn, dù 5xx là lỗi của **riêng model đó** (đo được:
+  mistral-nemotron 500, gemma-4 lỗi inference, model khác vẫn chạy).
+
+Và một cái bẫy chỉ lộ ra khi đo thật: trần một lượt phải ≤ **nửa** tổng ngân
+sách, không thì model chậm ăn hết giờ và hàng dự phòng không bao giờ tới lượt —
+đúng ca đo được: gpt-oss-20b treo tiêu trọn 100s rồi request chết, trong khi
+nemotron ngay sau đó trả lời trong 11s.
+
+Sàng lọc lại toàn bộ model chat ngày 08/09 (1 lượt, trần 45s) cho kết quả ngược
+với dự đoán: **gpt-oss-20b là model NVIDIA DUY NHẤT còn chạy được**
+(9,7s, sửa đúng). nemotron-3-super, nemotron-3.5-lightning, deepseek-v4-flash,
+kimi-k3, mistral-large-2, llama-3.1-nemotron-70b đều treo hoặc hỏng;
+minimax-m3 trả 429. Nên đổi model NVIDIA không phải lời giải — nguồn dự phòng
+thật sự là **Gemini** (client tự nhảy sang, xem `withProviderFallback` trong
+index.html).
+
 Đo ngày 05/09/2026, thử cả hàng: `openai/gpt-oss-20b` và `nvidia/nemotron-3-super-120b-a12b`
 đều bắt đúng lỗi chia thì quá khứ và trả JSON sạch; `moonshotai/kimi-k2.6` và
 `nvidia/nemotron-nano-3-30b-a3b` trả 404, `mistralai/mistral-nemotron` lỗi 500,

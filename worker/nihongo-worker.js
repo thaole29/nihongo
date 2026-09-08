@@ -77,6 +77,40 @@ function modelChain(env, requested) {
   return [...new Set(chain.filter(Boolean))].slice(0, 4);
 }
 
+/* Ngân sách thời gian. Vì sao cần: fetch trong Workers KHÔNG có timeout mặc
+   định — NVIDIA treo thì worker treo theo, người học ngồi nhìn "..." tới lúc
+   trình duyệt tự bỏ cuộc, và thấy một lỗi mạng trần trụi.
+   Đo 08/09/2026, cùng một câu こんにちは qua gpt-oss-20b: 7s / 14s / 77s / treo
+   quá 120s. /ask chậm hơn hẳn (11–54s) vì cố ý cho model suy nghĩ nhiều hơn.
+     attemptMs — trần cho MỘT lượt gọi. Đặt rộng hơn lần chạy chậm nhất đo được,
+                 để chỉ cắt đúng ca treo thật chứ không giết ca chậm mà vẫn xong.
+     TOTAL_MS  — trần cho CẢ request, tính luôn mọi lần hạ cấp và đổi model.
+                 Không có nó thì 4 nấc × 4 model có thể cộng thành nhiều phút. */
+const ATTEMPT_MS = { chat: 60_000, ask: 90_000 };
+const TOTAL_MS   = { chat: 105_000, ask: 155_000 };
+const SLOW_MSG = 'NVIDIA đang trả lời quá chậm — thử lại, hoặc chọn model khác trong ⚙️ Cài đặt AI.';
+
+/* fetch có hạn giờ. AbortController chứ không phải AbortSignal.timeout() để
+   chạy được trên cả runtime cũ; clearTimeout để timer không giữ isolate sống. */
+async function fetchNvidia(env, payload, ms) {
+  const ac = new AbortController();
+  const timer = setTimeout(() => ac.abort(), ms);
+  try {
+    return await fetch(NVIDIA_BASE + '/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + env.NVIDIA_API_KEY
+      },
+      body: JSON.stringify(payload),
+      signal: ac.signal
+    });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 /* Nhận diện "model này chết rồi" từ câu lỗi của NVIDIA. Đây là lỗi DUY NHẤT mà
    thử lại cùng model chắc chắn vô ích còn đổi model thì chắc chắn cứu được.
    Các câu đã gặp thật: "has reached its end of life ... no longer available",
@@ -498,23 +532,34 @@ function parseChatJson(txt) {
                                           mạng): đổi model cũng vô ích, dừng
      { swap: true, status, msg }        — model chết / quá tải: nên thử model kế
      { status, msg }                    — hỏng kiểu khác, dừng */
-async function runAttempts(env, attempts, isGood, retryMsg) {
+async function runAttempts(env, attempts, isGood, retryMsg, budget) {
   let lastStatus = 0, lastMsg = '';
 
   for (const payload of attempts) {
+    /* Hết giờ chung thì dừng, đừng bắt đầu thêm một lượt có thể treo 90s nữa. */
+    if (budget && Date.now() > budget.deadline) {
+      return { status: 504, msg: SLOW_MSG };
+    }
+
     let r;
     try {
-      r = await fetch(NVIDIA_BASE + '/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer ' + env.NVIDIA_API_KEY
-        },
-        body: JSON.stringify(payload)
-      });
-    } catch (_) {
-      return { hard: true, status: 502, msg: 'Không gọi được NVIDIA — thử lại sau.' };
+      /* Trần của lượt này = min(trần một lượt, thời gian còn lại của cả request).
+         Không kẹp theo phần còn lại thì TOTAL_MS chỉ là gợi ý: lượt cuối vẫn
+         chạy trọn attemptMs và tổng vọt qua trần (đo được: 2 model treo = 120s
+         trong khi trần là 100s). */
+      const left = budget ? budget.deadline - Date.now() : ATTEMPT_MS.chat;
+      r = await fetchNvidia(env, payload, Math.min(budget ? budget.attemptMs : ATTEMPT_MS.chat, left));
+    } catch (e) {
+      /* Treo quá lâu hoặc đứt kết nối. Trước đây chỗ này trả hard:true — sai:
+         model đang treo là lý do CHÍNH ĐÁNG nhất để đổi sang model khác, đúng
+         như khi nó chết hẳn. Để hard:true thì một cú NVIDIA nghẽn là hỏng cả
+         lượt hỏi, dù hàng dự phòng còn nguyên. */
+      const timedOut = e && (e.name === 'AbortError' || e.name === 'TimeoutError');
+      return {
+        swap: true,
+        status: timedOut ? 504 : 502,
+        msg: timedOut ? SLOW_MSG : 'Không gọi được NVIDIA — thử lại sau.'
+      };
     }
 
     if (r.ok) {
@@ -548,11 +593,19 @@ async function runAttempts(env, attempts, isGood, retryMsg) {
       return { swap: true, status: 502, msg: 'Model này không còn phục vụ — chọn model khác trong ⚙️ Cài đặt AI.' };
     }
 
+    /* 401/403/429 là chuyện của TÀI KHOẢN (sai key, hết credit) — mọi model đều
+       hỏng như nhau, đổi model chỉ tốn thêm thời gian. Dừng ngay. */
     if (r.status === 401 || r.status === 403) {
       return { hard: true, status: 502, msg: 'API key NVIDIA của worker không hợp lệ hoặc hết hạn.' };
     }
     if (r.status === 429) {
       return { hard: true, status: 429, msg: 'NVIDIA đang giới hạn tốc độ (hoặc hết credit) — thử lại sau ít phút.' };
+    }
+    /* 5xx = phía NVIDIA hỏng khi phục vụ ĐÚNG model này (đo được: mistral-nemotron
+       trả 500, gemma-4 lỗi kết nối inference, trong khi model khác vẫn chạy).
+       Hạ cấp kiểu ép JSON không cứu được, nhưng đổi model thì cứu được. */
+    if (r.status >= 500) {
+      return { swap: true, status: 502, msg: 'NVIDIA đang lỗi với model này — thử model khác.' };
     }
     if (r.status !== 400 && r.status !== 422) break;   // lỗi khác thì hạ cấp cũng vô ích
   }
@@ -563,13 +616,24 @@ async function runAttempts(env, attempts, isGood, retryMsg) {
 /* Chạy hết hàng model: model nào chết / quá tải thì lặng lẽ sang model kế.
    buildAttempts(model) dựng lại payload cho đúng model đang thử.
    Trả { ok, out, model } hoặc { status, msg } của model cuối cùng đã thử. */
-async function runWithFallback(env, chain, buildAttempts, isGood, retryMsg) {
+async function runWithFallback(env, chain, buildAttempts, isGood, retryMsg, kind) {
+  /* Chia ngân sách sao cho model dự phòng CHẮC CHẮN còn lượt. Đo 08/09/2026:
+     gpt-oss-20b treo tiêu trọn 100s rồi request chết, trong khi nemotron ngay
+     sau đó trả lời trong 11s — hàng dự phòng có mà không bao giờ tới lượt thì
+     coi như không có. Nên trần một lượt không được vượt nửa tổng ngân sách. */
+  const total = TOTAL_MS[kind] || TOTAL_MS.chat;
+  const slots = Math.min(chain.length, 2) || 1;
+  const budget = {
+    attemptMs: Math.min(ATTEMPT_MS[kind] || ATTEMPT_MS.chat, Math.floor(total / slots)),
+    deadline: Date.now() + total
+  };
   let last = { status: 502, msg: 'Gọi NVIDIA thất bại.' };
   for (const model of chain) {
-    const res = await runAttempts(env, buildAttempts(model), isGood, retryMsg);
+    const res = await runAttempts(env, buildAttempts(model), isGood, retryMsg, budget);
     if (res.ok) return { ok: true, out: res.out, model };
     last = res;
-    if (res.hard || !res.swap) break;   // chỉ model chết / quá tải mới đáng đổi
+    if (res.hard || !res.swap) break;   // chết / quá tải / treo / 5xx mới đáng đổi
+    if (Date.now() > budget.deadline) { last = { status: 504, msg: SLOW_MSG }; break; }
   }
   return last;
 }
@@ -638,7 +702,7 @@ async function handleChat(request, env, origin) {
 
   const res = await runWithFallback(
     env, modelChain(env, model), buildAttempts,
-    out => !!out.reply, 'Bot trả về dữ liệu lạ, thử gửi lại.'
+    out => !!out.reply, 'Bot trả về dữ liệu lạ, thử gửi lại.', 'chat'
   );
   if (!res.ok) return json({ error: res.msg }, res.status, origin);
 
@@ -889,7 +953,7 @@ async function handleAsk(request, env, origin) {
 
   const res = await runWithFallback(
     env, modelChain(env, model), buildAttempts,
-    out => !!(out.answer_vi || out.corrected), 'Bot trả về dữ liệu lạ, thử hỏi lại.'
+    out => !!(out.answer_vi || out.corrected), 'Bot trả về dữ liệu lạ, thử hỏi lại.', 'ask'
   );
   if (!res.ok) return json({ error: res.msg }, res.status, origin);
 
