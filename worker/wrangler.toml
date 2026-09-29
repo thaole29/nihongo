@@ -21,7 +21,7 @@ DEFAULT_MODEL = "openai/gpt-oss-20b"
 # Hàng dự phòng khi model mặc định chết (EOL / bị gỡ / quá tải): worker tự nhảy
 # sang model kế trong danh sách này, người dùng không phải chọn tay.
 # Để trống thì worker dùng FALLBACK_MODELS hardcode trong nihongo-worker.js.
-FALLBACK_MODELS = "openai/gpt-oss-20b,nvidia/nemotron-3-super-120b-a12b"
+FALLBACK_MODELS = "openai/gpt-oss-20b,nvidia/nemotron-3-super-120b-a12b,nvidia/nemotron-3-ultra-550b-a55b"
 
 # API key KHÔNG đặt ở đây (file này lên git). Nạp bằng:
 #   wrangler secret put NVIDIA_API_KEY

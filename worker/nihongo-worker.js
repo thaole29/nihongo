@@ -66,8 +66,38 @@ const DEFAULT_MODEL = 'openai/gpt-oss-20b';
    Đo 05/09/2026 trên cùng câu test: gpt-oss-20b và nemotron-3-super đều bắt
    đúng lỗi chia thì; kimi-k2.6 / nemotron-nano-3 trả 404, mistral-nemotron 500,
    gemma-4 lỗi kết nối inference.
+   Đo lại 29/09/2026: nemotron-3-super/ultra KHÔNG nhận nvext.guided_json (400
+   "unknown field") — trước đây thang hạ cấp vẫn cứu được nhưng tới nấc
+   json_object thì model bật suy nghĩ dài (21–31s, có lúc treo). Tắt suy nghĩ
+   (chat_template_kwargs.enable_thinking=false) thì super trả lời 3s, ultra 12s,
+   cả hai bắt đúng lỗi chia thì. deepseek-v4.1-flash, kimi-k3, gemma-4-31b,
+   glm-5.3(-flash), nemotron-3.5-lightning đều treo quá 75s; kimi-k2.6,
+   nemotron-nano-3, mistral-large-2 trả 404 cho tài khoản này.
    Ghi đè bằng biến FALLBACK_MODELS trong wrangler.toml (cách nhau bằng dấu phẩy). */
-const FALLBACK_MODELS = ['openai/gpt-oss-20b', 'nvidia/nemotron-3-super-120b-a12b'];
+const FALLBACK_MODELS = ['openai/gpt-oss-20b', 'nvidia/nemotron-3-super-120b-a12b', 'nvidia/nemotron-3-ultra-550b-a55b'];
+
+/* Trí nhớ ngắn hạn về sức khoẻ từng model, sống trong isolate (Cloudflare tái
+   tạo isolate thì mất — không sao, chỉ là tối ưu). Vì sao cần: model vừa treo
+   60s thì request NGAY SAU gần như chắc chắn cũng treo; không nhớ thì mỗi người
+   học lại ngồi chờ đúng cái model đó hết hạn giờ rồi mới được đổi.
+     badUntil  — tới lúc này thì xếp model xuống cuối hàng (không loại hẳn: cả
+                 hàng cùng hỏng thì vẫn phải thử).
+     noGuided  — model đã trả 400 "unknown field guided_json": lần sau bỏ qua
+                 thẳng các nấc guided, khỏi tốn hai round-trip. */
+const health = new Map();
+const COOLDOWN_MS = { slow: 2 * 60_000, swap: 5 * 60_000, dead: 60 * 60_000 };
+function modelHealth(m) {
+  if (!health.has(m)) health.set(m, { badUntil: 0, noGuided: false });
+  return health.get(m);
+}
+function markBad(m, why) {
+  modelHealth(m).badUntil = Date.now() + (COOLDOWN_MS[why] || COOLDOWN_MS.swap);
+}
+function byHealth(chain) {
+  const now = Date.now();
+  const bad = m => (health.get(m) || {}).badUntil > now;
+  return [...chain.filter(m => !bad(m)), ...chain.filter(bad)];
+}
 
 /* Danh sách model sẽ thử, theo thứ tự: model người dùng chọn → model mặc định
    → hàng dự phòng. Cắt còn 4 để một request hỏng không kéo dài vô tận. */
@@ -88,15 +118,27 @@ function modelChain(env, requested) {
                  Không có nó thì 4 nấc × 4 model có thể cộng thành nhiều phút. */
 const ATTEMPT_MS = { chat: 60_000, ask: 90_000 };
 const TOTAL_MS   = { chat: 105_000, ask: 155_000 };
+/* Chạy song song (hedge): model chính chưa trả lời sau từng này thì gọi luôn
+   model dự phòng, ai về trước thì lấy. Đo 29/09/2026, gpt-oss-20b cùng một câu:
+   4s / 6s / 15s / 48s — đuôi dài là chuyện thường chứ không phải sự cố, nên
+   chờ nó hết 52s rồi mới đổi model thì người học vẫn thấy app "đơ". Chọn mốc
+   cao hơn ca bình thường để chỉ tốn thêm lượt gọi cho đúng ca chậm bất thường. */
+const HEDGE_MS   = { chat: 15_000, ask: 40_000 };
 const SLOW_MSG = 'NVIDIA đang trả lời quá chậm — thử lại, hoặc chọn model khác trong ⚙️ Cài đặt AI.';
 
 /* fetch có hạn giờ. AbortController chứ không phải AbortSignal.timeout() để
-   chạy được trên cả runtime cũ; clearTimeout để timer không giữ isolate sống. */
-async function fetchNvidia(env, payload, ms) {
+   chạy được trên cả runtime cũ; clearTimeout để timer không giữ isolate sống.
+   Đọc BODY cũng nằm trong hạn giờ: fetch resolve khi có header, trước đây timer
+   bị huỷ ngay lúc đó nên r.json() có thể treo vô hạn.
+   stop = tín hiệu huỷ từ ngoài (model khác đã trả lời xong thì huỷ lượt này).
+   Trả { status, ok, data } — data là JSON đã parse, hoặc null nếu body hỏng. */
+async function fetchNvidia(env, payload, ms, stop) {
   const ac = new AbortController();
   const timer = setTimeout(() => ac.abort(), ms);
+  const onStop = () => ac.abort();
+  if (stop) stop.addEventListener('abort', onStop);
   try {
-    return await fetch(NVIDIA_BASE + '/chat/completions', {
+    const r = await fetch(NVIDIA_BASE + '/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -106,8 +148,13 @@ async function fetchNvidia(env, payload, ms) {
       body: JSON.stringify(payload),
       signal: ac.signal
     });
+    const text = await r.text();
+    let data = null;
+    try { data = JSON.parse(text); } catch (_) {}
+    return { status: r.status, ok: r.ok, data };
   } finally {
     clearTimeout(timer);
+    if (stop) stop.removeEventListener('abort', onStop);
   }
 }
 
@@ -522,24 +569,30 @@ function parseChatJson(txt) {
 
    Thang tự hạ cấp — mỗi model NIM hỗ trợ một kiểu ép JSON khác nhau:
      1. nvext.guided_json  (NVIDIA khuyến nghị, ép đúng schema)
-     2. response_format json_object (JSON hợp lệ nhưng cấu trúc tự do)
-     3. không ép gì, chỉ dựa vào prompt + parse bằng regex
-   Gặp 400/422 thì tụt một nấc thay vì để hỏng cả lượt.
+     2. json_object + tắt suy nghĩ (dòng nemotron-3: không có guided_json, và
+        bật suy nghĩ thì chậm gấp 5–10 lần)
+     3. response_format json_object (JSON hợp lệ nhưng cấu trúc tự do)
+     4. không ép gì, chỉ dựa vào prompt + parse bằng regex
+   Gặp 400/422 thì tụt một nấc thay vì để hỏng cả lượt. Lỗi nói thẳng "unknown
+   field guided_json" thì nhảy qua MỌI nấc guided còn lại và nhớ cho lần sau.
 
    Trả về một trong:
      { ok: true, out }                  — đã parse được JSON dùng được
      { hard: true, status, msg }        — hỏng ở mức tài khoản (key, credit,
                                           mạng): đổi model cũng vô ích, dừng
-     { swap: true, status, msg }        — model chết / quá tải: nên thử model kế
-     { status, msg }                    — hỏng kiểu khác, dừng */
-async function runAttempts(env, attempts, isGood, retryMsg, budget) {
+     { swap: true, status, msg }        — model chết / quá tải / treo / trả rác:
+                                          nên thử model kế
+     { status, msg }                    — hỏng kiểu khác, dừng
+   `dead: true` đi kèm swap khi model bị gỡ hẳn (404/EOL) → nghỉ lâu hơn. */
+async function runAttempts(env, model, attempts, isGood, retryMsg, budget) {
   let lastStatus = 0, lastMsg = '';
+  const h = modelHealth(model);
 
   for (const payload of attempts) {
+    if (budget.stop.aborted) return { status: 499, msg: '' };   // model khác đã thắng
     /* Hết giờ chung thì dừng, đừng bắt đầu thêm một lượt có thể treo 90s nữa. */
-    if (budget && Date.now() > budget.deadline) {
-      return { status: 504, msg: SLOW_MSG };
-    }
+    if (Date.now() > budget.deadline) return { swap: true, status: 504, msg: SLOW_MSG };
+    if (h.noGuided && payload.nvext) continue;
 
     let r;
     try {
@@ -547,9 +600,10 @@ async function runAttempts(env, attempts, isGood, retryMsg, budget) {
          Không kẹp theo phần còn lại thì TOTAL_MS chỉ là gợi ý: lượt cuối vẫn
          chạy trọn attemptMs và tổng vọt qua trần (đo được: 2 model treo = 120s
          trong khi trần là 100s). */
-      const left = budget ? budget.deadline - Date.now() : ATTEMPT_MS.chat;
-      r = await fetchNvidia(env, payload, Math.min(budget ? budget.attemptMs : ATTEMPT_MS.chat, left));
+      const left = budget.deadline - Date.now();
+      r = await fetchNvidia(env, payload, Math.min(budget.attemptMs, left), budget.stop);
     } catch (e) {
+      if (budget.stop.aborted) return { status: 499, msg: '' };
       /* Treo quá lâu hoặc đứt kết nối. Trước đây chỗ này trả hard:true — sai:
          model đang treo là lý do CHÍNH ĐÁNG nhất để đổi sang model khác, đúng
          như khi nó chết hẳn. Để hard:true thì một cú NVIDIA nghẽn là hỏng cả
@@ -563,14 +617,13 @@ async function runAttempts(env, attempts, isGood, retryMsg, budget) {
     }
 
     if (r.ok) {
-      const d = await r.json();
-      const msg = ((d.choices || [])[0] || {}).message || {};
+      const msg = ((r.data && r.data.choices || [])[0] || {}).message || {};
       const out = parseChatJson(msg.content);
       if (out && isGood(out)) return { ok: true, out };
       lastStatus = 502;
       /* Content rỗng nhưng có reasoning dài = model tiêu hết max_tokens vào suy
          nghĩ. Báo khác hẳn "dữ liệu lạ" để lần sau khỏi phải chẩn đoán lại. */
-      lastMsg = (!msg.content && (msg.reasoning_content || '').length > 200)
+      lastMsg = (!msg.content && (msg.reasoning_content || msg.reasoning || '').length > 200)
         ? 'Model nghĩ quá dài nên không kịp trả lời — thử lại hoặc chọn model khác trong ⚙️ Cài đặt AI.'
         : retryMsg;
       continue;            // JSON hỏng → tụt nấc, thử kiểu ép khác
@@ -578,11 +631,9 @@ async function runAttempts(env, attempts, isGood, retryMsg, budget) {
 
     lastStatus = r.status;
     lastMsg = 'Lỗi NVIDIA ' + r.status;
-    try {
-      const e = await r.json();
-      lastMsg = (e.detail && (e.detail.message || e.detail)) || (e.error && (e.error.message || e.error)) || e.message || lastMsg;
-      if (typeof lastMsg !== 'string') lastMsg = JSON.stringify(lastMsg);
-    } catch (_) {}
+    const e = r.data || {};
+    lastMsg = (e.detail && (e.detail.message || e.detail)) || (e.error && (e.error.message || e.error)) || e.message || lastMsg;
+    if (typeof lastMsg !== 'string') lastMsg = JSON.stringify(lastMsg);
 
     /* Hai ca đáng đổi model. Cả hai đều hỏng NGAY (không tốn lượt inference)
        nên nhảy sang model kế chỉ tốn thêm vài trăm ms, người dùng không thấy. */
@@ -590,7 +641,7 @@ async function runAttempts(env, attempts, isGood, retryMsg, budget) {
       return { swap: true, status: 503, msg: 'Model đang quá tải bên NVIDIA — thử lại sau ít phút, hoặc chọn model khác trong ⚙️ Cài đặt AI.' };
     }
     if (r.status === 404 || DEAD_MODEL_RE.test(lastMsg)) {
-      return { swap: true, status: 502, msg: 'Model này không còn phục vụ — chọn model khác trong ⚙️ Cài đặt AI.' };
+      return { swap: true, dead: true, status: 502, msg: 'Model này không còn phục vụ — chọn model khác trong ⚙️ Cài đặt AI.' };
     }
 
     /* 401/403/429 là chuyện của TÀI KHOẢN (sai key, hết credit) — mọi model đều
@@ -608,14 +659,21 @@ async function runAttempts(env, attempts, isGood, retryMsg, budget) {
       return { swap: true, status: 502, msg: 'NVIDIA đang lỗi với model này — thử model khác.' };
     }
     if (r.status !== 400 && r.status !== 422) break;   // lỗi khác thì hạ cấp cũng vô ích
+    if (/guided_json/i.test(lastMsg)) h.noGuided = true;
   }
 
-  return { status: lastStatus >= 500 ? 502 : 400, msg: lastMsg || 'Gọi NVIDIA thất bại.' };
+  /* Hết thang mà vẫn không ra JSON dùng được = model này hỏng với prompt này.
+     Trước đây dừng luôn cả hàng — nhưng rác là chuyện của RIÊNG model đó, model
+     kế hoàn toàn có thể trả lời đúng. */
+  return { swap: true, status: lastStatus >= 500 ? 502 : 400, msg: lastMsg || 'Gọi NVIDIA thất bại.' };
 }
 
-/* Chạy hết hàng model: model nào chết / quá tải thì lặng lẽ sang model kế.
+/* Chạy hàng model: model nào chết / quá tải / treo thì sang model kế; model
+   chính chậm quá HEDGE_MS thì gọi song song model kế, ai trả lời được trước
+   thì lấy và huỷ phần còn lại. Tối đa 2 model chạy cùng lúc để không đốt
+   gấp đôi credit cho mọi lượt — chỉ ca chậm bất thường mới tốn thêm.
    buildAttempts(model) dựng lại payload cho đúng model đang thử.
-   Trả { ok, out, model } hoặc { status, msg } của model cuối cùng đã thử. */
+   Trả { ok, out, model } hoặc { status, msg } của lỗi đáng báo nhất. */
 async function runWithFallback(env, chain, buildAttempts, isGood, retryMsg, kind) {
   /* Chia ngân sách sao cho model dự phòng CHẮC CHẮN còn lượt. Đo 08/09/2026:
      gpt-oss-20b treo tiêu trọn 100s rồi request chết, trong khi nemotron ngay
@@ -623,19 +681,64 @@ async function runWithFallback(env, chain, buildAttempts, isGood, retryMsg, kind
      coi như không có. Nên trần một lượt không được vượt nửa tổng ngân sách. */
   const total = TOTAL_MS[kind] || TOTAL_MS.chat;
   const slots = Math.min(chain.length, 2) || 1;
+  const stopper = new AbortController();
   const budget = {
     attemptMs: Math.min(ATTEMPT_MS[kind] || ATTEMPT_MS.chat, Math.floor(total / slots)),
-    deadline: Date.now() + total
+    deadline: Date.now() + total,
+    stop: stopper.signal
   };
-  let last = { status: 502, msg: 'Gọi NVIDIA thất bại.' };
-  for (const model of chain) {
-    const res = await runAttempts(env, buildAttempts(model), isGood, retryMsg, budget);
-    if (res.ok) return { ok: true, out: res.out, model };
-    last = res;
-    if (res.hard || !res.swap) break;   // chết / quá tải / treo / 5xx mới đáng đổi
-    if (Date.now() > budget.deadline) { last = { status: 504, msg: SLOW_MSG }; break; }
-  }
-  return last;
+  const queue = byHealth(chain);
+  const hedgeMs = HEDGE_MS[kind] || HEDGE_MS.chat;
+
+  return new Promise(resolve => {
+    let running = 0, done = false, noMore = false;
+    let last = null;
+    const startedAt = new Map();
+    const finish = (v) => {
+      if (done) return;
+      done = true;
+      /* Model còn đang chạy lúc có người thắng và đã quá mốc hedge = chính nó
+         là cái chậm khiến phải gọi dự phòng. Cho nghỉ ngắn để request kế tiếp
+         đi thẳng model nhanh, khỏi mỗi lượt lại chờ thêm HEDGE_MS. */
+      for (const [m, t] of startedAt) if (Date.now() - t >= hedgeMs) markBad(m, 'slow');
+      stopper.abort();
+      resolve(v);
+    };
+    const launch = () => {
+      if (done || noMore || running >= 2) return;
+      const model = queue.shift();
+      if (!model || Date.now() > budget.deadline) {
+        if (!running) finish(last || { status: 504, msg: SLOW_MSG });
+        return;
+      }
+      running++;
+      startedAt.set(model, Date.now());
+      const hedge = setTimeout(launch, hedgeMs);
+      runAttempts(env, model, buildAttempts(model), isGood, retryMsg, budget)
+        .catch(() => ({ swap: true, status: 502, msg: 'Gọi NVIDIA thất bại.' }))
+        .then(res => {
+          clearTimeout(hedge);
+          running--;
+          startedAt.delete(model);
+          if (done) return;
+          if (res.ok) {
+            modelHealth(model).badUntil = 0;
+            return finish({ ok: true, out: res.out, model });
+          }
+          if (res.swap) markBad(model, res.dead ? 'dead' : 'swap');
+          /* Lỗi tài khoản (hard) thắng mọi lỗi khác khi báo cho người dùng:
+             "sai key" hữu ích hơn "model này chậm". */
+          if (!last || !last.hard) last = res;
+          if (res.hard || !res.swap) noMore = true;
+          if (noMore) {
+            if (!running) finish(last);   // còn model đang chạy thì đợi nó
+            return;
+          }
+          launch();
+        });
+    };
+    launch();
+  });
 }
 
 async function handleChat(request, env, origin) {
@@ -695,6 +798,7 @@ async function handleChat(request, env, origin) {
     return [
       { ...base, reasoning_effort: 'low', nvext: { guided_json: CHAT_JSON_SCHEMA } },
       { ...base, nvext: { guided_json: CHAT_JSON_SCHEMA } },   // model không nhận reasoning_effort
+      { ...base, chat_template_kwargs: { enable_thinking: false }, response_format: { type: 'json_object' } },
       { ...base, response_format: { type: 'json_object' } },
       base
     ];
@@ -946,6 +1050,7 @@ async function handleAsk(request, env, origin) {
     return [
       { ...base, reasoning_effort: 'medium', nvext: { guided_json: ASK_JSON_SCHEMA } },
       { ...base, nvext: { guided_json: ASK_JSON_SCHEMA } },
+      { ...base, chat_template_kwargs: { enable_thinking: false }, response_format: { type: 'json_object' } },
       { ...base, response_format: { type: 'json_object' } },
       base
     ];

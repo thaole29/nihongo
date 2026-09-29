@@ -132,6 +132,30 @@ minimax-m3 trả 429. Nên đổi model NVIDIA không phải lời giải — ng
 thật sự là **Gemini** (client tự nhảy sang, xem `withProviderFallback` trong
 index.html).
 
+**29/09/2026 — kết luận "nemotron hỏng" ở trên là sai chẩn đoán.** Gọi thẳng
+NVIDIA (không qua thang hạ cấp) thì nemotron-3-super/ultra trả lời trong 2–3s.
+Chúng **không nhận `nvext.guided_json`** (400 "unknown field"). Thang cũ vẫn tụt
+được tới `json_object`, nhưng ở nấc đó model bật suy nghĩ dài (21–31s, có lúc
+treo), nên lượt nào cũng như hỏng. Thêm nấc `chat_template_kwargs.enable_thinking=false`
++ `json_object` thì super mất 3–6s, ultra 7–12s, cả hai bắt đúng lỗi chia thì.
+Hàng dự phòng giờ là gpt-oss-20b → nemotron-3-super → nemotron-3-ultra.
+deepseek-v4.1-flash, kimi-k3, gemma-4-31b, glm-5.3(-flash), nemotron-3.5-lightning
+vẫn treo quá 75s. kimi-k2.6, nemotron-nano-3, mistral-large-2 trả 404 cho tài
+khoản này, dù vẫn có trong `/v1/models`.
+
+Ba thay đổi khác cùng đợt:
+- **Chạy song song (hedge).** gpt-oss-20b đo cùng một câu: 4s / 6s / 15s / 48s.
+  Đuôi dài là chuyện thường chứ không phải sự cố. Nên model chính chưa trả lời
+  sau `HEDGE_MS` (15s chat, 40s hỏi nhanh) thì worker gọi luôn model kế, lấy
+  kết quả về trước và huỷ phần kia. Tối đa 2 model chạy cùng lúc.
+- **Nhớ model hỏng.** Model treo / 5xx / rác bị xếp xuống cuối hàng 5 phút
+  (404/EOL: 60 phút, thua hedge vì chậm: 2 phút). Nhờ vậy request kế tiếp đi
+  thẳng model đang khoẻ. Model không nhận `guided_json` được nhớ để bỏ qua các nấc guided.
+- **Rác cũng đổi model.** Một model hết thang mà vẫn không ra JSON dùng được
+  thì trước đây làm hỏng cả lượt. Giờ worker nhảy sang model kế. Đọc body cũng
+  nằm trong hạn giờ (trước đây timer bị huỷ lúc có header nên `r.json()` có thể
+  treo), và body 200 không phải JSON không còn làm worker ném exception.
+
 Đo ngày 05/09/2026, thử cả hàng: `openai/gpt-oss-20b` và `nvidia/nemotron-3-super-120b-a12b`
 đều bắt đúng lỗi chia thì quá khứ và trả JSON sạch; `moonshotai/kimi-k2.6` và
 `nvidia/nemotron-nano-3-30b-a3b` trả 404, `mistralai/mistral-nemotron` lỗi 500,
