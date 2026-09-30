@@ -89,7 +89,7 @@ Model mặc định `openai/gpt-oss-20b` — **đổi ngày 05/09/2026** vì NVI
 - `hiragana_kana.json` — 46 chữ Hiragana あ–ん (có mẹo nhớ hình dạng).
 - `starter_vocab.json` — 60 từ vựng cơ bản (Chào hỏi / Đồ ăn / Thời tiết / Đồ trong nhà / Du lịch).
 
-Bộ mặc định hiện có **645 thẻ** trên 25 topic (trong đó **177 thẻ Katakana** — từ mượn về đồ ăn – đồ uống, công nghệ & điện tử, nơi chốn & đi lại, quần áo, thể thao & giải trí, đồ dùng trong nhà và từ trừu tượng hay gặp; riêng topic *Động từ (thể ます)* có **127 thẻ**, gồm các cặp tự động / tha động từ hay bị nhầm như あけます⇄あきます, はじまります⇄はじめます, みつけます⇄みつかります). Thêm thẻ mới vào `deck.js` thì máy đã dùng app cũng nhận được: `mergeNewDefaults()` gộp thẻ chưa có theo `char`, giữ nguyên tiến độ SRS của thẻ cũ và **không** dựng lại thẻ bạn đã chủ động xoá.
+Bộ mặc định hiện có **684 thẻ** trên 26 topic (trong đó **178 thẻ Katakana** — từ mượn về đồ ăn – đồ uống, công nghệ & điện tử, nơi chốn & đi lại, quần áo, thể thao & giải trí, đồ dùng trong nhà và từ trừu tượng hay gặp; riêng topic *Động từ (thể ます)* có **134 thẻ**, gồm các cặp tự động / tha động từ hay bị nhầm như あけます⇄あきます, はじまります⇄はじめます, みつけます⇄みつかります). Thêm thẻ mới vào `deck.js` thì máy đã dùng app cũng nhận được: `mergeNewDefaults()` gộp thẻ chưa có theo `char`, giữ nguyên tiến độ SRS của thẻ cũ và **không** dựng lại thẻ bạn đã chủ động xoá.
 
 Import không tạo bản trùng (upsert theo ký tự, giữ nguyên tiến độ SRS).
 

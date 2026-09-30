@@ -5804,6 +5804,357 @@ window.NIHONGO_DEFAULT_DECK = [
 "meaning": "Ý định / Intention",
 "example": "にほんへ いく つもりです。(Nihon e iku tsumori desu.) — Tôi định đi Nhật.",
 "note": "Mẫu: [động từ thể từ điển] + つもりです."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "たのしみます",
+"reading": "tanoshimimasu",
+"meaning": "Tận hưởng / Enjoy",
+"example": "りょこうを たのしみました。(Ryokou o tanoshimimashita.) — Tôi đã tận hưởng chuyến đi.",
+"note": "Động từ của たのしい (vui). たのしみです = \"mong chờ\"."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "けいけんします",
+"reading": "keiken shimasu",
+"meaning": "Trải nghiệm · từng trải / Experience",
+"example": "いろいろな ことを けいけんしました。(Iroirona koto o keiken shimashita.) — Tôi đã trải nghiệm nhiều điều.",
+"note": "Kanji 経験. Thiên về \"từng trải\" nói chung; thử tận tay thì dùng たいけんします."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "たいけんします",
+"reading": "taiken shimasu",
+"meaning": "Trải nghiệm tận tay · thử / Try (hands-on)",
+"example": "きものを たいけんしました。(Kimono o taiken shimashita.) — Tôi đã thử mặc kimono.",
+"note": "Kanji 体験. Hay gặp trong tour: たいけんツアー (tour trải nghiệm)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "かんこうします",
+"reading": "kankou shimasu",
+"meaning": "Tham quan · du lịch ngắm cảnh / Sightsee",
+"example": "おきなわを かんこうしました。(Okinawa o kankou shimashita.) — Tôi đã đi tham quan Okinawa.",
+"note": "Kanji 観光. かんこうきゃく = khách du lịch."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "あるきまわります",
+"reading": "arukimawarimasu",
+"meaning": "Đi dạo khắp nơi / Walk around",
+"example": "まちを あるきまわりました。(Machi o arukimawarimashita.) — Tôi đã đi dạo khắp phố.",
+"note": "Ghép あるきます (đi bộ) + まわります (đi vòng quanh)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "かんどうします",
+"reading": "kandou shimasu",
+"meaning": "Xúc động · cảm động / Be moved",
+"example": "きれいな けしきに かんどうしました。(Kireina keshiki ni kandou shimashita.) — Tôi đã xúc động trước phong cảnh đẹp.",
+"note": "Kanji 感動. Điều làm mình xúc động + に."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "おどろきます",
+"reading": "odorokimasu",
+"meaning": "Kinh ngạc · ngạc nhiên / Be surprised",
+"example": "うみの いろに おどろきました。(Umi no iro ni odorokimashita.) — Tôi đã kinh ngạc vì màu nước biển.",
+"note": "Điều làm mình ngạc nhiên + に. Nói thân mật hay dùng びっくりしました."
+},
+{
+"type": "hiragana",
+"topic": "Du lịch",
+"char": "りょかん",
+"reading": "ryokan",
+"meaning": "Nhà trọ kiểu Nhật / Japanese inn",
+"example": "りょかんに とまりました。(Ryokan ni tomarimashita.) — Tôi đã nghỉ ở nhà trọ kiểu Nhật.",
+"note": "Kanji 旅館. Thường có chiếu tatami và おんせん. Khách sạn kiểu Tây là ホテル."
+},
+{
+"type": "hiragana",
+"topic": "Du lịch",
+"char": "おんせん",
+"reading": "onsen",
+"meaning": "Suối nước nóng / Hot spring",
+"example": "おんせんに はいりました。(Onsen ni hairimashita.) — Tôi đã tắm suối nước nóng.",
+"note": "Kanji 温泉. \"Tắm\" onsen dùng はいります (vào), không dùng あびます."
+},
+{
+"type": "hiragana",
+"topic": "Du lịch",
+"char": "けしき",
+"reading": "keshiki",
+"meaning": "Phong cảnh / Scenery",
+"example": "ここの けしきは きれいですね。(Koko no keshiki wa kirei desu ne.) — Phong cảnh ở đây đẹp nhỉ.",
+"note": "Kanji 景色."
+},
+{
+"type": "hiragana",
+"topic": "Du lịch",
+"char": "うみべ",
+"reading": "umibe",
+"meaning": "Bờ biển (chỗ sát mép nước) / Seaside",
+"example": "うみべを あるきました。(Umibe o arukimashita.) — Tôi đã đi dạo bờ biển.",
+"note": "うみ (biển) + べ (mép, bờ). Đi dạo DỌC theo nơi nào dùng を."
+},
+{
+"type": "katakana",
+"topic": "Du lịch",
+"char": "ビーチ",
+"reading": "biichi",
+"meaning": "Bãi biển / Beach",
+"example": "ビーチで およぎました。(Biichi de oyogimashita.) — Tôi đã bơi ở bãi biển.",
+"note": "Từ mượn \"beach\". Chỗ diễn ra hành động + で."
+},
+{
+"type": "hiragana",
+"topic": "Du lịch",
+"char": "しま",
+"reading": "shima",
+"meaning": "Hòn đảo / Island",
+"example": "ちいさい しまへ いきました。(Chiisai shima e ikimashita.) — Tôi đã đi tới một hòn đảo nhỏ.",
+"note": "Kanji 島. Khi ghép thường đọc じま: いしがきじま (đảo Ishigaki)."
+},
+{
+"type": "hiragana",
+"topic": "Du lịch",
+"char": "おきなわ",
+"reading": "okinawa",
+"meaning": "Okinawa",
+"example": "なつやすみに おきなわへ いきました。(Natsuyasumi ni Okinawa e ikimashita.) — Kỳ nghỉ hè tôi đã đi Okinawa.",
+"note": "Kanji 沖縄. Tỉnh cực nam Nhật Bản, nổi tiếng biển và san hô."
+},
+{
+"type": "hiragana",
+"topic": "Du lịch",
+"char": "すいぞくかん",
+"reading": "suizokukan",
+"meaning": "Thủy cung / Aquarium",
+"example": "すいぞくかんで さかなを みました。(Suizokukan de sakana o mimashita.) — Tôi đã xem cá ở thủy cung.",
+"note": "Kanji 水族館. Okinawa có thủy cung Churaumi rất nổi tiếng."
+},
+{
+"type": "hiragana",
+"topic": "Du lịch",
+"char": "かいがん",
+"reading": "kaigan",
+"meaning": "Bờ biển · duyên hải / Coast",
+"example": "かいがんで しゃしんを とりました。(Kaigan de shashin o torimashita.) — Tôi đã chụp ảnh ở bờ biển.",
+"note": "Kanji 海岸. Hay xuất hiện trong tên địa danh; nói chuyện thường ngày hay dùng うみべ."
+},
+{
+"type": "hiragana",
+"topic": "Du lịch",
+"char": "おみやげ",
+"reading": "omiyage",
+"meaning": "Quà lưu niệm / Souvenir",
+"example": "かぞくに おみやげを かいました。(Kazoku ni omiyage o kaimashita.) — Tôi đã mua quà lưu niệm cho gia đình.",
+"note": "Gốc là みやげ (土産); nói lịch sự luôn thêm お."
+},
+{
+"type": "hiragana",
+"topic": "Du lịch",
+"char": "また いきたいです",
+"reading": "mata ikitai desu",
+"meaning": "Muốn đi lại lần nữa / I want to go again",
+"example": "おきなわに また いきたいです。(Okinawa ni mata ikitai desu.) — Tôi muốn đi Okinawa lần nữa.",
+"note": "また = lại. いきます → bỏ ます thêm たい = muốn đi."
+},
+{
+"type": "hiragana",
+"topic": "Vị trí & Phương hướng",
+"char": "みなみ",
+"reading": "minami",
+"meaning": "Phía nam / South",
+"example": "おきなわは にほんの みなみに あります。(Okinawa wa Nihon no minami ni arimasu.) — Okinawa ở phía nam Nhật Bản.",
+"note": "Kanji 南."
+},
+{
+"type": "hiragana",
+"topic": "Vị trí & Phương hướng",
+"char": "きた",
+"reading": "kita",
+"meaning": "Phía bắc / North",
+"example": "ほっかいどうは きたに あります。(Hokkaidou wa kita ni arimasu.) — Hokkaido ở phía bắc.",
+"note": "Kanji 北. Đừng nhầm với きた = \"đã đến\" (thể thường quá khứ của きます)."
+},
+{
+"type": "hiragana",
+"topic": "Vị trí & Phương hướng",
+"char": "ひがし",
+"reading": "higashi",
+"meaning": "Phía đông / East",
+"example": "えきの ひがしに ホテルが あります。(Eki no higashi ni hoteru ga arimasu.) — Phía đông nhà ga có khách sạn.",
+"note": "Kanji 東 — chữ 東 trong とうきょう (東京)."
+},
+{
+"type": "hiragana",
+"topic": "Vị trí & Phương hướng",
+"char": "にし",
+"reading": "nishi",
+"meaning": "Phía tây / West",
+"example": "たいようは にしに しずみます。(Taiyou wa nishi ni shizumimasu.) — Mặt trời lặn ở phía tây.",
+"note": "Kanji 西. Thứ tự hay nói: ひがし・にし・みなみ・きた."
+},
+{
+"type": "hiragana",
+"topic": "Thiên nhiên",
+"char": "たいよう",
+"reading": "taiyou",
+"meaning": "Mặt trời / Sun",
+"example": "たいようが まぶしいです。(Taiyou ga mabushii desu.) — Mặt trời chói quá.",
+"note": "Kanji 太陽. Nói thân mật cũng hay dùng おひさま."
+},
+{
+"type": "hiragana",
+"topic": "Thiên nhiên",
+"char": "なみ",
+"reading": "nami",
+"meaning": "Sóng / Wave",
+"example": "きょうは なみが たかいです。(Kyou wa nami ga takai desu.) — Hôm nay sóng cao.",
+"note": "Kanji 波. Sóng lớn/nhỏ dùng たかい/ひくい."
+},
+{
+"type": "hiragana",
+"topic": "Thiên nhiên",
+"char": "すな",
+"reading": "suna",
+"meaning": "Cát / Sand",
+"example": "すなが しろくて きれいです。(Suna ga shirokute kirei desu.) — Cát trắng và đẹp.",
+"note": "Kanji 砂. すなはま = bãi cát."
+},
+{
+"type": "hiragana",
+"topic": "Thiên nhiên",
+"char": "さんご",
+"reading": "sango",
+"meaning": "San hô / Coral",
+"example": "うみの なかに さんごが あります。(Umi no naka ni sango ga arimasu.) — Dưới biển có san hô.",
+"note": "Kanji 珊瑚. Biển Okinawa nổi tiếng rạn san hô."
+},
+{
+"type": "hiragana",
+"topic": "Thiên nhiên",
+"char": "そら",
+"reading": "sora",
+"meaning": "Bầu trời / Sky",
+"example": "そらが あおいです。(Sora ga aoi desu.) — Bầu trời xanh.",
+"note": "Kanji 空 — cũng là chữ くう trong くうこう (sân bay)."
+},
+{
+"type": "hiragana",
+"topic": "Thiên nhiên",
+"char": "ほし",
+"reading": "hoshi",
+"meaning": "Ngôi sao / Star",
+"example": "よる ほしを みました。(Yoru hoshi o mimashita.) — Buổi tối tôi đã ngắm sao.",
+"note": "Kanji 星."
+},
+{
+"type": "hiragana",
+"topic": "Thiên nhiên",
+"char": "しょくぶつ",
+"reading": "shokubutsu",
+"meaning": "Thực vật · cây cỏ / Plant",
+"example": "めずらしい しょくぶつを みました。(Mezurashii shokubutsu o mimashita.) — Tôi đã thấy loài cây lạ.",
+"note": "Kanji 植物. Cặp với どうぶつ (động vật)."
+},
+{
+"type": "hiragana",
+"topic": "Động vật",
+"char": "どうぶつ",
+"reading": "doubutsu",
+"meaning": "Động vật / Animal",
+"example": "どうぶつが すきです。(Doubutsu ga suki desu.) — Tôi thích động vật.",
+"note": "Kanji 動物. どうぶつえん = sở thú."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "あおい",
+"reading": "aoi",
+"meaning": "Xanh (biển, trời) / Blue",
+"example": "あおい うみを みました。(Aoi umi o mimashita.) — Tôi đã ngắm biển xanh.",
+"note": "Tính từ -i của あお (màu xanh dương). Đứng trước danh từ dùng あおい, không dùng あおの."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "うつくしい",
+"reading": "utsukushii",
+"meaning": "Đẹp (trang trọng) / Beautiful",
+"example": "うつくしい けしきですね。(Utsukushii keshiki desu ne.) — Phong cảnh đẹp quá nhỉ.",
+"note": "Trang trọng, văn viết hơn きれい. Nói chuyện thường ngày dùng きれい."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "すばらしい",
+"reading": "subarashii",
+"meaning": "Tuyệt vời / Wonderful",
+"example": "すばらしい りょこうでした。(Subarashii ryokou deshita.) — Đó là một chuyến đi tuyệt vời.",
+"note": "Lịch sự hơn すごい."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "すてき",
+"reading": "suteki",
+"meaning": "Đẹp · tuyệt · cuốn hút / Lovely",
+"example": "すてきな ホテルですね。(Suteki na hoteru desu ne.) — Khách sạn đẹp quá nhỉ.",
+"note": "Tính từ -na: すてきな + danh từ. Hay dùng khen đồ vật, nơi chốn, người."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "ふかい",
+"reading": "fukai",
+"meaning": "Sâu / Deep",
+"example": "この うみは ふかいです。(Kono umi wa fukai desu.) — Biển này sâu.",
+"note": "Trái nghĩa: あさい (nông)."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "あさい",
+"reading": "asai",
+"meaning": "Nông · cạn / Shallow",
+"example": "ここは あさいですから、あんぜんです。(Koko wa asai desu kara, anzen desu.) — Chỗ này nông nên an toàn.",
+"note": "Trái nghĩa: ふかい (sâu). Đừng nhầm với あさ (buổi sáng)."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "まぶしい",
+"reading": "mabushii",
+"meaning": "Chói (nắng, ánh sáng) / Dazzling",
+"example": "たいようが まぶしいです。(Taiyou ga mabushii desu.) — Mặt trời chói quá.",
+"note": "Khác あかるい (sáng sủa): まぶしい là sáng tới mức chói mắt."
+},
+{
+"type": "hiragana",
+"topic": "Danh từ thường dùng",
+"char": "さいこう",
+"reading": "saikou",
+"meaning": "Tuyệt đỉnh · hết sảy / The best",
+"example": "おきなわは さいこうでした！(Okinawa wa saikou deshita!) — Okinawa tuyệt đỉnh luôn!",
+"note": "Kanji 最高 (cao nhất). Trái nghĩa: さいてい (tệ nhất)."
+},
+{
+"type": "hiragana",
+"topic": "Danh từ thường dùng",
+"char": "おもいで",
+"reading": "omoide",
+"meaning": "Kỷ niệm / Memory",
+"example": "いい おもいでに なりました。(Ii omoide ni narimashita.) — Đã trở thành một kỷ niệm đẹp.",
+"note": "Kanji 思い出. Đừng nhầm với おもい (nặng)."
 }
 ];
 window.NIHONGO_KANA_INFO = {
