@@ -2336,7 +2336,9 @@ function askDeckLines(q){
    ⚠️ Sửa luật ở đây thì phải sửa cả askOffTopic() trong worker/nihongo-worker.js.
 
    Nguyên tắc: CHO QUA khi còn nghi ngờ. Chặn nhầm một câu hỏi thật thì người
-   học mất niềm tin vào tính năng, còn lọt một câu spam chỉ tốn một lượt gọi. */
+   học mất niềm tin vào tính năng, còn lọt một câu spam chỉ tốn một lượt gọi.
+   Bản cũ lại là danh sách CHO PHÉP → "con mèo", "chào buổi sáng" bị từ chối vì
+   không có chữ Nhật. Nay chỉ chặn dấu hiệu RÕ là việc khác (xem worker). */
 function askOffTopicMsg(){ return t('ask.offtopic'); }
 const ASK_JP_CHARS=/[぀-ヿ一-龯ｦ-ﾟ]/;
 /* Bỏ dấu để "ngữ pháp" và "ngu phap" cùng khớp một từ khoá — người ta gõ không
@@ -2369,11 +2371,26 @@ function looksRomaji(q){
   const words=s.split(/[^a-z]+/).filter(Boolean);
   return words.length>0 && words.every(w=>ASK_ROMAJI_SYL.test(w.replace(/([kstpgzdbmnrh])\1/g,'$1')));
 }
+/* Cố ý hẹp: "bệnh viện", "thời tiết"… là thứ người học hay hỏi cách nói — không đưa vào. */
+const ASK_OFF_RE=new RegExp('(?:'+[
+  '\\bcode\\b','lap trinh','python','javascript','typescript','\\bhtml\\b','\\bcss\\b','\\bsql\\b','regex','debug','excel',
+  'phuong trinh','dao ham','tich phan','giai toan','bai toan','equation','integral','derivative',
+  'viet bai','bai van','viet van','viet email','essay','\\bcv\\b','resume','lam tho','viet truyen','ke chuyen',
+  'tin tuc','thoi su','chung khoan','co phieu','bitcoin','crypto','gia vang','ty gia','xo so','bong da',
+  'tieng anh','tieng trung','tieng han','tieng phap','tieng duc',
+  'ignore (?:all|previous)','bo qua huong dan','system prompt','jailbreak'
+].join('|')+')');
+const ASK_JP_NAMED_RE=/tieng nhat|nhat ban|nhat ngu|japan|hiragana|katakana|kanji|romaji|furigana|jlpt/;
+const ASK_MATH_RE=/\d\s*[-+*\/×÷^]\s*\d/;
+const ASK_LONG=200;   // dài hơn mức này mà không dính gì tới tiếng Nhật = dán bài vào nhờ xử lý
 function askOffTopic(q){
-  if(ASK_JP_CHARS.test(q)) return false;                  // có chữ Nhật → chắc chắn liên quan
-  if(ASK_TOPIC_RE.test(noDiacritic(q))) return false;
-  if(looksRomaji(q)) return false;
-  return true;
+  const s=String(q||'').trim();
+  if(ASK_JP_CHARS.test(s)) return false;                  // có chữ Nhật → chắc chắn liên quan
+  const n=noDiacritic(s);
+  // nhắc thẳng tiếng Nhật thì cho qua; từ khoá chung như "ngữ pháp" không đủ ("ngữ pháp tiếng Anh")
+  if(ASK_JP_NAMED_RE.test(n) || looksRomaji(s)) return false;
+  if(ASK_OFF_RE.test(n) || ASK_MATH_RE.test(s)) return true;
+  return s.length>ASK_LONG && !ASK_TOPIC_RE.test(n);
 }
 
 function askSystemPrompt(deck){
@@ -2402,6 +2419,11 @@ ${deckBlock}
 - Chỉ khẳng định điều bạn thật sự chắc. Có nhiều cách nói / nhiều cách hiểu thì
   nêu cách phổ biến nhất rồi ghi phần còn lại vào "caveat".
 - Câu hỏi mơ hồ: chọn cách hiểu hợp lý nhất VÀ nói rõ mình đang hiểu thế nào.
+- Người học chỉ gõ một từ / cụm / câu bằng tiếng Việt hoặc tiếng Anh, không kèm
+  câu hỏi (vd "con mèo", "chào buổi sáng", "hôm nay tôi đi học") = họ hỏi câu đó
+  nói bằng tiếng Nhật thế nào. "answer_vi" nêu cách nói, "examples" đưa đúng câu
+  tiếng Nhật đó (jp + romaji + vi); verdict "không xét", "subject" để rỗng như
+  quy tắc bên dưới. Đây KHÔNG phải câu hỏi ngoài phạm vi.
 
 ━━ NẾU NGƯỜI HỌC HỎI "VIẾT THẾ NÀY ĐÚNG KHÔNG" ━━
 Đây là loại câu hỏi quan trọng nhất, làm thật kỹ:

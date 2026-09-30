@@ -847,7 +847,17 @@ const ASK_LIMITS = { maxQuestion: 400, maxDeck: 600 };
    ⚠️ Bản sao của askOffTopic() trong index.html — sửa thì sửa CẢ HAI.
 
    Nguyên tắc: CHO QUA khi còn nghi ngờ. Chặn nhầm câu hỏi thật thì người học
-   mất niềm tin, còn lọt một câu spam chỉ tốn một lượt gọi. */
+   mất niềm tin, còn lọt một câu spam chỉ tốn một lượt gọi — và câu lọt vẫn gặp
+   prompt, nơi model được dặn từ chối nguyên văn.
+
+   29/09/2026: bản cũ là DANH SÁCH CHO PHÉP (phải có chữ Nhật / từ khoá / romaji
+   thuần mới qua) — ngược với chính nguyên tắc trên. Người học gõ "con mèo",
+   "chào buổi sáng", "khi nào dùng wa và ga" — câu hỏi tiếng Nhật chính hiệu
+   nhưng không có chữ Nhật nào — đều bị trả lời bằng câu từ chối. Trong ô Hỏi
+   nhanh của app học tiếng Nhật, câu hỏi mặc định LÀ về tiếng Nhật. Nay đảo lại:
+   chỉ chặn khi có dấu hiệu RÕ là việc khác (code, toán, viết hộ, tin tức/tài
+   chính, ngôn ngữ khác, lệnh bẻ prompt), hoặc đoạn văn dài không dính gì tới
+   tiếng Nhật (kiểu dán cả bài vào nhờ xử lý). */
 const ASK_OFFTOPIC_MSG = {
   vi: 'Tôi không trả lời được những nội dung không liên quan tới Tiếng Nhật, để tránh spam token.',
   en: 'I can only answer questions about Japanese, to avoid burning tokens on spam.'
@@ -875,11 +885,28 @@ function looksRomaji(q) {
   const words = s.split(/[^a-z]+/).filter(Boolean);
   return words.length > 0 && words.every(w => ASK_ROMAJI_SYL.test(w.replace(/([kstpgzdbmnrh])\1/g, '$1')));
 }
+/* Dấu hiệu RÕ RÀNG của việc ngoài phạm vi. Cố ý hẹp: từ đời thường như "bệnh
+   viện", "thời tiết", "thuộc" là thứ người học hay hỏi cách nói — không đưa vào. */
+const ASK_OFF_RE = new RegExp('(?:' + [
+  '\\bcode\\b', 'lap trinh', 'python', 'javascript', 'typescript', '\\bhtml\\b', '\\bcss\\b', '\\bsql\\b', 'regex', 'debug', 'excel',
+  'phuong trinh', 'dao ham', 'tich phan', 'giai toan', 'bai toan', 'equation', 'integral', 'derivative',
+  'viet bai', 'bai van', 'viet van', 'viet email', 'essay', '\\bcv\\b', 'resume', 'lam tho', 'viet truyen', 'ke chuyen',
+  'tin tuc', 'thoi su', 'chung khoan', 'co phieu', 'bitcoin', 'crypto', 'gia vang', 'ty gia', 'xo so', 'bong da',
+  'tieng anh', 'tieng trung', 'tieng han', 'tieng phap', 'tieng duc',
+  'ignore (?:all|previous)', 'bo qua huong dan', 'system prompt', 'jailbreak'
+].join('|') + ')');
+const ASK_JP_NAMED_RE = /tieng nhat|nhat ban|nhat ngu|japan|hiragana|katakana|kanji|romaji|furigana|jlpt/;
+const ASK_MATH_RE = /\d\s*[-+*\/×÷^]\s*\d/;
+const ASK_LONG = 200;   // dài hơn mức này mà không dính gì tới tiếng Nhật = dán bài vào nhờ xử lý
 function askOffTopic(q) {
-  if (ASK_JP_CHARS.test(q)) return false;
-  if (ASK_TOPIC_RE.test(noDiacritic(q))) return false;
-  if (looksRomaji(q)) return false;
-  return true;
+  const s = String(q || '').trim();
+  if (ASK_JP_CHARS.test(s)) return false;                 // có chữ Nhật → chắc chắn liên quan
+  const n = noDiacritic(s);
+  /* Nhắc thẳng tới tiếng Nhật thì cho qua dù có dấu hiệu khác ("tiếng Anh của
+     たべる"); từ khoá chung như "ngữ pháp" thì KHÔNG đủ — "ngữ pháp tiếng Anh". */
+  if (ASK_JP_NAMED_RE.test(n) || looksRomaji(s)) return false;
+  if (ASK_OFF_RE.test(n) || ASK_MATH_RE.test(s)) return true;
+  return s.length > ASK_LONG && !ASK_TOPIC_RE.test(n);
 }
 
 /* Trả về đúng cấu trúc /ask bình thường để client khỏi phải xử lý ca riêng. */
@@ -921,6 +948,11 @@ ${deckBlock}
 - Chỉ khẳng định điều bạn thật sự chắc. Có nhiều cách nói / nhiều cách hiểu thì
   nêu cách phổ biến nhất rồi ghi phần còn lại vào "caveat".
 - Câu hỏi mơ hồ: chọn cách hiểu hợp lý nhất VÀ nói rõ mình đang hiểu thế nào.
+- Người học chỉ gõ một từ / cụm / câu bằng tiếng Việt hoặc tiếng Anh, không kèm
+  câu hỏi (vd "con mèo", "chào buổi sáng", "hôm nay tôi đi học") = họ hỏi câu đó
+  nói bằng tiếng Nhật thế nào. "answer_vi" nêu cách nói, "examples" đưa đúng câu
+  tiếng Nhật đó (jp + romaji + vi); verdict "không xét", "subject" để rỗng như
+  quy tắc bên dưới. Đây KHÔNG phải câu hỏi ngoài phạm vi.
 
 ━━ NẾU NGƯỜI HỌC HỎI "VIẾT THẾ NÀY ĐÚNG KHÔNG" ━━
 Đây là loại câu hỏi quan trọng nhất, làm thật kỹ:
