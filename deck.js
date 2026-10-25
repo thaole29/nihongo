@@ -3281,7 +3281,7 @@ window.NIHONGO_DEFAULT_DECK = [
 "topic": "Động từ (thể ます)",
 "char": "おくります",
 "reading": "okurimasu",
-"meaning": "Gửi / tiễn / Send",
+"meaning": "Gửi · tiễn · đưa về / Send · see off",
 "example": "メールを おくります。(Meeru o okurimasu.) — Gửi email.",
 "note": "Thể ます của おくる. Còn nghĩa tiễn ai đó: えきまで おくります."
 },
@@ -6155,6 +6155,420 @@ window.NIHONGO_DEFAULT_DECK = [
 "meaning": "Kỷ niệm / Memory",
 "example": "いい おもいでに なりました。(Ii omoide ni narimashita.) — Đã trở thành một kỷ niệm đẹp.",
 "note": "Kanji 思い出. Đừng nhầm với おもい (nặng)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "さそいます",
+"reading": "sasoimasu",
+"meaning": "Rủ · mời / Invite",
+"example": "ともだちを えいがに さそいました。(Tomodachi o eiga ni sasoimashita.) — Tôi đã rủ bạn đi xem phim.",
+"note": "Mẫu: [người] を [việc] に さそいます."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "あつまります",
+"reading": "atsumarimasu",
+"meaning": "Tụ tập · tập trung / Gather",
+"example": "えきの まえに あつまりましょう。(Eki no mae ni atsumarimashou.) — Tập trung trước ga nhé.",
+"note": "Tự động từ: người/vật tự tụ lại. あつめます = gom, sưu tầm."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "まちあわせます",
+"reading": "machiawasemasu",
+"meaning": "Hẹn gặp (ở điểm hẹn) / Meet up",
+"example": "3じに えきで まちあわせましょう。(San-ji ni eki de machiawasemashou.) — 3 giờ hẹn gặp ở ga nhé.",
+"note": "Gồm まちます (đợi) + あわせます. Điểm hẹn = まちあわせばしょ."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "へんじします",
+"reading": "henji shimasu",
+"meaning": "Trả lời · hồi âm / Reply",
+"example": "あとで へんじします。(Ato de henji shimasu.) — Lát nữa tôi trả lời nhé.",
+"note": "Kanji 返事. Hay dùng cho tin nhắn, lời mời. へんじ = câu trả lời."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "さんかします",
+"reading": "sanka shimasu",
+"meaning": "Tham gia / Take part",
+"example": "パーティーに さんかします。(Paatii ni sanka shimasu.) — Tôi sẽ tham gia buổi tiệc.",
+"note": "Kanji 参加. Mẫu: [sự kiện] に さんかします."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "けっせきします",
+"reading": "kesseki shimasu",
+"meaning": "Vắng mặt / Be absent",
+"example": "あしたの かいぎは けっせきします。(Ashita no kaigi wa kesseki shimasu.) — Tôi sẽ vắng buổi họp ngày mai.",
+"note": "Kanji 欠席. Ngược nghĩa: しゅっせきします (có mặt)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "おくれます",
+"reading": "okuremasu",
+"meaning": "Đến muộn · trễ / Be late",
+"example": "すみません、10ぷん おくれます。(Sumimasen, juppun okuremasu.) — Xin lỗi, tôi trễ 10 phút.",
+"note": "Mẫu: [chỗ/giờ] に おくれます. Khác おくります (gửi / tiễn)."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "むかえます",
+"reading": "mukaemasu",
+"meaning": "Đón / Welcome · pick up",
+"example": "えきまで むかえに いきます。(Eki made mukae ni ikimasu.) — Tôi sẽ ra ga đón bạn.",
+"note": "Hay dùng dạng むかえに いきます / きます (đi / đến đón). Xem thẻ ～に いきます."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "でむかえます",
+"reading": "demukaemasu",
+"meaning": "Ra đón / Go out to greet",
+"example": "くうこうで ともだちを でむかえました。(Kuukou de tomodachi o demukaemashita.) — Tôi đã ra sân bay đón bạn.",
+"note": "Kanji 出迎えます: ra tận nơi để đón. ≈ むかえに いきます."
+},
+{
+"type": "hiragana",
+"topic": "Động từ (thể ます)",
+"char": "よります",
+"reading": "yorimasu",
+"meaning": "Ghé qua / Drop by",
+"example": "かえりに コンビニに よります。(Kaeri ni konbini ni yorimasu.) — Trên đường về tôi ghé cửa hàng tiện lợi.",
+"note": "Kanji 寄ります. Mẫu: [nơi] に よります."
+},
+{
+"type": "hiragana",
+"topic": "Rủ rê & Hẹn gặp",
+"char": "～ましょう",
+"reading": "~mashou",
+"meaning": "Hãy cùng ~ nhé / Let's ~",
+"example": "いっしょに いきましょう。(Issho ni ikimashou.) — Cùng đi nhé.",
+"note": "Đổi ～ます → ～ましょう: あいましょう (gặp nhau nhé), いきましょう (đi thôi), でかけましょう (cùng ra ngoài nhé). Hỏi ～ましょうか = \"mình ~ nhé?\"."
+},
+{
+"type": "hiragana",
+"topic": "Rủ rê & Hẹn gặp",
+"char": "～に いきます",
+"reading": "~ ni ikimasu",
+"meaning": "Đi (để) làm ~ / Go to do ~",
+"example": "こんばん のみに いきませんか。(Konban nomi ni ikimasen ka?) — Tối nay đi uống không?",
+"note": "[động từ bỏ ます] + に いきます: のみに (đi uống), たべに (đi ăn), あそびに (đi chơi), むかえに (đi đón)."
+},
+{
+"type": "hiragana",
+"topic": "Rủ rê & Hẹn gặp",
+"char": "よかったら",
+"reading": "yokattara",
+"meaning": "Nếu được · nếu bạn thích / If you like",
+"example": "よかったら、いっしょに たべませんか。(Yokattara, issho ni tabemasen ka?) — Nếu được thì cùng ăn nhé?",
+"note": "Đặt đầu câu mời cho lịch sự, mềm mỏng."
+},
+{
+"type": "hiragana",
+"topic": "Rủ rê & Hẹn gặp",
+"char": "いいですよ",
+"reading": "ii desu yo",
+"meaning": "Được đấy · OK nhé / Sure",
+"example": "A: あした あいませんか。B: いいですよ。(Ashita aimasen ka? — Ii desu yo.) — Mai gặp nhau không? — Được thôi.",
+"note": "Nhận lời mời. Khác いいですね (hay nhỉ — tán thành ý kiến)."
+},
+{
+"type": "hiragana",
+"topic": "Rủ rê & Hẹn gặp",
+"char": "むり",
+"reading": "muri",
+"meaning": "Không được · quá sức / Impossible",
+"example": "きょうは ちょっと むりです。(Kyou wa chotto muri desu.) — Hôm nay thì chắc không được rồi.",
+"note": "Kanji 無理. Từ chối khéo: ちょっと… hoặc ちょっと むりです."
+},
+{
+"type": "hiragana",
+"topic": "Rủ rê & Hẹn gặp",
+"char": "また こんど",
+"reading": "mata kondo",
+"meaning": "Để dịp khác vậy / Maybe next time",
+"example": "ざんねんですが、また こんど。(Zannen desu ga, mata kondo.) — Tiếc quá, để dịp khác nhé.",
+"note": "Câu từ chối nhẹ nhàng. こんど = lần tới."
+},
+{
+"type": "hiragana",
+"topic": "Rủ rê & Hẹn gặp",
+"char": "たのしみ",
+"reading": "tanoshimi",
+"meaning": "Mong chờ · háo hức / Look forward to",
+"example": "らいしゅうの りょこう、たのしみです。(Raishuu no ryokou, tanoshimi desu.) — Mong chuyến đi tuần sau quá.",
+"note": "Hay dùng たのしみです / たのしみに しています. Xem thẻ たのしみます."
+},
+{
+"type": "hiragana",
+"topic": "Rủ rê & Hẹn gặp",
+"char": "のみかい",
+"reading": "nomikai",
+"meaning": "Buổi nhậu · liên hoan / Drinking party",
+"example": "きんようびに のみかいが あります。(Kin'youbi ni nomikai ga arimasu.) — Thứ sáu có buổi nhậu.",
+"note": "Kanji 飲み会. Văn hoá công ty Nhật rất hay có."
+},
+{
+"type": "hiragana",
+"topic": "Rủ rê & Hẹn gặp",
+"char": "そうべつかい",
+"reading": "soubetsukai",
+"meaning": "Tiệc chia tay / Farewell party",
+"example": "たなかさんの そうべつかいを します。(Tanaka-san no soubetsukai o shimasu.) — Chúng tôi làm tiệc chia tay anh Tanaka.",
+"note": "Kanji 送別会. Ngược lại: かんげいかい."
+},
+{
+"type": "hiragana",
+"topic": "Rủ rê & Hẹn gặp",
+"char": "かんげいかい",
+"reading": "kangeikai",
+"meaning": "Tiệc chào mừng / Welcome party",
+"example": "あたらしい ひとの かんげいかいです。(Atarashii hito no kangeikai desu.) — Là tiệc chào mừng người mới.",
+"note": "Kanji 歓迎会. Ngược lại: そうべつかい."
+},
+{
+"type": "hiragana",
+"topic": "Rủ rê & Hẹn gặp",
+"char": "たんじょうびかい",
+"reading": "tanjoubikai",
+"meaning": "Tiệc sinh nhật / Birthday party",
+"example": "どようびに たんじょうびかいを します。(Doyoubi ni tanjoubikai o shimasu.) — Thứ bảy tôi làm tiệc sinh nhật.",
+"note": "たんじょうび (sinh nhật) + かい (buổi họp mặt)."
+},
+{
+"type": "hiragana",
+"topic": "Rủ rê & Hẹn gặp",
+"char": "しょくじかい",
+"reading": "shokujikai",
+"meaning": "Buổi ăn chung / Dinner gathering",
+"example": "みんなで しょくじかいを しましょう。(Minna de shokujikai o shimashou.) — Mọi người cùng làm buổi ăn chung nhé.",
+"note": "Kanji 食事会. Nhẹ nhàng hơn のみかい (ít rượu)."
+},
+{
+"type": "hiragana",
+"topic": "Rủ rê & Hẹn gặp",
+"char": "かんじ",
+"reading": "kanji",
+"meaning": "Người tổ chức (buổi tiệc) / Organizer",
+"example": "こんかいの かんじは わたしです。(Konkai no kanji wa watashi desu.) — Lần này tôi là người tổ chức.",
+"note": "Kanji 幹事. Đồng âm với かんじ (漢字 — chữ Hán), phân biệt theo ngữ cảnh."
+},
+{
+"type": "hiragana",
+"topic": "Trạng từ",
+"char": "いっしょに",
+"reading": "issho ni",
+"meaning": "Cùng nhau / Together",
+"example": "いっしょに かえりましょう。(Issho ni kaerimashou.) — Cùng về nhé.",
+"note": "Kanji 一緒に. Hay đi với ～ませんか / ～ましょう."
+},
+{
+"type": "hiragana",
+"topic": "Trạng từ",
+"char": "ぜひ",
+"reading": "zehi",
+"meaning": "Nhất định · rất mong / By all means",
+"example": "ぜひ きて ください。(Zehi kite kudasai.) — Nhất định hãy đến nhé.",
+"note": "Nhận lời nhiệt tình: ぜひ！ (nhất định rồi!)."
+},
+{
+"type": "hiragana",
+"topic": "Trạng từ",
+"char": "きゅうに",
+"reading": "kyuu ni",
+"meaning": "Đột xuất · bất chợt / Suddenly",
+"example": "きゅうに ようじが できました。(Kyuu ni youji ga dekimashita.) — Tôi đột nhiên có việc bận.",
+"note": "Kanji 急に. Lý do hay dùng khi huỷ hẹn."
+},
+{
+"type": "hiragana",
+"topic": "Trạng từ",
+"char": "やっぱり",
+"reading": "yappari",
+"meaning": "Quả nhiên · rốt cuộc vẫn / As expected · after all",
+"example": "やっぱり いきません。(Yappari ikimasen.) — Thôi, rốt cuộc tôi không đi.",
+"note": "Văn viết / lịch sự hơn: やはり."
+},
+{
+"type": "hiragana",
+"topic": "Trạng từ",
+"char": "たぶん",
+"reading": "tabun",
+"meaning": "Có lẽ / Probably",
+"example": "たぶん 7じごろ つきます。(Tabun shichi-ji goro tsukimasu.) — Có lẽ khoảng 7 giờ tôi tới.",
+"note": "Hay đi với ～でしょう. Độ chắc thấp hơn きっと."
+},
+{
+"type": "hiragana",
+"topic": "Trạng từ",
+"char": "きっと",
+"reading": "kitto",
+"meaning": "Chắc chắn / Surely",
+"example": "きっと たのしいですよ。(Kitto tanoshii desu yo.) — Chắc chắn sẽ vui lắm đấy.",
+"note": "Độ chắc: きっと > たぶん."
+},
+{
+"type": "hiragana",
+"topic": "Số & Thời gian",
+"char": "ごぜんちゅう",
+"reading": "gozenchuu",
+"meaning": "Trong buổi sáng / During the morning",
+"example": "ごぜんちゅうは いそがしいです。(Gozenchuu wa isogashii desu.) — Cả buổi sáng tôi bận.",
+"note": "Kanji 午前中: suốt khoảng trước 12 giờ trưa. Xem ごぜん."
+},
+{
+"type": "hiragana",
+"topic": "Số & Thời gian",
+"char": "ゆうがた",
+"reading": "yuugata",
+"meaning": "Chiều tối · chạng vạng / Evening",
+"example": "ゆうがた あいましょう。(Yuugata aimashou.) — Chiều tối gặp nhau nhé.",
+"note": "Kanji 夕方: khoảng 4–7 giờ chiều, trước よる."
+},
+{
+"type": "hiragana",
+"topic": "Số & Thời gian",
+"char": "こんや",
+"reading": "kon'ya",
+"meaning": "Tối nay / Tonight",
+"example": "こんや ひまですか。(Kon'ya hima desu ka?) — Tối nay bạn rảnh không?",
+"note": "Kanji 今夜. Văn nói hay dùng こんばん."
+},
+{
+"type": "hiragana",
+"topic": "Số & Thời gian",
+"char": "へいじつ",
+"reading": "heijitsu",
+"meaning": "Ngày thường (thứ 2–6) / Weekday",
+"example": "へいじつは しごとが あります。(Heijitsu wa shigoto ga arimasu.) — Ngày thường tôi phải đi làm.",
+"note": "Kanji 平日. Ngược lại: しゅうまつ / やすみの ひ."
+},
+{
+"type": "hiragana",
+"topic": "Số & Thời gian",
+"char": "やすみの ひ",
+"reading": "yasumi no hi",
+"meaning": "Ngày nghỉ / Day off",
+"example": "やすみの ひは なにを しますか。(Yasumi no hi wa nani o shimasu ka?) — Ngày nghỉ bạn làm gì?",
+"note": "やすみ (nghỉ) + の + ひ (ngày)."
+},
+{
+"type": "hiragana",
+"topic": "Số & Thời gian",
+"char": "～ごろ",
+"reading": "~goro",
+"meaning": "Khoảng (thời điểm) ~ / Around ~",
+"example": "6じごろ あいましょう。(Roku-ji goro aimashou.) — Gặp nhau khoảng 6 giờ nhé.",
+"note": "Đi sau mốc giờ: ～じごろ. Khoảng lượng thời gian thì dùng ～ぐらい."
+},
+{
+"type": "hiragana",
+"topic": "Số & Thời gian",
+"char": "～ふん／～ぷん",
+"reading": "~fun / ~pun",
+"meaning": "~ phút / Minute(s)",
+"example": "3じ15ふんに あいましょう。(San-ji juugo-fun ni aimashou.) — Gặp lúc 3 giờ 15 phút nhé.",
+"note": "ぷん sau 1, 3, 4, 6, 8, 10: いっぷん, さんぷん, よんぷん, ろっぷん, はっぷん, じゅっぷん. Còn lại ふん. Hỏi: なんぷん."
+},
+{
+"type": "hiragana",
+"topic": "Địa điểm trong phố",
+"char": "いりぐち",
+"reading": "iriguchi",
+"meaning": "Lối vào / Entrance",
+"example": "いりぐちで まって います。(Iriguchi de matte imasu.) — Tôi đang đợi ở lối vào.",
+"note": "Kanji 入口. Ngược lại: でぐち."
+},
+{
+"type": "hiragana",
+"topic": "Địa điểm trong phố",
+"char": "でぐち",
+"reading": "deguchi",
+"meaning": "Lối ra / Exit",
+"example": "ひがしぐちの でぐちで あいましょう。(Higashiguchi no deguchi de aimashou.) — Gặp ở lối ra cửa Đông nhé.",
+"note": "Kanji 出口. Ga lớn ở Nhật có nhiều でぐち — hẹn gặp nhớ nói rõ cửa nào."
+},
+{
+"type": "hiragana",
+"topic": "Địa điểm trong phố",
+"char": "かいじょう",
+"reading": "kaijou",
+"meaning": "Địa điểm (tổ chức sự kiện) / Venue",
+"example": "かいじょうは どこですか。(Kaijou wa doko desu ka?) — Địa điểm tổ chức ở đâu?",
+"note": "Kanji 会場."
+},
+{
+"type": "hiragana",
+"topic": "Địa điểm trong phố",
+"char": "ひろば",
+"reading": "hiroba",
+"meaning": "Quảng trường / Plaza",
+"example": "えきまえの ひろばで まちあわせましょう。(Ekimae no hiroba de machiawasemashou.) — Hẹn ở quảng trường trước ga nhé.",
+"note": "Kanji 広場."
+},
+{
+"type": "hiragana",
+"topic": "Địa điểm trong phố",
+"char": "こうさてん",
+"reading": "kousaten",
+"meaning": "Ngã tư / Intersection",
+"example": "つぎの こうさてんを みぎに まがって ください。(Tsugi no kousaten o migi ni magatte kudasai.) — Rẽ phải ở ngã tư tiếp theo.",
+"note": "Kanji 交差点."
+},
+{
+"type": "hiragana",
+"topic": "Địa điểm trong phố",
+"char": "しんごう",
+"reading": "shingou",
+"meaning": "Đèn giao thông / Traffic light",
+"example": "しんごうを わたって ください。(Shingou o watatte kudasai.) — Hãy qua đèn giao thông.",
+"note": "Kanji 信号. あおしんごう = đèn xanh."
+},
+{
+"type": "hiragana",
+"topic": "Địa điểm trong phố",
+"char": "かど",
+"reading": "kado",
+"meaning": "Góc đường / Corner",
+"example": "あの かどに ぎんこうが あります。(Ano kado ni ginkou ga arimasu.) — Ở góc kia có ngân hàng.",
+"note": "Kanji 角."
+},
+{
+"type": "hiragana",
+"topic": "Địa điểm trong phố",
+"char": "ちゅうしゃじょう",
+"reading": "chuushajou",
+"meaning": "Bãi đỗ xe / Parking lot",
+"example": "ちゅうしゃじょうは ありますか。(Chuushajou wa arimasu ka?) — Có bãi đỗ xe không?",
+"note": "Kanji 駐車場. ちゅうりんじょう = bãi gửi xe đạp."
+},
+{
+"type": "hiragana",
+"topic": "Địa điểm trong phố",
+"char": "うけつけ",
+"reading": "uketsuke",
+"meaning": "Quầy lễ tân · tiếp tân / Reception",
+"example": "うけつけで なまえを いって ください。(Uketsuke de namae o itte kudasai.) — Hãy nói tên ở quầy lễ tân.",
+"note": "Kanji 受付."
+},
+{
+"type": "hiragana",
+"topic": "Tính từ",
+"char": "～そう",
+"reading": "~sou",
+"meaning": "Trông có vẻ ~ / Looks ~",
+"example": "たのしそうですね。(Tanoshisou desu ne.) — Trông vui nhỉ.",
+"note": "Tính từ -i bỏ い + そう: たのしそう (trông vui), いそがしそう (trông bận). Tính từ -na thêm そう: ひまそう. Riêng いい → よさそう."
 }
 ];
 window.NIHONGO_KANA_INFO = {
